@@ -1,19 +1,24 @@
-# LostLink — Smart Lost-and-Found Matcher
+# LostLink
 
-LostLink is a website that helps people reunite with belongings left behind at schools and sports facilities. Students describe what they have lost, and LostLink matches those descriptions with items listed in the facility's lost-and-found. Staff manage the resulting claim requests.
+### Smart lost-and-found matching
+
+LostLink helps people find belongings they have misplaced at **schools, sports facilities, and offices**. People describe a missing item, LostLink surfaces possible matches from listed found items, and staff manage claim requests.
 
 ## How it works
 
-1. **Students search:** A student describes a missing item, such as its type, color, brand, or other identifying details.
-2. **LostLink finds matches:** The website compares the description with items that have been listed and shows possible matches.
-3. **Students submit a claim:** A student can request an item they believe is theirs.
-4. **Staff review requests:** Facility staff manage claims and coordinate returning items to their owners.
+| Step | What happens |
+| --- | --- |
+| **1. Describe** | A student, visitor, athlete, or employee searches by describing the missing item, such as its type, color, brand, or distinguishing details. |
+| **2. Match** | LostLink compares the description with items listed in the organization's lost-and-found and shows possible matches. |
+| **3. Claim** | The person submits a request for an item they believe belongs to them. |
+| **4. Review** | Staff review and manage requests, then coordinate returning items to their owners. |
 
 ## Who it's for
 
-- **Schools** helping students find belongings left in classrooms, hallways, gyms, and other campus spaces.
-- **Sports facilities** helping visitors and athletes find items left at games, practices, and events.
+- **Schools** — help students and staff find belongings left around campus.
+- **Sports facilities** — help athletes, spectators, and visitors find items left at games, practices, and events.
+- **Offices** — help employees and visitors reconnect with items misplaced in shared spaces.
 
-## Product goal
+## Why LostLink
 
-Make lost-and-found easier to search and simpler for staff to manage, so belongings can get back to their owners with less manual back-and-forth.
+Lost-and-found searches can take time for both the person looking and the staff responsible for collected items. LostLink brings item descriptions and claim requests into one searchable workflow, making it easier to find possible matches and manage returns.
