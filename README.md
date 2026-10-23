@@ -8,7 +8,7 @@ LostLink helps people find belongings they have misplaced at **schools, sports f
 
 | Step | What happens |
 | --- | --- |
-| **1. Describe** | A student, visitor, athlete, or employee searches by describing the missing item, such as its type, color, brand, or distinguishing details. |
+| **1. Describe** | A student, visitor, athlete, or employee searches by describing the missing item, such as its type, color, brand, or distinguishing details. They may also include a photo |
 | **2. Match** | LostLink compares the description with items listed in the organization's lost-and-found and shows possible matches. |
 | **3. Claim** | The person submits a request for an item they believe belongs to them. |
 | **4. Review** | Staff review and manage requests, then coordinate returning items to their owners. |
