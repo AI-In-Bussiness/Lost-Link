@@ -1,0 +1,14 @@
+[
+  { "id": "exact-01", "group": "exact", "orgSlug": "cedar-grove", "query": "black Nike duffel", "relevantItemIds": ["item-duffel"] },
+  { "id": "exact-02", "group": "exact", "orgSlug": "cedar-grove", "query": "blue water bottle", "relevantItemIds": ["item-bottle"] },
+  { "id": "exact-03", "group": "exact", "orgSlug": "cedar-grove", "query": "scientific calculator", "relevantItemIds": ["item-calculator"] },
+  { "id": "exact-04", "group": "exact", "orgSlug": "cedar-grove", "query": "red keys", "relevantItemIds": ["item-keys"] },
+  { "id": "meaning-01", "group": "paraphrase", "orgSlug": "cedar-grove", "query": "dark gym bag with a white logo near the basketball court", "relevantItemIds": ["item-duffel", "item-backpack"] },
+  { "id": "meaning-02", "group": "paraphrase", "orgSlug": "cedar-grove", "query": "something to drink from", "relevantItemIds": ["item-bottle"] },
+  { "id": "meaning-03", "group": "paraphrase", "orgSlug": "cedar-grove", "query": "rain protection that folds up", "relevantItemIds": ["item-umbrella"] },
+  { "id": "meaning-04", "group": "paraphrase", "orgSlug": "cedar-grove", "query": "small container for my sandwich", "relevantItemIds": ["item-lunchbag"] },
+  { "id": "none-01", "group": "no-match", "orgSlug": "cedar-grove", "query": "telescope", "relevantItemIds": [] },
+  { "id": "none-02", "group": "no-match", "orgSlug": "cedar-grove", "query": "violin", "relevantItemIds": [] },
+  { "id": "scope-01", "group": "organization", "orgSlug": "cedar-grove", "query": "black Nike duffel", "relevantItemIds": ["item-duffel"], "forbiddenItemIds": ["item-maple-duffel"] },
+  { "id": "scope-02", "group": "organization", "orgSlug": "maple-hill", "query": "black Nike duffel", "relevantItemIds": ["item-maple-duffel"], "forbiddenItemIds": ["item-duffel", "item-backpack"] }
+]
