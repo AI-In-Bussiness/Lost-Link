@@ -1,0 +1,11 @@
+Task ID,Task,Owner,Status,Depends on,Evidence,Reviewer,Open issue
+LL-001,Map competition rules and rubric,Both founders,Review,,competition-and-evidence.md,Overseer,Exact dates and submission destination; spend track and recommended threshold adoption pending
+LL-002,Choose showcase audience,Founder A,Review,,product-scope.md,Overseer,Fictional school selected; real need still unvalidated
+LL-003,Freeze MVP,Both founders,Review,LL-001;LL-002,product-scope.md,Founder B and Overseer,Joint scope agreement pending
+LL-004,Define user journeys and screen inventory (provisional task label),Founder A,Review,LL-002;LL-003,ux-spec.md,Overseer,Original workbook task title unavailable
+LL-005,Define security and privacy decisions,Founder B,Not Started,LL-003,shared-contract-proposal.md,Security reviewer,Founder A proposal only; retention and auth policies require Founder B
+LL-006,Agree architecture and shared contracts,Both founders,In Progress,LL-003;LL-004;LL-005,shared-contract-proposal.md,Overseer,Founder B must finalize schema authorization and transaction design
+LL-007,Set up progress board,Founder A,Review,,task-board.csv,Overseer,Local CSV covers Phase 0 only; 56-task workbook unavailable
+A0-R01,Collect need and demand evidence,Founder A,Not Started,LL-002,competition-and-evidence.md,Overseer,No interviews or competitor findings yet
+A0-R02,Confirm dates spend track and member contributions,Both founders,Blocked,LL-001,competition-and-evidence.md,Overseer,Organizer and team facts required
+A0-R03,Accept Phase 0 exit gate,Overseer,Blocked,LL-003;LL-005;LL-006,founder-a-handoff.md,Founders,Independent review and joint decisions pending
