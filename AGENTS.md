@@ -19,7 +19,7 @@ Before beginning a phase, determine and record:
 | Field | Meaning | Example |
 | --- | --- | --- |
 | `agent_id` | Stable, unique identifier for the specific agent or agent instance; use lowercase kebab-case. | `codex-01` |
-| `founder_version` | Version of **Founder** being used for this work, as supplied by the project or task owner. | `1.4.0` |
+| `founder_version` | Version of **Founder** being used for this work, as supplied by the project or task owner. | `A or B` |
 | `phase_number` | Zero-padded number for the assigned phase. | `02` |
 | `phase_slug` | Short, descriptive lowercase kebab-case label. | `implementation` |
 
