@@ -1,4 +1,4 @@
-import type { LostLinkApi } from "../mocks/contracts.ts";
+import type { LostLinkApi } from "./contracts.ts";
 
 /** Host-provided session display only. Authorization always belongs in the adapter. */
 export interface Session {

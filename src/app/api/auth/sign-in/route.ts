@@ -9,14 +9,16 @@ export async function POST(request: NextRequest) {
   }
   const form = await readAuthForm(request);
   const credentials = form && credentialsFromForm(form);
-  if (!credentials) return NextResponse.redirect(new URL("/sign-in?error=invalid", origin), { status: 303, headers: { "Cache-Control": "private, no-store" } });
+  const next = safeReturnPath(form?.get("next"));
+  const failed = (reason: string) => new URL("/sign-in?error=" + reason + "&next=" + encodeURIComponent(next), origin);
+  if (!credentials) return NextResponse.redirect(failed("invalid"), { status: 303, headers: { "Cache-Control": "private, no-store" } });
   const client = await createSupabaseServerClient();
-  if (!client) return NextResponse.redirect(new URL("/sign-in?error=unavailable", origin), { status: 303, headers: { "Cache-Control": "private, no-store" } });
+  if (!client) return NextResponse.redirect(failed("unavailable"), { status: 303, headers: { "Cache-Control": "private, no-store" } });
   try {
     const { error } = await client.auth.signInWithPassword(credentials);
-    if (error) return NextResponse.redirect(new URL("/sign-in?error=invalid", origin), { status: 303, headers: { "Cache-Control": "private, no-store" } });
+    if (error) return NextResponse.redirect(failed("invalid"), { status: 303, headers: { "Cache-Control": "private, no-store" } });
     return NextResponse.redirect(new URL(safeReturnPath(form!.get("next")), origin), { status: 303, headers: { "Cache-Control": "private, no-store" } });
   } catch {
-    return NextResponse.redirect(new URL("/sign-in?error=unavailable", origin), { status: 303, headers: { "Cache-Control": "private, no-store" } });
+    return NextResponse.redirect(failed("unavailable"), { status: 303, headers: { "Cache-Control": "private, no-store" } });
   }
 }

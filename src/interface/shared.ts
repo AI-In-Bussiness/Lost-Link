@@ -1,4 +1,4 @@
-import type { PublicItem, Result } from "../mocks/contracts.ts";
+import type { PublicItem, Result } from "./contracts.ts";
 import type { View } from "./types.ts";
 
 export const categories = [
@@ -21,7 +21,7 @@ export const e = (value: unknown): string =>
 export const label = (value: string): string =>
   value.replaceAll("_", " ").replace(/^./, (c) => c.toUpperCase());
 export const date = (value: string): string =>
-  new Intl.DateTimeFormat("en-US", {
+  !value ? "Not provided" : new Intl.DateTimeFormat("en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -56,7 +56,7 @@ export function itemImage(item: PublicItem, className = ""): string {
       !url.startsWith("//") &&
       !/[\\\x00-\x1f]/.test(url)) ||
     /^https:\/\//i.test(url);
-  return `<div class="item-image ${e(className)}"><img src="${e(safe ? url : "/mock-assets/item-placeholder.svg")}" alt="${e(item.photo.alt)}" loading="lazy">${item.photo.isPlaceholder ? '<span class="photo-label">Illustration · demo item</span>' : ""}</div>`;
+  return `<div class="item-image ${e(className)}"><img src="${e(safe ? url : "/mock-assets/item-placeholder.svg")}" alt="${e(item.photo.alt)}" loading="lazy">${item.photo.isPlaceholder ? '<span class="photo-label">No photograph · illustration</span>' : ""}</div>`;
 }
 export function itemCard(
   item: PublicItem & { matchReasons?: string[] },

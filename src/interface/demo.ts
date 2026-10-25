@@ -6,6 +6,7 @@ import {
 } from "../mocks/client.ts";
 import type { Persona } from "../mocks/contracts.ts";
 import type { Session } from "./types.ts";
+import { demoSignInView } from "./demo-signin.ts";
 import { mountLostLink } from "./app.ts";
 
 const host = location.hostname;
@@ -38,6 +39,7 @@ const session = (): Session | null =>
               : [],
       };
 const app = mountLostLink(document.querySelector<HTMLElement>("#app")!, {
+  signInView: demoSignInView,
   getApi: () =>
     createMockApi(store, {
       persona,

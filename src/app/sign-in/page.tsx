@@ -1,10 +1,11 @@
+import { safeReturnPath } from "@/lib/auth/security";
 import Link from "next/link";
 import { supabaseConfiguration } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
-export default async function SignInPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
-  const { error } = await searchParams;
+export default async function SignInPage({ searchParams }: { searchParams: Promise<{ error?: string; returnTo?: string; next?: string }> }) {
+  const { error, returnTo, next } = await searchParams;
   const configured = !!supabaseConfiguration();
   return <main id="main" className="mx-auto max-w-lg px-6 py-16">
     <Link href="/" className="underline">LostLink home</Link>
@@ -14,7 +15,7 @@ export default async function SignInPage({ searchParams }: { searchParams: Promi
       {error && <p role="alert">{error === "unavailable" ? "Sign-in is temporarily unavailable. Please try again." : "Unable to sign in. Check your details and try again."}</p>}
       <label className="grid gap-1">Email<input name="email" type="email" autoComplete="username" maxLength={254} required className="rounded border p-3" /></label>
       <label className="grid gap-1">Password<input name="password" type="password" autoComplete="current-password" maxLength={256} required className="rounded border p-3" /></label>
-      <input type="hidden" name="next" value="/account" />
+      <input type="hidden" name="next" value={safeReturnPath(returnTo ?? next)} />
       <button className="rounded bg-slate-900 px-4 py-3 text-white" type="submit">Sign in</button>
     </form>}
   </main>;
