@@ -79,3 +79,11 @@
 - **Relevant references:** [State snapshot](../../docs/coordination/current-state.md),
   [documentation index](../../docs/README.md),
   [PR #4](https://github.com/AI-In-Bussiness/Lost-Link/pull/4).
+
+## Publication addendum
+
+Main advanced to d1b68a1aa74ae6ddda6e0ea6537935e041ec4b3e during publication.
+Preserved all three new Overseer reports unchanged and appended to its existing
+agent-logs/README.md. Updated the branch through a merge commit preserving both
+histories; no force update. The original 20-file preservation check predates
+this update; the final tree additionally preserves the new review artifacts.

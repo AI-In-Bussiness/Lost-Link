@@ -47,3 +47,11 @@ The local workspace checkout initially pointed to `b52dd4c` with only README
 and LICENSE. Shell fetch failed because its proxy was unreachable. Remote
 inspection and publication use the GitHub plugin, based on current main;
 the old local checkout is not used as the publication base.
+
+## Concurrent update preserved
+
+During publication, main advanced to `d1b68a1aa74ae6ddda6e0ea6537935e041ec4b3e`.
+It added an Overseer report index and Phase 0–2 reports reviewing `412010c`.
+Those original reports and their index content are retained unchanged. Their
+blocked gate findings describe that reviewed main commit; the founder feature
+branches still require the relevant independent re-review.
