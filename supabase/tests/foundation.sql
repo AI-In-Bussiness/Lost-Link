@@ -9,9 +9,9 @@ insert into public.memberships(organization_id,user_id,role) values
  ('10000000-0000-4000-8000-000000000001','30000000-0000-4000-8000-000000000005','admin');
 insert into public.claims(id,organization_id,item_id,claimant_id,evidence_text,private_review_note) values
  ('40000000-0000-4000-8000-000000000001','10000000-0000-4000-8000-000000000001','20000000-0000-4000-8000-000000000001','30000000-0000-4000-8000-000000000003','There is a yellow dinosaur keyring inside.','Internal staff note');
-insert into public.item_photos(organization_id,item_id,storage_path,status) values
- ('10000000-0000-4000-8000-000000000001','20000000-0000-4000-8000-000000000001','10000000-0000-4000-8000-000000000001/20000000-0000-4000-8000-000000000001/approved.webp','published'),
- ('10000000-0000-4000-8000-000000000001','20000000-0000-4000-8000-000000000001','10000000-0000-4000-8000-000000000001/20000000-0000-4000-8000-000000000001/pending.webp','pending');
+insert into public.item_photos(organization_id,item_id,storage_path,status,sha256,byte_size,content_type,processed_at) values
+ ('10000000-0000-4000-8000-000000000001','20000000-0000-4000-8000-000000000001','10000000-0000-4000-8000-000000000001/20000000-0000-4000-8000-000000000001/approved.webp','published',repeat('a',64),123,'image/webp',now()),
+ ('10000000-0000-4000-8000-000000000001','20000000-0000-4000-8000-000000000001','10000000-0000-4000-8000-000000000001/20000000-0000-4000-8000-000000000001/pending.webp','pending',repeat('b',64),123,'image/webp',now());
 insert into storage.objects(bucket_id,name) values
  ('item-public','10000000-0000-4000-8000-000000000001/20000000-0000-4000-8000-000000000001/approved.webp'),
  ('item-staging','10000000-0000-4000-8000-000000000001/20000000-0000-4000-8000-000000000001/pending.webp');
@@ -31,8 +31,8 @@ do $$ begin update public.claims set status='approved'; raise exception 'FAIL di
 do $$ begin insert into public.memberships values('10000000-0000-4000-8000-000000000002',auth.uid(),'admin',now()); raise exception 'FAIL membership escalation'; exception when insufficient_privilege then raise notice 'PASS membership escalation denied'; end $$;
 do $$ begin insert into storage.objects(bucket_id,name) values('item-staging','10000000-0000-4000-8000-000000000002/20000000-0000-4000-8000-000000000002/attack.webp'); raise exception 'FAIL cross org upload'; exception when insufficient_privilege then raise notice 'PASS cross org staging upload denied'; end $$;
 do $$ begin insert into storage.objects(bucket_id,name) values('item-public','10000000-0000-4000-8000-000000000001/20000000-0000-4000-8000-000000000001/unreviewed.webp'); raise exception 'FAIL public derivative upload'; exception when insufficient_privilege then raise notice 'PASS direct derivative publication denied'; end $$;
-insert into storage.objects(bucket_id,name) values('item-staging','10000000-0000-4000-8000-000000000001/20000000-0000-4000-8000-000000000001/new.webp');
-select pg_temp.assert_true((select count(*)=3 from storage.objects),'staff staging upload succeeds');
+do $$ begin insert into storage.objects(bucket_id,name) values('item-staging','10000000-0000-4000-8000-000000000001/20000000-0000-4000-8000-000000000001/new.webp'); raise exception 'FAIL direct staging ingress'; exception when insufficient_privilege then raise notice 'PASS direct unprocessed staging upload denied'; end $$;
+select pg_temp.assert_true((select count(*)=2 from storage.objects),'staff can read existing scoped storage');
 select set_config('request.jwt.claim.sub','30000000-0000-4000-8000-000000000002',true);
 select pg_temp.assert_true((select count(*)=0 from public.claims),'other org staff cannot read claims');
 select set_config('request.jwt.claim.sub','30000000-0000-4000-8000-000000000003',true);

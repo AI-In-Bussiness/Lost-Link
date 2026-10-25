@@ -25,7 +25,7 @@ Lost-and-found searches can take time for both the person looking and the staff 
 
 ## Development and Founder B handoff
 
-Lost-and-found for a fictional school competition demo. Founder B's Phase 1 foundation uses Next.js App Router, TypeScript, Tailwind and Supabase Auth/PostgreSQL/Storage. Founder B’s Phase 2 backend now supports structured search, inventory mutations and private claim review/return APIs. The interface and photo pipeline are not connected yet; semantic AI remains later work. See the [Phase 2 API handoff](docs/phase-2/README.md).
+Lost-and-found for a fictional school competition demo. Founder B's Phase 1 foundation uses Next.js App Router, TypeScript, Tailwind and Supabase Auth/PostgreSQL/Storage. Founder B’s Phase 2 backend now supports structured search, inventory mutations and private claim review/return APIs. The Phase3 backend also processes/reviews/delivers sanitized photos and exposes staff activity. The interface is not connected yet; semantic AI remains later work. See the [Phase3 handoff](docs/phase-3/README.md). See the [Phase 2 API handoff](docs/phase-2/README.md).
 
 ## Local development
 
@@ -35,6 +35,7 @@ Use Node 24 (`.nvmrc`), npm 11 and Docker. Run from this repository root:
 npm ci
 npm run db:start
 npm run env:local
+npm run env:photos
 npm run db:test
 npm run dev
 ```
@@ -75,7 +76,7 @@ npm run build
 npm run test:live
 ```
 
-`test:live` starts and stops its own production app on port 3000, using the running local Supabase stack. Free that port first. It creates and removes temporary confirmed Auth users, exercises real REST tenant isolation, and checks session-cookie sign-in/out, protected account access, CSRF rejection and redirect restrictions. It is an HTTP integration test, not a browser test. The SQL suites also cover owner-proof projection, Storage policies, role escalation denial, revocation, relational constraints and transactional lifecycle rules. The backend HTTP suite exercises staff inventory, private claims, concurrent approval, return, pagination, state conflicts and claim throttling. Future Playwright tests will cover the full implemented product journey.
+`test:live` starts and stops its own production app on port 3000, using the running local Supabase stack. Free that port first. It creates and removes temporary confirmed Auth users, exercises real REST tenant isolation, and checks session-cookie sign-in/out, protected account access, CSRF rejection and redirect restrictions. It also tests real photo uploads, private preview/publication, Storage integrity, concurrent photo caps and a photographed-item claim/return. Port3001 must also be free for the missing-processor credential regression. It is an HTTP integration test, not a browser test. The SQL suites also cover owner-proof projection, Storage policies, role escalation denial, revocation, relational constraints and transactional lifecycle rules. The backend HTTP suite exercises staff inventory, private claims, concurrent approval, return, pagination, state conflicts and claim throttling. Future Playwright tests will cover the full implemented product journey.
 
 GitHub Actions runs the same checks against disposable local services. A workflow file does not establish that remote CI has run.
 

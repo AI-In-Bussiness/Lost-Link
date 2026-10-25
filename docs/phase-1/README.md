@@ -40,3 +40,7 @@ This machine uses Docker's `vfs` storage driver. Standard pulls of the multi-lay
 Supabase CLI 2.75.0 is pinned for the tested local stack. Its upstream archive checksum was verified during installation. The CLI installer's tar dependency is overridden to 7.5.22; npm audit reported zero advisories during preparation. Re-evaluate updates deliberately with database/auth tests instead of silently changing local service versions.
 
 For this proxy-based cloud shell, install using `npm_config_https_proxy="$HTTPS_PROXY" npm ci --cache /workspace/.cache/npm`; this references the existing proxy setting without storing its value. Normal machines and GitHub Actions can use `npm ci` directly. Keep TLS and checksum verification enabled.
+
+## Phase3 superseding note
+
+The statements above describe the Phase1 foundation. [Phase3](../phase-3/README.md) now adds a narrowly trusted server-only photo processor that requires SUPABASE_SERVICE_ROLE_KEY for uploads; ordinary user APIs still do not use it. Direct staging ingress is now denied, and only newly decoded/re-encoded derivatives enter Storage. The original foundation assertions were preserved and updated to this stricter permission boundary.
