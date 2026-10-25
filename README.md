@@ -22,3 +22,14 @@ LostLink helps people find belongings they have misplaced at **schools, sports f
 ## Why LostLink
 
 Lost-and-found searches can take time for both the person looking and the staff responsible for collected items. LostLink brings item descriptions and claim requests into one searchable workflow, making it easier to find possible matches and manage returns.
+
+## Working in this repository
+
+Start with [AGENTS.md](AGENTS.md), then the [shared agent hub](docs/coordination/README.md).
+The [documentation index](docs/README.md) organizes existing plans and handoffs;
+the [repository map](docs/coordination/repository-map.md) explains file locations.
+
+Implementation is currently split across branches. Check the
+[branch and delivery snapshot](docs/coordination/current-state.md) before assuming
+a feature or toolchain exists on your branch. Track shared integration work in
+the [coordination board](docs/coordination/task-board.csv).
