@@ -49,3 +49,11 @@
 ## Final verification addendum — 2026-10-25 UTC
 
 Final lint/typecheck/build passed. The final adapter/auth unit suite passed 18 tests and retained mocks passed 14. The Phase 3 suite passed all four checks, including explicit withdrawn/cancelled receipt and staff-state checks added during review. The retained Phase 2 browser suite passed seven with its one optional axe scan skipped. Production JavaScript was searched for runtime mock-store identifiers, private fixture markers and demo account controls; none were found after extracting demo sign-in. CSV shape/statuses, relative Phase 3 document links and whitespace checks passed. No live persistence or photo claim was added.
+
+## PR #7 CI repair addendum — 2026-10-25 UTC
+
+User requested repair of both failed merge checks. Both `Foundation checks / check` runs on `a4af15b` (push run `40231587659`, PR run `40231613996`) failed at `npm run db:start`: the default public ECR image registry returned `toomanyrequests: Data limit exceeded`. Dependency installation succeeded; subsequent lint/tests/build/live steps were skipped. Vercel checks were already successful.
+
+The workflow now sets `SUPABASE_INTERNAL_IMAGE_REGISTRY=ghcr.io` for the job. This is the pinned Supabase CLI's supported registry setting, verified in its v2.75.0 source (`internal/utils/docker.go` and `cmd/root.go`). It preserves CLI-selected image tags and the entire SQL/auth/backend test sequence. The same pinned PostgreSQL image manifest is available on Supabase's public GHCR mirror. A local mirror-based startup and both remote CI triggers are being verified; successful manifest inspection alone is not recorded as a passing integration suite. Remote terminal results are available on PR #7's checks for this repair commit.
+
+No checks, assertions, policies or test steps were removed or allowed to fail. This repair does not accept the outstanding photo/independent-review phase gate.
