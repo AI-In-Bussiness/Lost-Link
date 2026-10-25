@@ -17,6 +17,7 @@ jobs:
       - run: npm run lint
       - run: npm run typecheck
       - run: npm test
+      - run: npm run test:mocks
       - run: npm run db:test
       - run: npm run build
       - run: npm run test:live

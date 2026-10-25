@@ -1,0 +1,353 @@
+{
+  "notice": "FICTIONAL DEVELOPMENT RESPONSES. Includes pretend private claim evidence. Never serve this file publicly or use as real evidence.",
+  "browse": {
+    "ok": true,
+    "data": {
+      "items": [
+        {
+          "id": "item-bottle",
+          "organizationId": "org-cedar",
+          "title": "Blue reusable water bottle",
+          "publicDescription": "Blue metal water bottle with a screw-top lid.",
+          "category": "bottle",
+          "color": "blue",
+          "foundLocation": "Library",
+          "foundDate": "2026-10-24",
+          "photo": {
+            "url": "/mock-assets/item-placeholder.svg",
+            "alt": "Illustration placeholder for blue reusable water bottle; not a photograph",
+            "isPlaceholder": true
+          },
+          "status": "available",
+          "createdAt": "2026-10-24T10:00:00.000Z",
+          "updatedAt": "2026-10-24T10:00:00.000Z",
+          "matchReasons": []
+        },
+        {
+          "id": "item-keys",
+          "organizationId": "org-cedar",
+          "title": "Keys on a red loop",
+          "publicDescription": "Two keys on a plain red fabric key loop.",
+          "category": "keys",
+          "color": "red",
+          "foundLocation": "Cafeteria",
+          "foundDate": "2026-10-24",
+          "photo": {
+            "url": "/mock-assets/item-placeholder.svg",
+            "alt": "Illustration placeholder for keys on a red loop; not a photograph",
+            "isPlaceholder": true
+          },
+          "status": "available",
+          "createdAt": "2026-10-24T10:00:00.000Z",
+          "updatedAt": "2026-10-24T10:00:00.000Z",
+          "matchReasons": []
+        }
+      ],
+      "page": 1,
+      "pageSize": 2,
+      "total": 9,
+      "totalPages": 5,
+      "mode": "keyword",
+      "smartMatchingUnavailable": false
+    }
+  },
+  "match": {
+    "ok": true,
+    "data": {
+      "items": [
+        {
+          "id": "item-duffel",
+          "organizationId": "org-cedar",
+          "title": "Black Nike duffel bag",
+          "publicDescription": "Black sports duffel with a white logo and two carry handles.",
+          "category": "bag",
+          "color": "black",
+          "foundLocation": "Gym entrance",
+          "foundDate": "2026-10-23",
+          "photo": {
+            "url": "/mock-assets/item-placeholder.svg",
+            "alt": "Illustration placeholder for black nike duffel bag; not a photograph",
+            "isPlaceholder": true
+          },
+          "status": "available",
+          "createdAt": "2026-10-23T10:00:00.000Z",
+          "updatedAt": "2026-10-23T10:00:00.000Z",
+          "matchReasons": [
+            "Matching public terms: black, nike, duffel"
+          ]
+        }
+      ],
+      "page": 1,
+      "pageSize": 1,
+      "total": 4,
+      "totalPages": 4,
+      "mode": "keyword",
+      "smartMatchingUnavailable": false
+    }
+  },
+  "noMatch": {
+    "ok": true,
+    "data": {
+      "items": [],
+      "page": 1,
+      "pageSize": 20,
+      "total": 0,
+      "totalPages": 0,
+      "mode": "keyword",
+      "smartMatchingUnavailable": false
+    }
+  },
+  "empty": {
+    "ok": true,
+    "data": {
+      "items": [],
+      "page": 1,
+      "pageSize": 20,
+      "total": 0,
+      "totalPages": 0,
+      "mode": "keyword",
+      "smartMatchingUnavailable": false
+    }
+  },
+  "unauthenticated": {
+    "ok": false,
+    "error": {
+      "code": "UNAUTHENTICATED",
+      "message": "Sign in to continue.",
+      "requestId": "mock-anonymous-4"
+    }
+  },
+  "forbidden": {
+    "ok": false,
+    "error": {
+      "code": "FORBIDDEN",
+      "message": "Staff access is required.",
+      "requestId": "mock-student-1"
+    }
+  },
+  "validation": {
+    "ok": false,
+    "error": {
+      "code": "VALIDATION_ERROR",
+      "message": "Check your email.",
+      "requestId": "mock-student-2",
+      "fieldErrors": {
+        "contactEmail": "Enter a valid email address."
+      }
+    }
+  },
+  "pending": {
+    "ok": true,
+    "data": {
+      "id": "claim-pending",
+      "itemId": "item-bottle",
+      "organizationId": "org-cedar",
+      "claimantId": "demo-student-avery",
+      "contactEmail": "avery@example.invalid",
+      "ownershipEvidence": "The sticker on the base says Moon Club.",
+      "status": "pending",
+      "decisionReason": null,
+      "decidedBy": null,
+      "decidedAt": null,
+      "createdAt": "2026-10-24T11:00:00.000Z",
+      "item": {
+        "id": "item-bottle",
+        "organizationId": "org-cedar",
+        "title": "Blue reusable water bottle",
+        "publicDescription": "Blue metal water bottle with a screw-top lid.",
+        "category": "bottle",
+        "color": "blue",
+        "foundLocation": "Library",
+        "foundDate": "2026-10-24",
+        "photo": {
+          "url": "/mock-assets/item-placeholder.svg",
+          "alt": "Illustration placeholder for blue reusable water bottle; not a photograph",
+          "isPlaceholder": true
+        },
+        "status": "available",
+        "createdAt": "2026-10-24T10:00:00.000Z",
+        "updatedAt": "2026-10-24T10:00:00.000Z"
+      },
+      "collectionInstructions": null
+    }
+  },
+  "approved": {
+    "ok": true,
+    "data": {
+      "id": "claim-approved",
+      "itemId": "item-jacket",
+      "organizationId": "org-cedar",
+      "claimantId": "demo-student-avery",
+      "contactEmail": "avery@example.invalid",
+      "ownershipEvidence": "There is a folded chess score sheet in the inner pocket.",
+      "status": "approved",
+      "decisionReason": null,
+      "decidedBy": "demo-staff-cedar",
+      "decidedAt": "2026-10-24T12:00:00.000Z",
+      "createdAt": "2026-10-24T11:00:00.000Z",
+      "item": {
+        "id": "item-jacket",
+        "organizationId": "org-cedar",
+        "title": "Red rain jacket",
+        "publicDescription": "Lightweight red jacket with a hood.",
+        "category": "clothing",
+        "color": "red",
+        "foundLocation": "Bus waiting area",
+        "foundDate": "2026-10-17",
+        "photo": {
+          "url": "/mock-assets/item-placeholder.svg",
+          "alt": "Illustration placeholder for red rain jacket; not a photograph",
+          "isPlaceholder": true
+        },
+        "status": "reserved",
+        "createdAt": "2026-10-17T10:00:00.000Z",
+        "updatedAt": "2026-10-17T10:00:00.000Z"
+      },
+      "collectionInstructions": "Visit the Cedar Grove front office on a school day. Show your claim reference to staff."
+    }
+  },
+  "rejected": {
+    "ok": true,
+    "data": {
+      "id": "claim-rejected",
+      "itemId": "item-backpack",
+      "organizationId": "org-cedar",
+      "claimantId": "demo-student-avery",
+      "contactEmail": "avery@example.invalid",
+      "ownershipEvidence": "I left a notebook with a red cover inside.",
+      "status": "rejected",
+      "decisionReason": "The identifying detail did not match.",
+      "decidedBy": "demo-staff-cedar",
+      "decidedAt": "2026-10-24T12:00:00.000Z",
+      "createdAt": "2026-10-24T11:00:00.000Z",
+      "item": {
+        "id": "item-backpack",
+        "organizationId": "org-cedar",
+        "title": "Black athletic backpack",
+        "publicDescription": "Black backpack with padded straps and a mesh side pocket.",
+        "category": "bag",
+        "color": "black",
+        "foundLocation": "Locker room",
+        "foundDate": "2026-10-22",
+        "photo": {
+          "url": "/mock-assets/item-placeholder.svg",
+          "alt": "Illustration placeholder for black athletic backpack; not a photograph",
+          "isPlaceholder": true
+        },
+        "status": "available",
+        "createdAt": "2026-10-22T10:00:00.000Z",
+        "updatedAt": "2026-10-22T10:00:00.000Z"
+      },
+      "collectionInstructions": null
+    }
+  },
+  "fulfilled": {
+    "ok": true,
+    "data": {
+      "id": "claim-fulfilled",
+      "itemId": "item-headphones",
+      "organizationId": "org-cedar",
+      "claimantId": "demo-student-jordan",
+      "contactEmail": "jordan@example.invalid",
+      "ownershipEvidence": "Blue paint mark on the left inner band.",
+      "status": "fulfilled",
+      "decisionReason": null,
+      "decidedBy": "demo-staff-cedar",
+      "decidedAt": "2026-10-24T12:00:00.000Z",
+      "createdAt": "2026-10-24T11:00:00.000Z",
+      "item": {
+        "id": "item-headphones",
+        "organizationId": "org-cedar",
+        "title": "White over-ear headphones",
+        "publicDescription": "White wireless headphones with padded ear cups.",
+        "category": "electronics",
+        "color": "white",
+        "foundLocation": "Music room",
+        "foundDate": "2026-10-16",
+        "photo": {
+          "url": "/mock-assets/item-placeholder.svg",
+          "alt": "Illustration placeholder for white over-ear headphones; not a photograph",
+          "isPlaceholder": true
+        },
+        "status": "returned",
+        "createdAt": "2026-10-16T10:00:00.000Z",
+        "updatedAt": "2026-10-16T10:00:00.000Z"
+      },
+      "collectionInstructions": null
+    }
+  },
+  "staffReview": {
+    "ok": true,
+    "data": {
+      "id": "claim-pending",
+      "itemId": "item-bottle",
+      "organizationId": "org-cedar",
+      "claimantId": "demo-student-avery",
+      "contactEmail": "avery@example.invalid",
+      "ownershipEvidence": "The sticker on the base says Moon Club.",
+      "status": "pending",
+      "decisionReason": null,
+      "decidedBy": null,
+      "decidedAt": null,
+      "createdAt": "2026-10-24T11:00:00.000Z"
+    }
+  },
+  "aiUnavailable": {
+    "ok": true,
+    "data": {
+      "items": [
+        {
+          "id": "item-duffel",
+          "organizationId": "org-cedar",
+          "title": "Black Nike duffel bag",
+          "publicDescription": "Black sports duffel with a white logo and two carry handles.",
+          "category": "bag",
+          "color": "black",
+          "foundLocation": "Gym entrance",
+          "foundDate": "2026-10-23",
+          "photo": {
+            "url": "/mock-assets/item-placeholder.svg",
+            "alt": "Illustration placeholder for black nike duffel bag; not a photograph",
+            "isPlaceholder": true
+          },
+          "status": "available",
+          "createdAt": "2026-10-23T10:00:00.000Z",
+          "updatedAt": "2026-10-23T10:00:00.000Z",
+          "matchReasons": [
+            "Matching public terms: duffel"
+          ]
+        }
+      ],
+      "page": 1,
+      "pageSize": 1,
+      "total": 1,
+      "totalPages": 1,
+      "mode": "keyword",
+      "smartMatchingUnavailable": true
+    }
+  },
+  "networkError": {
+    "ok": false,
+    "error": {
+      "code": "INTERNAL_ERROR",
+      "message": "Unable to load data. Try again.",
+      "requestId": "mock-anonymous-1"
+    }
+  },
+  "rateLimited": {
+    "ok": false,
+    "error": {
+      "code": "RATE_LIMITED",
+      "message": "Too many requests. Try again later.",
+      "requestId": "mock-anonymous-1"
+    }
+  },
+  "conflict": {
+    "ok": false,
+    "error": {
+      "code": "CONFLICT",
+      "message": "This claim has already been reviewed.",
+      "requestId": "mock-staff-2"
+    }
+  }
+}

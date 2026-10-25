@@ -40,3 +40,11 @@
 - **Remaining work:** Founder A/integrator must map mocked pending to submitted, field names and competing-claim behavior before UI wiring.
 - **Recommended next steps:** Read the corresponding phase handoff and validation records before implementing downstream changes.
 - **Relevant references:** docs/phase-0/README.md; docs/phase-1/validation.md; docs/phase-2/README.md; docs/phase-2/validation.md
+
+## 2026-10-25 addendum — requested commit and push
+
+The user explicitly requested committing and pushing the work under repository guidelines. Fetched origin/main at412010c, read its full AGENTS.md, and added retrospective reports for each participating agent/phase. Created codex/founder-b-phase-2; preserved all existing main files through a merge rather than replacing main or force-pushing.
+
+Merged the full repository rules with generated Next rules and combined the product README with the development handoff. Founder A's mock code, fixtures, assets and documents are retained. Minimal integration fixes enable existing .ts imports, remove a redundant unreachable test guard and an unused import. See docs/phase-2/integration-notes.md for unresolved DTO/state differences; no frontend/backend compatibility or joint contract approval is invented.
+
+After integration: lint, typecheck,11 auth/API tests,14 existing mock tests and production build passed. Node reports a non-failing package-module detection warning for native mock tests. Added npm run test:mocks to CI. Earlier72 database and live HTTP/race results remain recorded in docs/phase-2/validation.md; no remote CI or hosted deployment result is claimed. Credentials, generated output and local demo passwords remain ignored. Push outcome is reported in the conversation after remote verification.

@@ -74,3 +74,7 @@ The existing Supabase/Vercel hosted targets remain identified but unverified wit
 ## Validation
 
 See [validation.md](validation.md). `npm run db:test` now runs both SQL suites; `npm run test:live` now runs both auth and backend HTTP suites against its own production server on a free port3000. For an already-running local app, `npm run test:backend` runs only the backend HTTP suite. All fixtures are newly created fictional organizations/users and removed on completion. The SQL suites roll back their fixtures. Do not target these tests at a hosted project.
+
+## Repository integration
+
+The pushed Founder B branch retains current main's Founder A mocks/documents. See [integration notes](integration-notes.md) for DTO/state differences that need an explicit adapter or shared decision before connecting the interface. The additional14 mock tests pass and are included in CI; this does not imply they share the backend's proposed lifecycle.
