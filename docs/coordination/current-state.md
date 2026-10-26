@@ -1,5 +1,10 @@
 # Repository state snapshot
 
+## Founder B Phase 5 started — 2026-10-26 UTC
+
+A focused branch `codex/founder-b-phase-5` starts from current main `b70777e`. It adds bounded request-stream deadlines and a backend security coverage matrix. See [Phase 5](../phase-5/README.md). Phase 4 PR12 remains open and is not assumed integrated; full Phase 5 acceptance and combined validation remain pending.
+
+
 ## Overseer remediation — 2026-10-26 UTC
 
 Work starts from current main `dc58f92` on `codex/overseer-phase-0-3-fixes`.

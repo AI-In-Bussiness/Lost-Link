@@ -7,8 +7,9 @@ import { isSameOrigin, siteOrigin } from "@/lib/auth/security";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { decodeCursor, encodeCursor, queryObject, slug, uuid } from "@/lib/api/contracts";
 import { BodyError, readJsonBody } from "@/lib/api/body";
+import { uploadBytes } from "./upload";
 import { ImageError } from "./image";
-import { databasePhotoError, downloadVerifiedPhoto, MAX_PHOTO_BYTES, PhotoError, photoMetadata, storeProcessedPhoto } from "./service";
+import { databasePhotoError, downloadVerifiedPhoto, PhotoError, photoMetadata, storeProcessedPhoto } from "./service";
 
 type PhotoAction = "upload" | "list" | "publish" | "staff_content" | "public_content" | "activity";
 const paging = z.strictObject({
@@ -18,38 +19,6 @@ const paging = z.strictObject({
 });
 const emptyQuery = z.strictObject({});
 const reviewBody = z.strictObject({ reviewed: z.literal(true) });
-const MAX_MULTIPART_BYTES = MAX_PHOTO_BYTES + 16 * 1024;
-
-async function uploadBytes(request: Request): Promise<Buffer> {
-  const contentType = request.headers.get("content-type");
-  if (!contentType || !/^multipart\/form-data\s*;/i.test(contentType)) throw new PhotoError(415, "UNSUPPORTED_MEDIA_TYPE", "Use a multipart file upload.");
-  const declared = request.headers.get("content-length");
-  if (declared && (!/^\d+$/.test(declared) || Number(declared) > MAX_MULTIPART_BYTES)) throw new PhotoError(413, "PAYLOAD_TOO_LARGE", "The upload is too large.");
-  const reader = request.body?.getReader();
-  if (!reader) throw new PhotoError(400, "VALIDATION_ERROR", "Choose a photo to upload.");
-  const chunks: Uint8Array[] = [];
-  let size = 0;
-  while (true) {
-    const { value, done } = await reader.read();
-    if (done) break;
-    size += value.byteLength;
-    if (size > MAX_MULTIPART_BYTES) { await reader.cancel(); throw new PhotoError(413, "PAYLOAD_TOO_LARGE", "The upload is too large."); }
-    chunks.push(value);
-  }
-  let form: FormData;
-  try {
-    form = await new Request("http://localhost/upload", { method: "POST", headers: { "Content-Type": contentType }, body: Buffer.concat(chunks, size) }).formData();
-  } catch {
-    throw new PhotoError(400, "VALIDATION_ERROR", "Use a valid multipart file upload.");
-  }
-  const entries = [...form.entries()];
-  if (entries.length !== 1 || entries[0][0] !== "file" || !(entries[0][1] instanceof File)) throw new PhotoError(400, "VALIDATION_ERROR", "Upload exactly one file named file.");
-  const file = entries[0][1];
-  if (!file.size) throw new PhotoError(400, "VALIDATION_ERROR", "Choose a photo to upload.");
-  if (file.size > MAX_PHOTO_BYTES) throw new PhotoError(413, "PAYLOAD_TOO_LARGE", "Photos must be 4 MiB or smaller.");
-  // Ignore the untrusted filename and MIME label. The decoder validates bytes.
-  return Buffer.from(await file.arrayBuffer());
-}
 
 async function staffContext(client: SupabaseClient, orgSlug: string) {
   const { data: { user }, error: authError } = await client.auth.getUser();

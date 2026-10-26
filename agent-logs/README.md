@@ -59,3 +59,5 @@ shared phase acceptance still requires its review evidence.
 ## Founder A Phase 2 UI refinement
 
 - [Research, visual changes and verification](codex-ui-01__founder-va__phase-02-ui-refinement/codex-ui-01__founder-va__phase-02-ui-refinement.md).
+
+- [Founder B Phase 5 security checkpoint](codex-founder-b-phase5__founder-vb__phase-05-security/codex-founder-b-phase5__founder-vb__phase-05-security.md) — request-read reliability and security verification inventory.
