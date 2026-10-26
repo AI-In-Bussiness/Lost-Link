@@ -25,7 +25,7 @@ Lost-and-found searches can take time for both the person looking and the staff 
 
 ## Development and Founder B handoff
 
-Lost-and-found for a fictional school competition demo. Founder B's Phase 1 foundation uses Next.js App Router, TypeScript, Tailwind and Supabase Auth/PostgreSQL/Storage. Founder B’s Phase 2 backend now supports structured search, inventory mutations and private claim review/return APIs. Founder A’s Phase 3 branch connects the interface to these APIs; the photo pipeline remains unavailable; semantic AI remains later work. See the [Phase 2 API handoff](docs/phase-2/README.md) and [Phase 3 integration handoff](docs/phase-3/founder-a-handoff.md).
+Lost-and-found for a fictional school competition demo. The application combines Founder B's Next.js, TypeScript and Supabase foundation with Founder A's real API interface for search, inventory, private claims, review and return. Founder B's Phase 3 backend adds sanitized photo processing, review/publication/delivery APIs and staff activity. Photo and activity controls still need wiring in the live interface; semantic AI remains later work. See the [Phase 2 API handoff](docs/phase-2/README.md), [interface handoff](docs/phase-3/founder-a-handoff.md), and [photo/backend handoff](docs/phase-3/README.md).
 
 ## Local development
 
@@ -35,6 +35,7 @@ Use Node 24 (`.nvmrc`), npm 11 and Docker. Run from this repository root:
 npm ci
 npm run db:start
 npm run env:local
+npm run env:photos
 npm run db:test
 npm run dev
 ```
@@ -75,7 +76,7 @@ npm run build
 npm run test:live
 ```
 
-`test:live` starts and stops its own production app on port 3000, using the running local Supabase stack. Free that port first. It creates and removes temporary confirmed Auth users, exercises real REST tenant isolation, and checks session-cookie sign-in/out, protected account access, CSRF rejection and redirect restrictions. It is an HTTP integration test, not a browser test. The SQL suites also cover owner-proof projection, Storage policies, role escalation denial, revocation, relational constraints and transactional lifecycle rules. The backend HTTP suite exercises staff inventory, private claims, concurrent approval, return, pagination, state conflicts and claim throttling. Future Playwright tests will cover the full implemented product journey.
+`test:live` starts and stops its own production app on port 3000, using the running local Supabase stack. Free that port first. It creates and removes temporary confirmed Auth users, exercises real REST tenant isolation, and checks session-cookie sign-in/out, protected account access, CSRF rejection and redirect restrictions. It also tests real photo uploads, private preview/publication, Storage integrity, concurrent photo caps and a photographed-item claim/return. Port3001 must also be free for the missing-processor credential regression. It is an HTTP integration test, not a browser test. The SQL suites also cover owner-proof projection, Storage policies, role escalation denial, revocation, relational constraints and transactional lifecycle rules. The backend HTTP suite exercises staff inventory, private claims, concurrent approval, return, pagination, state conflicts and claim throttling. Future Playwright tests will cover the full implemented product journey.
 
 GitHub Actions runs the same checks against disposable local services. A workflow file does not establish that remote CI has run.
 
@@ -91,7 +92,7 @@ Architecture and security decisions: [Phase 0 handoff](docs/phase-0/README.md). 
 
 The homepage, `/o/:slug/search`, item/claim screens, `/my/claims` and staff workspace now use the real cookie-authenticated API. `LOSTLINK_ORGANIZATION_SLUGS` optionally sets the school selector’s comma-separated public slugs (defaults to the two fictional seed schools). Direct organization URLs are also resolved by the API. Sign in with an operator-provisioned account; the real application has no demo persona controls.
 
-For repeatable browser checks, start `npm start` and, separately, `node tools/phase2-preview.mjs`, then run `python tools/phase3-browser-test.py` with Python Playwright and Chromium installed. This suite checks production routes and exercises authenticated interactions in an isolated HTTP-fixture harness. It does **not** prove Supabase persistence. See the Phase 3 handoff for the blocked live check and missing photo support.
+For repeatable browser checks, start `npm start` and, separately, `node tools/phase2-preview.mjs`, then run `python tools/phase3-browser-test.py` with Python Playwright and Chromium installed. This suite checks production routes and exercises authenticated interactions in an isolated HTTP-fixture harness. It does **not** prove Supabase persistence. See the Phase 3 handoffs for their original verification boundaries and the [current integration snapshot](docs/coordination/current-state.md) for remaining photo/activity UI work.
 
 ## Working in this repository
 
@@ -99,7 +100,7 @@ Start with [AGENTS.md](AGENTS.md), then the [shared agent hub](docs/coordination
 The [documentation index](docs/README.md) organizes existing plans and handoffs;
 the [repository map](docs/coordination/repository-map.md) explains file locations.
 
-Implementation is currently split across branches. Check the
-[branch and delivery snapshot](docs/coordination/current-state.md) before assuming
-a feature or toolchain exists on your branch. Track shared integration work in
-the [coordination board](docs/coordination/task-board.csv).
+All agents use `main` as the common integrated baseline. Related work shares a
+short-lived integration branch and a PR into `main`, following the workflow in
+AGENTS.md. Read the [delivery snapshot](docs/coordination/current-state.md) and
+track file ownership in the [coordination board](docs/coordination/task-board.csv).

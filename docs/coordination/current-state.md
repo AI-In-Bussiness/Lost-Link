@@ -1,5 +1,29 @@
 # Repository state snapshot
 
+## Consolidation update — 2026-10-26 UTC
+
+The combined tree is based on main `be015f7` (including PRs #4 and #8)
+and merges Founder B Phase 3 `af5609f`. All other eight non-main branch heads
+were already ancestors of that main commit. Every file path from all ten
+observed branch heads is present; original reports, source documents, fixtures,
+standalone preview, Next.js interface, backend and all migrations are retained.
+README and Phase 3 validation conflicts were combined with both founders'
+evidence preserved. See the consolidation report linked from the agent index
+for exact checks and the integration PR.
+
+Use current main as the common baseline. Related assignments share a temporary
+PR branch as specified in AGENTS.md; permanent branches per founder or phase
+are no longer required. Original branches remain available as historical
+references; no branch was deleted or force-pushed.
+
+The live interface covers search, private claims, staff intake/review and return.
+Photo processing/publication/content and staff activity APIs are now present.
+The live adapter still uses placeholder photos and an unavailable activity
+feed: UI wiring and independent real-browser acceptance remain follow-up work.
+A merge does not establish hosted deployment or phase-gate approval.
+
+## Historical inspection (preserved)
+
 Inspected 2026-10-25 UTC through the GitHub connection. Re-check live refs and
 pull requests before integrating; this is a dated snapshot, not a live monitor.
 
