@@ -501,6 +501,66 @@ class InterfaceTest(unittest.TestCase):
         p.keyboard.press('Enter')
         self.assertTrue(p.evaluate("document.activeElement.id === 'main'"))
 
+    def test_retry_restores_keyboard_focus_after_page_replacement(self):
+        p = self.page
+        # One failed read followed by a successful retry, through the real mount seam.
+        p.evaluate("""async () => {
+          const {mountLostLink} = await import('/src/interface/app.ts');
+          const {createMockApi,createMockStore} = await import('/src/mocks/client.ts');
+          const api = createMockApi(createMockStore());
+          let failed = false;
+          const transport = {...api,listOrganizations:async () => {
+            if (!failed) {failed=true;return {ok:false,error:{code:'INTERNAL_ERROR',message:'Please retry.',requestId:'test'}};}
+            return api.listOrganizations();
+          }};
+          history.replaceState({},'', '/o/cedar-grove/search');
+          window.__retryApp = mountLostLink(document.querySelector('#app'),{
+            getApi:()=>transport,getSession:()=>null,signOut:()=>{}});
+        }""")
+        expect(p.locator('h1')).to_have_text('We couldn’t load this page')
+        self.keyboard_activate(p.get_by_role('button', name='Try again', exact=True))
+        expect(p.locator('h1')).to_have_text("Let's find your item.")
+        expect(p.locator('h1')).to_be_focused()
+        p.keyboard.press('Tab')
+        expect(p.get_by_label('Describe your item')).to_be_focused()
+
+    def test_staff_refresh_announces_updated_claim_to_keyboard_users(self):
+        p = self.page
+        self.control('persona', 'staff')
+        self.route(SCHOOL + '/staff/claims/claim-pending')
+        self.keyboard_activate(p.get_by_role('button', name='Approve for collection'))
+        expect(p.get_by_role('heading', name='Record physical handover')).to_be_visible()
+        expect(p.locator('h1')).to_be_focused()
+        self.keyboard_activate(p.get_by_label('I confirm'), 'Space')
+        self.keyboard_activate(p.get_by_role('button', name='Mark item returned'))
+        expect(p.locator('main')).to_contain_text('The physical handover has been recorded.')
+        expect(p.locator('h1')).to_be_focused()
+
+    def test_phone_text_resize_and_reduced_motion(self):
+        p = self.page
+        self.control('persona', 'staff')
+        p.set_viewport_size({'width': 320, 'height': 640})
+        p.emulate_media(reduced_motion='reduce')
+        p.evaluate("document.documentElement.style.fontSize=(parseFloat(getComputedStyle(document.documentElement).fontSize)*2)+'px'")
+        for path in ['/', SCHOOL + '/search', SCHOOL + '/items/item-duffel',
+                     SCHOOL + '/items/item-duffel/claim', '/my/claims',
+                     '/my/claims/claim-approved', SCHOOL + '/staff',
+                     SCHOOL + '/staff/items', SCHOOL + '/staff/items/new',
+                     SCHOOL + '/staff/items/item-jacket',
+                     SCHOOL + '/staff/claims/claim-pending']:
+            self.route(path)
+            p.evaluate('async () => {await document.fonts.ready}')
+            self.assertFalse(p.evaluate('document.documentElement.scrollWidth > innerWidth'), path)
+            for control in p.locator('main input:not([type=hidden]), main textarea, main select, main button').all():
+                if not control.is_visible():
+                    continue
+                control.scroll_into_view_if_needed()
+                bounds = control.bounding_box()
+                self.assertIsNotNone(bounds, path)
+                self.assertGreaterEqual(bounds['x'], 0, path)
+                self.assertLessEqual(bounds['x'] + bounds['width'], 321, path)
+        p.screenshot(path='/tmp/lostlink-phone-text-200.png', full_page=True)
+
     def test_responsive_pages_landmarks_and_screenshots(self):
         p = self.page
         routes = ['/', SCHOOL + '/search', SCHOOL + '/items/item-duffel', '/sign-in', '/my/claims',

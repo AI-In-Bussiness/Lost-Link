@@ -48,8 +48,11 @@ organization pass. Their interpretation remains in the existing phase documents.
 - [Overseer response and route/state evidence](phase-2/review-response.md)
 - [Founder A Phase 2 handoff](phase-2/founder-a-handoff.md)
 
+- [Founder B Phase 5 security checkpoint](phase-5/README.md) — bounded request streams and backend coverage matrix; full phase in progress.
 - [Founder B Phase 4 semantic matching checkpoint](phase-4/README.md) — free local CPU inference with synthetic evaluation; independent acceptance pending.
 - [Founder A Phase 4 cases and explanations](phase-4/founder-a-handoff.md) — frozen additional relevance set and reproducible diagnostics.
+- [Founder A Phase 5 browser quality](phase-5/founder-a-handoff.md) — focus recovery, phone text reflow and expanded live accessibility/error checks.
+
 
 - [Founder A Phase 6 presentation polish](phase-6/founder-a-handoff.md) — dashboard/privacy polish, demo narrative and pitch draft; competition summary excluded by task owner.
 
