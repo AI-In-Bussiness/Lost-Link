@@ -1,0 +1,192 @@
+"""Real local Auth/Postgres/Storage browser acceptance. No intercepted API responses.
+Run through npm run test:browser; credentials exist only in its temporary 0600 file.
+"""
+import json
+import os
+import struct
+import unittest
+import zlib
+from pathlib import Path
+from playwright.sync_api import sync_playwright, expect
+
+
+def png_bytes():
+    def chunk(kind, data):
+        return struct.pack('!I', len(data)) + kind + data + struct.pack('!I', zlib.crc32(kind + data))
+    return b'\x89PNG\r\n\x1a\n' + chunk(b'IHDR', struct.pack('!IIBBBBB', 40, 20, 8, 6, 0, 0, 0)) + chunk(b'IDAT', zlib.compress((b'\0' + bytes([60, 80, 120, 255]) * 40) * 20)) + chunk(b'IEND', b'')
+
+
+class PersistedWorkflow(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.fixtures = json.loads(Path(os.environ['LOSTLINK_BROWSER_FIXTURES']).read_text())
+        cls.origin = cls.fixtures['origin']
+        cls.school = '/o/' + cls.fixtures['orgs'][0]['slug']
+        cls.runtime = sync_playwright().start()
+        cls.browser = cls.runtime.chromium.launch(headless=True, args=['--no-sandbox'], **({'executable_path': os.environ['CHROMIUM_PATH']} if os.environ.get('CHROMIUM_PATH') else {}))
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.browser.close()
+        cls.runtime.stop()
+
+    def login(self, account, path):
+        context = self.browser.new_context(viewport={'width': 1440, 'height': 1000})
+        self.addCleanup(context.close)
+        page = context.new_page()
+        page.goto(self.origin + '/sign-in?returnTo=' + path)
+        page.get_by_label('Email', exact=True).fill(account['email'])
+        page.get_by_label('Password', exact=True).fill(account['password'])
+        page.get_by_role('button', name='Sign in', exact=True).click()
+        page.wait_for_url(self.origin + path)
+        expect(page.locator('main')).not_to_have_attribute('aria-busy', 'true')
+        return context, page
+
+    def review(self, page, name):
+        expect(page.locator('main h1')).to_have_count(1)
+        expect(page.locator('main')).not_to_have_attribute('aria-busy', 'true')
+        for width in [320, 768, 1440]:
+            page.set_viewport_size({'width': width, 'height': 1000})
+            self.assertTrue(page.evaluate('document.documentElement.scrollWidth <= innerWidth'), f'{name} overflow at {width}')
+            page.screenshot(path=f'/tmp/lostlink-live-{name}-{width}.png', full_page=True)
+        axe = Path('tools/phase2/node_modules/axe-core/axe.min.js')
+        self.assertTrue(axe.exists(), 'Install the pinned tools/phase2 dependencies for accessibility checks.')
+        page.add_script_tag(path=str(axe))
+        results = page.evaluate("async () => (await axe.run(document, {runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}})).violations.map(v=>({id:v.id,impact:v.impact,targets:v.nodes.map(n=>n.target)}))")
+        self.assertEqual(results, [], f'{name} accessibility violations: {results}')
+
+    def test_real_upload_claim_review_return_and_isolation(self):
+        staff_context, staff = self.login(self.fixtures['staff'], self.school + '/staff/items/new')
+        self.review(staff, 'intake')
+        for label, value in [('Item title','Blue acceptance backpack'),('Public description','A blue backpack with a white outside pocket.'),('Color','blue'),('Broad found location','Library'),('Date found','2026-01-01'),('Identifying notes (required)','Synthetic private green dinosaur inside.'),('Staff storage location','Synthetic staff cabinet')]:
+            staff.get_by_label(label, exact=True).fill(value)
+        staff.get_by_role('button', name='Preview public listing').click()
+        self.assertNotIn('dinosaur', staff.locator('#public-preview').inner_text())
+        staff.get_by_role('button', name='Save listing and add photo').click()
+        staff.get_by_role('heading', name='Verification details', exact=True).wait_for()
+        item_id = staff.url.rsplit('/', 1)[1]
+        item_path = self.school + '/items/' + item_id
+        staff.get_by_label('Choose item photo').set_input_files({'name':'spoof.jpg','mimeType':'image/jpeg','buffer':b'<html>not an image</html>'})
+        staff.get_by_role('button', name='Upload for private review').click()
+        expect(staff.locator('#photo-upload [role=alert]')).to_be_visible()
+        staff.get_by_label('Choose item photo').set_input_files({'name':'synthetic.png','mimeType':'image/png','buffer':png_bytes()})
+        staff.get_by_role('button', name='Upload for private review').click()
+        staff.get_by_text('Private preview · not published', exact=True).wait_for()
+        private_photo = staff.locator('[data-publish-photo]').locator('..').locator('img')
+        expect(private_photo).to_be_visible()
+        self.assertTrue(private_photo.evaluate('(img)=>img.decode().then(()=>img.naturalWidth > 0)'))
+        staff.reload()
+        staff.get_by_text('Private preview · not published', exact=True).wait_for()
+        visitor_context = self.browser.new_context()
+        self.addCleanup(visitor_context.close)
+        visitor = visitor_context.new_page()
+        visitor.goto(self.origin + item_path)
+        visitor.get_by_role('heading', name='Blue acceptance backpack', exact=True).wait_for()
+        self.assertNotIn('dinosaur', visitor.locator('main').inner_text())
+        self.assertIn('No photograph', visitor.locator('main').inner_text())
+        staff.get_by_label('I inspected this processed photo').check()
+        staff.get_by_role('button', name='Publish reviewed photo').click()
+        staff.get_by_text('Published photograph', exact=True).wait_for()
+        staff.reload()
+        staff.get_by_text('Published photograph', exact=True).wait_for()
+        self.review(staff, 'manage')
+        self.assertIn('Photo published', staff.locator('main').inner_text())
+        visitor.reload()
+        photo = visitor.locator('main img')
+        expect(photo).to_have_attribute('src', __import__('re').compile('/api/v1/organizations/.*/photos/.*/content'))
+        self.assertTrue(photo.evaluate('(img)=>img.decode().then(()=>img.naturalWidth > 0)'))
+        public_photo_url = photo.get_attribute('src')
+        self.review(visitor, 'public-item')
+        visitor.goto(self.origin)
+        visitor.get_by_role('heading', name='Find what you lost.').wait_for()
+        self.review(visitor, 'home')
+        visitor.goto(self.origin + self.school + '/search?from=2026-01-02')
+        visitor.get_by_text('No matching items found.', exact=True).wait_for()
+        visitor.get_by_label('Found on or after').fill('2026-01-01')
+        visitor.get_by_label('Found on or before').fill('2026-01-01')
+        visitor.get_by_role('button', name='Search items').click()
+        visitor.get_by_role('link', name='Blue acceptance backpack', exact=True).wait_for()
+        self.review(visitor, 'search')
+        visitor.get_by_role('link', name='Blue acceptance backpack', exact=True).click()
+        visitor.get_by_role('link', name='This might be mine').click()
+        visitor.get_by_role('heading', name='Sign in', exact=True).wait_for()
+        self.review(visitor, 'sign-in')
+        visitor.get_by_label('Email', exact=True).fill(self.fixtures['claimant']['email'])
+        visitor.get_by_label('Password', exact=True).fill(self.fixtures['claimant']['password'])
+        visitor.get_by_role('button', name='Sign in', exact=True).click()
+        visitor.get_by_role('heading', name='Tell us what makes it yours.', exact=True).wait_for()
+        self.review(visitor, 'claim-form')
+        visitor.get_by_label('How can staff tell').fill('A synthetic green dinosaur is inside the zipped pocket.')
+        visitor.get_by_role('button', name='Send private claim').click()
+        visitor.get_by_role('heading', name='Your claim is with staff.', exact=True).wait_for()
+        claim_id = visitor.url.split('?')[0].rsplit('/',1)[1]
+        visitor.reload()
+        visitor.get_by_role('heading', name='Your claim is with staff.', exact=True).wait_for()
+        self.review(visitor, 'claim-status')
+        visitor.goto(self.origin + '/my/claims')
+        visitor.get_by_role('heading', name='My claims', exact=True).wait_for()
+        self.review(visitor, 'own-claims')
+        other_context, other = self.login(self.fixtures['other'], '/my/claims')
+        denied = other_context.request.get(self.origin + '/api/v1/me/claims').json()
+        self.assertEqual(denied['data'], [])
+        foreign_context, foreign = self.login(self.fixtures['foreign'], '/o/' + self.fixtures['orgs'][1]['slug'] + '/staff')
+        for endpoint in ['/staff/items/' + item_id, '/staff/items/' + item_id + '/photos', '/staff/activity?itemId=' + item_id]:
+            self.assertEqual(foreign_context.request.get(self.origin + '/api/v1/organizations/' + self.fixtures['orgs'][0]['slug'] + endpoint).status,404)
+        self.assertEqual(foreign_context.request.get(self.origin + '/api/v1/organizations/' + self.fixtures['orgs'][0]['slug'] + '/staff/claims').status,404)
+        staff.goto(self.origin + self.school + '/staff')
+        staff.get_by_role('heading', name='Claim review queue', exact=True).wait_for()
+        self.review(staff, 'dashboard')
+        staff.goto(self.origin + self.school + '/staff/items')
+        staff.get_by_role('heading', name='Found items', exact=True).wait_for()
+        self.review(staff, 'inventory')
+        staff.goto(self.origin + self.school + '/staff/claims/' + claim_id)
+        staff.get_by_role('heading', name='Review this claim', exact=True).wait_for()
+        self.review(staff, 'review')
+        staff.get_by_role('button', name='Approve for collection').focus()
+        staff.keyboard.press('Enter')
+        staff.get_by_role('heading', name='Record physical handover', exact=True).wait_for()
+        staff.reload()
+        staff.get_by_role('heading', name='Record physical handover', exact=True).wait_for()
+        self.assertEqual(visitor_context.request.get(self.origin + public_photo_url).status,404)
+        self.assertEqual(staff_context.request.get(self.origin + public_photo_url).status,404)
+        visitor.goto(self.origin + '/my/claims/' + claim_id)
+        visitor.get_by_role('heading', name='Ready for collection.', exact=True).wait_for()
+        staff.get_by_label('I confirm').check()
+        staff.get_by_role('button', name='Mark item returned').click()
+        staff.get_by_text('The physical handover has been recorded.', exact=True).wait_for()
+        staff.reload()
+        staff.get_by_text('The physical handover has been recorded.', exact=True).wait_for()
+        visitor.reload()
+        visitor.get_by_role('heading', name='Back where it belongs.', exact=True).wait_for()
+        visitor.goto(self.origin + self.school + '/search')
+        visitor.get_by_text('No items are listed here yet.', exact=True).wait_for()
+        self.assertEqual(visitor_context.request.get(self.origin + public_photo_url).status,404)
+        # A second persisted claim verifies public rejection text and staff-only note isolation.
+        staff.goto(self.origin + self.school + '/staff/items/new')
+        for label, value in [('Item title','Rejection acceptance case'),('Public description','A blue case for another fictional workflow.'),('Color','blue'),('Broad found location','Library'),('Date found','2026-01-01'),('Identifying notes (required)','Synthetic hidden mark.'),('Staff storage location','Synthetic staff cabinet')]:
+            staff.get_by_label(label, exact=True).fill(value)
+        staff.get_by_role('button', name='Preview public listing').click()
+        staff.get_by_role('button', name='Save listing and add photo').click()
+        staff.get_by_role('heading', name='Verification details', exact=True).wait_for()
+        second_id = staff.url.rsplit('/',1)[1]
+        visitor.goto(self.origin + self.school + '/items/' + second_id + '/claim')
+        visitor.get_by_label('How can staff tell').fill('Synthetic evidence provided for rejection testing.')
+        visitor.get_by_role('button', name='Send private claim').click()
+        visitor.get_by_role('heading', name='Your claim is with staff.', exact=True).wait_for()
+        rejected_id = visitor.url.split('?')[0].rsplit('/',1)[1]
+        staff.goto(self.origin + self.school + '/staff/claims/' + rejected_id)
+        staff.get_by_label('Reason for rejection',exact=True).fill('The supplied details do not match. Contact the school office.')
+        staff.get_by_label('Private review note (optional)',exact=True).fill('Synthetic private internal comparison only.')
+        staff.get_by_role('button', name='Reject claim',exact=True).click()
+        staff.get_by_text('Claim rejected',exact=True).wait_for()
+        visitor.reload()
+        visitor.get_by_role('heading', name='This claim wasn’t approved.',exact=True).wait_for()
+        self.assertIn('The supplied details do not match.',visitor.locator('main').inner_text())
+        self.assertNotIn('Synthetic private internal comparison only.',visitor.content())
+        self.assertNotIn('dinosaur', visitor.url)
+        self.assertEqual(visitor.evaluate('Object.keys(localStorage)'), [])
+        print('PASS: twelve live routes at 320/768/1440px, axe, real login/continuation, photos, date filters, private claims, approval/return persistence, school/owner isolation and safe rejection.')
+
+
+if __name__ == '__main__':
+    unittest.main(verbosity=2)

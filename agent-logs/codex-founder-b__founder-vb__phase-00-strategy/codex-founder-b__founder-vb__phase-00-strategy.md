@@ -40,3 +40,12 @@
 - **Remaining work:** Founder A and overseer must reconcile proposed scope; proposal completion is not joint approval.
 - **Recommended next steps:** Read the corresponding phase handoff and validation records before implementing downstream changes.
 - **Relevant references:** docs/phase-0/README.md; docs/phase-1/validation.md; docs/phase-2/README.md; docs/phase-2/validation.md
+
+## 2026-10-26 UTC addendum — Phase 0 Overseer response
+
+- **Agent / Founder / branch:** codex-founder-b / B / codex/overseer-phase-0-3-fixes, based on main dc58f92.
+- **Scope / work:** Recorded the current implemented contract and MVP traceability, corrected claimant-photo search copy, advanced LL-005/LL-006 to Review with actual implementation evidence, and preserved joint approval/external competition facts as unresolved. Original Overseer reports remain unchanged.
+- **Validation and results:** Document/link/CSV validation; runtime evidence belongs to the later-phase addenda below.
+- **Reflection:** The Overseer reviewed an older tree. Rechecking against integrated main exposed concrete integration gaps; a passing mock/build alone could not establish the real product journey. Evidence is now reproducible without fabricating independent approval.
+- **Cross-phase handoff:** See [Overseer response](../../docs/coordination/overseer-response.md) and [implemented contract](../../docs/coordination/implemented-contract.md). New clients must send claimantReason on explicit rejection and apply the fourth migration in order; do not edit/reset earlier migrations or leak privateNote. Coordinate with the separate PR10 visual redesign.
+- **Remaining work / decisions:** Independent re-review and joint founder acceptance; external competition facts; hosted validation; operational retention/deletion/throttling before real-user release. No remote deployment or manual screen-reader audit claimed.

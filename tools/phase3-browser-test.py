@@ -18,7 +18,7 @@ class WorkflowChecks(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.pw = sync_playwright().start()
-        cls.browser = cls.pw.chromium.launch(executable_path=os.environ.get("CHROMIUM_PATH", "/usr/bin/chromium"), args=["--no-sandbox"])
+        cls.browser = cls.pw.chromium.launch(**({"executable_path": os.environ["CHROMIUM_PATH"]} if os.environ.get("CHROMIUM_PATH") else {}), args=["--no-sandbox"])
 
     @classmethod
     def tearDownClass(cls):
@@ -53,6 +53,8 @@ class WorkflowChecks(unittest.TestCase):
             self.item.update(body)
             data = self.item
             status = 201
+        elif path.endswith("/photos") or path.endswith("/staff/activity"):
+            data = []
         elif path.endswith("/staff/items"):
             data = [self.item]
         elif path.endswith("/staff/items/item-1"):
@@ -73,6 +75,7 @@ class WorkflowChecks(unittest.TestCase):
             self.claim["version"] += 1
             self.claim["status"] = "approved" if body["decision"] == "approve" else "rejected"
             self.claim["privateReviewNote"] = body.get("privateNote")
+            self.claim["claimantReason"] = body.get("claimantReason")
             self.item["status"] = "reserved" if body["decision"] == "approve" else "available"
             data = self.claim
         elif path.endswith("/staff/claims/claim-1/return"):
@@ -82,7 +85,7 @@ class WorkflowChecks(unittest.TestCase):
             self.item["status"] = "returned"
             data = self.claim
         elif path.endswith("/staff/claims") or path == "/me/claims":
-            data = [self.claim] if self.claim else []
+            data = [{key:value for key,value in self.claim.items() if path != "/me/claims" or key not in ["privateReviewNote","claimantId"]}] if self.claim else []
         elif path.endswith("/search"):
             data = [{"item": self.item, "reasons": ["Matching public item details"]}] if self.item["status"] == "available" else []
         elif path.endswith("/items"):
@@ -163,11 +166,12 @@ class WorkflowChecks(unittest.TestCase):
             self.page.get_by_label(name, exact=True).fill(value)
         self.page.get_by_role("button", name="Preview public listing").click()
         self.assertNotIn("hidden green star", self.page.locator("#public-preview").inner_text())
-        self.page.get_by_role("button", name="Publish found item").click()
+        self.page.get_by_role("button", name="Save listing and add photo").click()
         self.page.get_by_role("heading", name="Verification details").wait_for()
         self.claim = {"id": "claim-1", "itemId": "item-1", "organizationSlug": "maple-school", "itemTitle": "Purple pencil case", "status": "submitted", "evidenceText": "Fictional ownership evidence from claimant.", "submittedAt": "2026-10-25T12:00:00Z", "reviewedAt": None, "decisionReason": None, "version": 1}
         self.mount_fixture("/o/maple-school/staff/claims/claim-1", staff=True)
-        self.page.get_by_label("Private review note").fill("Fictional private staff decision.")
+        self.page.get_by_label("Reason for rejection", exact=True).fill("The supplied details do not match. Contact staff.")
+        self.page.get_by_label("Private review note (optional)", exact=True).fill("Fictional private staff decision.")
         self.page.get_by_role("button", name="Reject claim", exact=True).click()
         self.page.get_by_role("heading", name="Private review note").wait_for()
         self.mount_fixture("/my/claims/claim-1")
@@ -183,6 +187,7 @@ class WorkflowChecks(unittest.TestCase):
             self.assertTrue(self.page.evaluate("document.documentElement.scrollWidth <= innerWidth"))
         self.page.screenshot(path="/tmp/lostlink-phase3-search.png", full_page=True)
         self.page.unroute("**/api/v1/**")
+        self.page.route("**/api/v1/**", lambda route: route.fulfill(status=503, json={"error":{"code":"UNAVAILABLE"}}))
         self.page.goto(ORIGIN)
         self.page.get_by_role("heading", name="We couldn’t load this page").wait_for()
         self.page.get_by_role("button", name="Try again").wait_for()

@@ -86,3 +86,24 @@
 - **Scope:** Workflow and coordination/report only; no product source changes.
 - **Validation:** Installed Playwright CLI confirms --only-shell support. YAML
   structure and git diff whitespace checked locally; remote results pending below.
+
+## Dated addendum — 2026-10-26: synchronize with merged Overseer fixes
+
+- **Trigger:** Task owner supplied PR #10's merge-conflict screenshot.
+- **Cause and resolution:** Main advanced to 26a0d97 through PR #11. Both branches
+  appended a different coordination-board row. Retained UI-001 and FIX-003 plus
+  main's updated integration statuses. Merged main into the existing PR branch
+  with ancestry preserved; no force push or direct main change.
+- **Integration review:** The shared public.ts automatic merge retains live date
+  filters and the redesigned homepage. All 41 other upstream-changed files match
+  main byte-for-byte, including photo/activity wiring, migrations and persisted
+  browser validation. Source diff against main remains limited to the original
+  design scope. Existing records of photo limitations describe earlier snapshots;
+  current main now supplies that integration.
+- **Validation:** Lint, root/scoped TypeScript, formatting, 29 unit tests, 14 mock
+  tests and production build passed. CSV shape/unique IDs, unresolved paths and
+  diff whitespace checked. Browser results and remote CI evidence follow below.
+- **Handoff:** Same PR #10; independent review/merge remains with the task owner.
+  SQL/live database checks will run in CI against the combined tree.
+- **Browser completion:** All 14 interface cases passed with axe enabled on the
+  combined tree, including twelve routes at three widths and keyboard workflows.

@@ -8,7 +8,9 @@ Sources: [Founder A proposal](../phase-0/shared-contract-proposal.md),
 [mock guide](../phase-1/frontend-mock-guide.md), and
 [Founder B's inspected integration notes](https://github.com/AI-In-Bussiness/Lost-Link/blob/5be324e220528d6d6fcef070c177c42dde6be040/docs/phase-2/integration-notes.md).
 
-## Reconcile before connecting the interface
+The [implemented contract](implemented-contract.md) records the current field/state/privacy mappings and the additive fixes. The table below preserves the original discrepancy inventory; it is not a list of missing implementation.
+
+## Original reconciliation inventory
 
 | Topic | Founder A mock/interface | Founder B backend | Required integration decision |
 | --- | --- | --- | --- |
@@ -48,5 +50,4 @@ Sources: [Founder A proposal](../phase-0/shared-contract-proposal.md),
 
 Do not run database-reset or data-removal commands just to organize the repo.
 Historical contract proposals and phase acceptance remain distinct from the
-repository consolidation. Photo APIs are present; photo/activity UI wiring and
-independent browser acceptance remain outstanding.
+repository consolidation. Photo/activity UI wiring and live browser builder checks are delivered in the [Overseer response](overseer-response.md). Independent acceptance and hosted validation remain outstanding.

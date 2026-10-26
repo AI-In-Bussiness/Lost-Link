@@ -24,9 +24,9 @@ remain in place so historical links and active branches stay compatible.
 - [Frontend mock guide and Node test command](phase-1/frontend-mock-guide.md)
 - [Founder A handoff](phase-1/founder-a-handoff.md)
 
-## Pending implementation handoffs
+## Historical delivery snapshots
 
-These are pinned to inspected commits because their files are not yet in main.
+These pinned snapshots preserve their original deliveries; the implementations are now integrated in main. See the [current implemented contract](coordination/implemented-contract.md) and [Overseer response](coordination/overseer-response.md) for the latest evidence.
 
 - [Founder A Phase 2 interface handoff](https://github.com/AI-In-Bussiness/Lost-Link/blob/5fc10076d21b609294accde9dc712a8965c4a36c/docs/phase-2/founder-a-handoff.md)
 - [Founder B Phase 0 architecture](https://github.com/AI-In-Bussiness/Lost-Link/blob/5be324e220528d6d6fcef070c177c42dde6be040/docs/phase-0/architecture-contract.md)

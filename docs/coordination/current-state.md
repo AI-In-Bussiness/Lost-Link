@@ -1,5 +1,18 @@
 # Repository state snapshot
 
+## Overseer remediation — 2026-10-26 UTC
+
+Work starts from current main `dc58f92` on `codex/overseer-phase-0-3-fixes`.
+The live interface now maps published photographs, uploads and reviews processed
+photos, and displays item-scoped activity. An additive migration supports
+inclusive date filters and a required claimant-visible rejection explanation
+separate from private staff notes. Earlier migrations and reviewer reports are
+preserved. See the [implemented contract](implemented-contract.md) and
+[Overseer response](overseer-response.md) for evidence and remaining acceptance
+boundaries. Formal joint approval and external competition facts remain open.
+PR #10's visual redesign is separate and has not been overwritten or merged by
+this remediation; coordinate interface conflicts when integrating those PRs.
+
 ## Consolidation update — 2026-10-26 UTC
 
 The combined tree is based on main `be015f7` (including PRs #4 and #8)

@@ -24,3 +24,7 @@ New UI fixes include active school retained in session memory, focusable validat
 Reproducible tools are isolated in `tools/phase2/` with a lockfile, strict TypeScript configuration and pinned Python Playwright. CI runs type/format checks, the 14 original mock tests and the full Chromium suite with axe enabled. The Phase 2 guide documents local commands.
 
 Peer review identified the school-context and photo-UI gaps before fixes. The original independent report remains an accurate record of that inspection; no independent Overseer approval is invented. Delivered tasks remain Review pending formal phase acceptance. The task owner's request authorizes merging this verified Phase 2 implementation separately from accepting upstream gates.
+
+## Combined backend and Phase 3 follow-up
+
+The [2026-10-26 Overseer response](../coordination/overseer-response.md) verifies the integrated real stack, twelve live routes, actual photo review, date filters, separate public/private rejection text and persistent browser journey. This supplements the original mock-only review evidence above without rewriting its result.

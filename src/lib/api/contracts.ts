@@ -12,15 +12,18 @@ const cursor = z.string().max(100).transform((value, ctx) => {
   try { return decodeCursor(value); } catch { ctx.addIssue({ code: "custom", message: "Invalid cursor." }); return z.NEVER; }
 }).optional();
 const paging = { limit, cursor };
+const calendarDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/).refine((value) => {
+    const date = new Date(`${value}T00:00:00.000Z`);
+    return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value;
+  }, "Use a valid calendar date.");
+const dateRange = { from: calendarDate.optional(), to: calendarDate.optional() };
+const orderedDates = (value: {from?: string; to?: string}) => !value.from || !value.to || value.from <= value.to;
 const itemFields = {
   title: z.string().trim().min(1).max(100),
   publicDescription: z.string().trim().min(1).max(1000),
   category, color,
   publicLocation: z.string().trim().min(1).max(150),
-  foundDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).refine((value) => {
-    const date = new Date(`${value}T00:00:00.000Z`);
-    return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value;
-  }, "Use a valid calendar date."),
+  foundDate: calendarDate,
   identifyingDetails: z.string().trim().min(1).max(2000),
   storageLocation: z.string().trim().min(1).max(150),
 };
@@ -30,9 +33,9 @@ const empty = z.strictObject({});
 
 export const endpoints = {
   organization: { query: empty, authenticated: false },
-  items: { query: z.strictObject({ ...paging, q: z.string().trim().max(300).optional(), category: category.optional(), color: color.optional() }), authenticated: false },
+  items: { query: z.strictObject({ ...paging, q: z.string().trim().max(300).optional(), category: category.optional(), color: color.optional(), ...dateRange }).refine(orderedDates, {message: "Choose an ordered date range.", path: ["to"]}), authenticated: false },
   item: { query: empty, authenticated: false },
-  search: { query: empty, body: z.strictObject({ query: z.string().trim().min(1).max(300), category: category.optional(), color: color.optional(), limit }), authenticated: false },
+  search: { query: empty, body: z.strictObject({ query: z.string().trim().min(1).max(300), category: category.optional(), color: color.optional(), ...dateRange, limit }).refine(orderedDates, {message: "Choose an ordered date range.", path: ["to"]}), authenticated: false },
   own_claims: { query: z.strictObject(paging), authenticated: true },
   submit_claim: { query: empty, body: z.strictObject({ evidenceText: z.string().trim().min(20).max(2000) }), authenticated: true, created: true },
   withdraw_claim: { query: empty, body: versionBody, authenticated: true },
@@ -42,7 +45,7 @@ export const endpoints = {
   update_item: { query: empty, body: z.strictObject({ ...Object.fromEntries(Object.entries(itemFields).map(([key, schema]) => [key, schema.optional()])), expectedVersion }).refine((value) => Object.keys(value).length > 1, "Provide a field to update."), authenticated: true },
   archive_item: { query: empty, body: versionBody, authenticated: true },
   staff_claims: { query: z.strictObject({ ...paging, status: claimStatus.optional(), itemId: uuid.optional() }), authenticated: true },
-  review_claim: { query: empty, body: z.strictObject({ expectedVersion, decision: z.enum(["approve", "reject"]), privateNote }), authenticated: true },
+  review_claim: { query: empty, body: z.strictObject({ expectedVersion, decision: z.enum(["approve", "reject"]), privateNote, claimantReason: z.string().trim().min(5).max(500).optional() }).refine(value => value.decision === "reject" ? !!value.claimantReason : value.claimantReason === undefined, {message: "Provide a claimant-safe reason when rejecting.", path: ["claimantReason"]}), authenticated: true },
   cancel_claim: { query: empty, body: z.strictObject({ expectedVersion, privateNote }), authenticated: true },
   return_claim: { query: empty, body: z.strictObject({ expectedVersion, ownershipVerified: z.literal(true) }), authenticated: true },
 } satisfies Record<string, { query: z.ZodType; body?: z.ZodType; authenticated: boolean; created?: boolean }>;

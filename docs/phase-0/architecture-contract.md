@@ -1,5 +1,7 @@
 # LL-006 — Architecture and shared contracts
 
+Current implementation and reconciled DTO/lifecycle choices: [implemented contract](../coordination/implemented-contract.md). This original design remains a historical proposal; use the current contract for integration.
+
 Status: Proposed for founder review. Phase 0 design, not implemented.
 
 ## Scope and decisions

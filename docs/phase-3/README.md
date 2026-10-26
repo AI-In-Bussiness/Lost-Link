@@ -1,5 +1,7 @@
 # Founder B — Phase 3 workflow backend
 
+2026-10-26 follow-up: live photo upload/review/publication and item activity are now wired through the integrated interface, alongside date filters and separate rejection explanations. The original backend-only scope below is preserved. See the [Overseer response](../coordination/overseer-response.md) for combined validation and the [implemented contract](../coordination/implemented-contract.md) for current behavior.
+
 Founder B's Phase3 backend now covers found-item creation, real photo processing/publication/delivery, organization-scoped search, private claim submission/review, persistent return state and staff activity history. Inventory/claim transactions were implemented in Phase2 and remain the same user-scoped APIs. This phase fills their photo and activity gaps; it does not claim Founder A's interface has been connected or the whole team's browser/deployment gate has passed.
 
 ## Local setup
@@ -30,7 +32,7 @@ Paths below are prefixed `/api/v1`. All mutations require an authenticated same-
 | Staff preview | GET `/organizations/:slug/staff/items/:itemId/photos/:photoId/content` | Same-org authenticated image/webp bytes |
 | Publish after review | POST `/organizations/:slug/staff/items/:itemId/photos/:photoId/publish` | JSON `{reviewed:true}`; returns `{data:{id,status:"published"}}`; safe to repeat |
 | Public delivery | GET `/organizations/:slug/items/:itemId/photos/:photoId/content` | Bytes only if organization is published, item available, photo published and verified |
-| Staff history | GET `/organizations/:slug/staff/activity` | Safe audit metadata, limit1–50/default20, opaque cursor; same-org staff/admin only |
+| Staff history | GET `/organizations/:slug/staff/activity` | Safe audit metadata, limit1–50/default20, opaque cursor; optional itemId includes only that item and its claim/photo events; same-org staff/admin only |
 
 Public item DTOs and structured search now include real `{url,alt}` photo entries after publication. Before publication those arrays remain empty. Alt text uses the public item title, never filenames or private verification facts. Staff review content should use returned URLs directly in the browser. Use an ordinary image element or unoptimized Next Image: server image optimization/CDN caching would omit staff cookies or retain images after authorization changes. Content routes use private,no-store, inline image/webp and nosniff.
 

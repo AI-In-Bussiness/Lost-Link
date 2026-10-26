@@ -23,9 +23,14 @@ export interface Claim {
 export interface MyClaim extends Claim {
   item?: PublicItem; itemTitle?: string; collectionInstructions: string | null;
 }
+export interface StaffPhoto { id: string; status: 'pending' | 'published'; url: string; alt: string }
+export interface PhotoApi {
+  upload(orgSlug: string, itemId: string, file: File): Promise<Result<{ id: string; status: 'pending' }>>;
+  publish(orgSlug: string, itemId: string, photoId: string): Promise<Result<unknown>>;
+}
 export interface Activity {
   id: string; organizationId: string; actorId: string; itemId: string;
-  claimId?: string; action: 'item_created' | 'claim_submitted' | 'claim_approved' | 'claim_rejected' | 'item_returned'; timestamp: string;
+  claimId?: string; action: string; timestamp: string;
 }
 export interface Pagination { page?: number; pageSize?: number }
 export interface Page<T> { items: T[]; page: number; pageSize: number; total: number; totalPages: number }
@@ -44,12 +49,13 @@ export interface CreateItemInput {
   upload: { mimeType: 'image/jpeg' | 'image/png' | 'image/webp'; sizeBytes: number };
   verificationNotes: string; storageLocation: string;
 }
-export interface DecisionInput { orgSlug: string; claimId: string; decision: 'approve' | 'reject'; reason?: string; expectedVersion?: number }
+export interface DecisionInput { orgSlug: string; claimId: string; decision: 'approve' | 'reject'; reason?: string; privateNote?: string; expectedVersion?: number }
 export interface ReturnInput { orgSlug: string; itemId: string; approvedClaimId: string; expectedVersion?: number }
 export interface StaffQuery extends Pagination { orgSlug: string }
-export interface StaffItemDetail { item: StaffItem; claims: Claim[]; activity: Activity[] }
+export interface StaffItemDetail { item: StaffItem; claims: Claim[]; activity: Activity[]; photos?: StaffPhoto[] }
 export interface LostLinkApi {
   readonly live?: boolean;
+  readonly photos?: PhotoApi;
   listOrganizations(): Promise<Result<Organization[]>>;
   searchItems(input: SearchInput): Promise<Result<SearchResults>>;
   getPublicItem(orgSlug: string, itemId: string): Promise<Result<PublicItem>>;

@@ -8,7 +8,7 @@ LostLink helps people find belongings they have misplaced at **schools, sports f
 
 | Step | What happens |
 | --- | --- |
-| **1. Describe** | A student, visitor, athlete, or employee searches by describing the missing item, such as its type, color, brand, or distinguishing details. They may also include a photo |
+| **1. Describe** | A student, visitor, athlete, or employee searches by describing the missing item, such as its type, color, brand, or distinguishing details. Search uses text and filters; staff attach photographs to found items. |
 | **2. Match** | LostLink compares the description with items listed in the organization's lost-and-found and shows possible matches. |
 | **3. Claim** | The person submits a request for an item they believe belongs to them. |
 | **4. Review** | Staff review and manage requests, then coordinate returning items to their owners. |
@@ -25,7 +25,7 @@ Lost-and-found searches can take time for both the person looking and the staff 
 
 ## Development and Founder B handoff
 
-Lost-and-found for a competition demo. Despite the website being used as a demo, it needs to be fully operational and full-featured for the judges to test. The application combines Founder B's Next.js, TypeScript and Supabase foundation with Founder A's real API interface for search, inventory, private claims, review and return. Founder B's Phase 3 backend adds sanitized photo processing, review/publication/delivery APIs and staff activity. Photo and activity controls still need wiring in the live interface; semantic AI remains later work. See the [Phase 2 API handoff](docs/phase-2/README.md), [interface handoff](docs/phase-3/founder-a-handoff.md), and [photo/backend handoff](docs/phase-3/README.md).
+Lost-and-found for a competition demo. Despite the website being used as a demo, it needs to be fully operational and full-featured for the judges to test. The application combines Founder B's Next.js, TypeScript and Supabase foundation with Founder A's real API interface for search, inventory, private claims, review and return. Founder B's Phase 3 backend adds sanitized photo processing, review/publication/delivery APIs and staff activity. The live interface includes real photo upload, private review/publication, found-date filters, claimant-visible rejection explanations and item activity; semantic AI remains later work. See the [Phase 2 API handoff](docs/phase-2/README.md), [interface handoff](docs/phase-3/founder-a-handoff.md), and [photo/backend handoff](docs/phase-3/README.md).
 
 ## Local development
 
@@ -34,6 +34,7 @@ Use Node 24 (`.nvmrc`), npm 11 and Docker. Run from this repository root:
 ```sh
 npm ci
 npm run db:start
+npx supabase migration up --local
 npm run env:local
 npm run env:photos
 npm run db:test
@@ -76,11 +77,27 @@ npm run build
 npm run test:live
 ```
 
-`test:live` starts and stops its own production app on port 3000, using the running local Supabase stack. Free that port first. It creates and removes temporary confirmed Auth users, exercises real REST tenant isolation, and checks session-cookie sign-in/out, protected account access, CSRF rejection and redirect restrictions. It also tests real photo uploads, private preview/publication, Storage integrity, concurrent photo caps and a photographed-item claim/return. Port3001 must also be free for the missing-processor credential regression. It is an HTTP integration test, not a browser test. The SQL suites also cover owner-proof projection, Storage policies, role escalation denial, revocation, relational constraints and transactional lifecycle rules. The backend HTTP suite exercises staff inventory, private claims, concurrent approval, return, pagination, state conflicts and claim throttling. Future Playwright tests will cover the full implemented product journey.
+`test:live` starts and stops its own production app on port 3000, using the running local Supabase stack. Free that port first. It creates and removes temporary confirmed Auth users, exercises real REST tenant isolation, and checks session-cookie sign-in/out, protected account access, CSRF rejection and redirect restrictions. It also tests real photo uploads, private preview/publication, Storage integrity, concurrent photo caps and a photographed-item claim/return. Port3001 must also be free for the missing-processor credential regression. It is an HTTP integration test, not a browser test. The SQL suites also cover owner-proof projection, Storage policies, role escalation denial, revocation, relational constraints and transactional lifecycle rules. The backend HTTP suite exercises staff inventory, private claims, concurrent approval, return, pagination, state conflicts and claim throttling. The separate `test:browser` suite runs the persisted product journey in Chromium against real local Auth/Postgres/Storage.
 
 GitHub Actions runs the same checks against disposable local services. A workflow file does not establish that remote CI has run.
 
 `npm run db:stop` stops local services while retaining local data. `npm run db:reset` destroys local data and reapplies migrations/seed; use only when explicitly intending to reset this local demo. Demo accounts must then be provisioned again. Never reset a shared or hosted database.
+
+### Browser verification
+
+Install the pinned browser tools, then run the production browser suite:
+
+```sh
+npm ci --prefix tools/phase2
+python -m pip install -r tools/phase2/requirements.txt
+python -m playwright install --with-deps chromium
+npm run build
+npm run test:browser
+```
+
+`test:browser` owns port 3000, creates isolated fictional organizations and accounts, and removes its fixtures afterwards. It checks twelve live routes at 320/768/1440px, axe accessibility rules, real photo review, private claims, approval/return across refreshes and other-user/other-school denial. It does not intercept API responses. Screenshots are written to `/tmp/lostlink-live-*.png`. These are automated builder checks; independent acceptance and a manual screen-reader audit remain separate.
+
+See the [Overseer response](docs/coordination/overseer-response.md) and [implemented contract](docs/coordination/implemented-contract.md) for current behavior, the original findings and outstanding owner decisions.
 
 ## Hosted setup
 

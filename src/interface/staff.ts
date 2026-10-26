@@ -1,3 +1,4 @@
+import { photoPanel, bindPhotoPanel } from "./live-photos.ts";
 import { photoInputHtml, bindPhotoInput } from "./photo-input.ts";
 import type {
   Category,
@@ -249,15 +250,27 @@ async function intake(ctx: ViewContext): Promise<View> {
       )}</select></div><div class="field"><label for="color">Color</label><input id="color" name="color" required maxlength="40" pattern="[a-z]+([ \\-][a-z]+)*" aria-describedby="color-hint"><p id="color-hint" class="muted">Use lowercase color words, for example black or dark blue.</p></div></div>
     <div class="field"><label for="foundLocation">Broad found location</label><input id="foundLocation" name="foundLocation" required maxlength="100" placeholder="For example, Library"></div>
     <div class="field"><label for="foundDate">Date found</label><input id="foundDate" name="foundDate" type="date" required max="${new Date().toISOString().slice(0, 10)}"></div>
-    ${photoInputHtml(Boolean(ctx.photoUpload))}
-    <div class="field"><label for="photo.alt">Image description</label><input id="photo.alt" name="photo.alt" required maxlength="200" value="Fictional found-item illustration, not a photograph"><p class="muted">Describe only public details for people using screen readers.</p></div></section>
+    ${ctx.api.live ? "<p>Save the listing, then upload and review its photograph on the next screen.</p>" : photoInputHtml(Boolean(ctx.photoUpload))}
+    ${ctx.api.live ? "" : `<div class="field"><label for="photo.alt">Image description</label><input id="photo.alt" name="photo.alt" required maxlength="200" value="Fictional found-item illustration, not a photograph"><p class="muted">Describe only public details for people using screen readers.</p></div>`}</section>
     <section class="card stack privacy"><p class="eyebrow">Staff only</p><h2>Private verification</h2><p>These details never appear in the public preview.</p><div class="field"><label for="verificationNotes">${ctx.api.live ? "Identifying notes (required)" : "Identifying notes (optional)"}</label><textarea id="verificationNotes" name="verificationNotes" ${ctx.api.live ? "required" : ""} maxlength="2000" rows="5" aria-describedby="private-hint"></textarea><p id="private-hint" class="muted">Record a hidden mark or contents staff can compare with a claim. Use fictional details in this demo.</p></div><div class="field"><label for="storageLocation">Staff storage location</label><input id="storageLocation" name="storageLocation" required maxlength="100"></div></section></div>
     <div class="actions"><button type="submit">Preview public listing &gt;</button><a href="${base(ctx)}/items">Cancel</a></div>
     <section id="public-preview" class="card stack" hidden aria-labelledby="preview-heading" tabindex="-1"></section></form>`,
     bind: (root) => {
       const form = root.querySelector<HTMLFormElement>("#intake-form")!;
       const preview = root.querySelector<HTMLElement>("#public-preview")!;
-      const photo = bindPhotoInput(form, ctx.photoUpload);
+      const photo = ctx.api.live
+        ? {
+            ready: () => true,
+            value: () => ({
+              photo: {
+                url: "/mock-assets/item-placeholder.svg",
+                alt: "No photograph yet",
+                isPlaceholder: true,
+              },
+              upload: { mimeType: "image/jpeg" as const, sizeBytes: 0 },
+            }),
+          }
+        : bindPhotoInput(form, ctx.photoUpload);
       let reviewed = false;
       const value = (name: string) =>
         String(new FormData(form).get(name) || "").trim();
@@ -271,7 +284,7 @@ async function intake(ctx: ViewContext): Promise<View> {
         foundDate: value("foundDate"),
         photo: {
           ...photo.value()!.photo,
-          alt: value("photo.alt"),
+          alt: ctx.api.live ? value("title") : value("photo.alt"),
         },
         upload: photo.value()!.upload,
         verificationNotes: value("verificationNotes"),
@@ -291,7 +304,7 @@ async function intake(ctx: ViewContext): Promise<View> {
         const item = input();
         reviewed = true;
         // Deliberately construct the public preview from its allowlisted fields.
-        preview.innerHTML = `<p class="eyebrow">Public preview</p><h2 id="preview-heading">${e(item.title)}</h2><div class="two-column"><div class="item-image"><img src="${e(item.photo.url)}" alt="${e(item.photo.alt)}"><span class="photo-label">${item.photo.isPlaceholder ? "Illustration · demo item" : "Local photo · not uploaded"}</span></div><div><p>${e(item.publicDescription)}</p><dl class="detail-list"><div><dt>Category</dt><dd>${e(label(item.category))}</dd></div><div><dt>Color</dt><dd>${e(item.color)}</dd></div><div><dt>Found at</dt><dd>${e(item.foundLocation)}</dd></div><div><dt>Found on</dt><dd>${date(item.foundDate)}</dd></div></dl></div></div><p class="muted">Only the listing above will be shown publicly.</p><div class="actions"><button type="button" id="publish-item">${ctx.api.live ? "Publish found item" : "Publish demo item"}</button><button type="button" class="secondary" id="edit-item">Back to editing</button></div>`;
+        preview.innerHTML = `<p class="eyebrow">Public preview</p><h2 id="preview-heading">${e(item.title)}</h2><div class="two-column"><div class="item-image"><img src="${e(item.photo.url)}" alt="${e(item.photo.alt)}"><span class="photo-label">${item.photo.isPlaceholder ? "Illustration · demo item" : "Local photo · not uploaded"}</span></div><div><p>${e(item.publicDescription)}</p><dl class="detail-list"><div><dt>Category</dt><dd>${e(label(item.category))}</dd></div><div><dt>Color</dt><dd>${e(item.color)}</dd></div><div><dt>Found at</dt><dd>${e(item.foundLocation)}</dd></div><div><dt>Found on</dt><dd>${date(item.foundDate)}</dd></div></dl></div></div><p class="muted">Only the listing above will be shown publicly.</p><div class="actions"><button type="button" id="publish-item">${ctx.api.live ? "Save listing and add photo" : "Publish demo item"}</button><button type="button" class="secondary" id="edit-item">Back to editing</button></div>`;
         preview.hidden = false;
         preview.focus();
         preview.querySelector("#edit-item")!.addEventListener("click", () => {
@@ -322,7 +335,7 @@ async function intake(ctx: ViewContext): Promise<View> {
 async function manageItem(ctx: ViewContext, id: string): Promise<View> {
   const result = await ctx.api.getStaffItem(ctx.orgSlug, id);
   if (!result.ok) return unavailable(result, ctx.refresh);
-  const { item, claims, activity } = result.data;
+  const { item, claims, activity, photos = [] } = result.data;
   const approved = claims.find((c) => c.status === "approved");
   return {
     title: "Manage " + item.title,
@@ -337,9 +350,10 @@ async function manageItem(ctx: ViewContext, id: string): Promise<View> {
     <section class="card stack privacy"><p class="eyebrow">Staff only</p><h2>Verification details</h2><dl class="detail-list"><div><dt>Private notes</dt><dd>${e(item.verificationNotes || "No notes recorded.")}</dd></div><div><dt>Storage location</dt><dd>${e(item.storageLocation)}</dd></div></dl>
     <h2>Claims</h2>${claims.length ? `<ul class="stack">${claims.map((c) => `<li>${badge(c.status)} <a href="${claimPath(ctx, c.id)}">${e(c.id)}</a> · ${e(ctx.api.live ? c.claimantId : c.contactEmail)}</li>`).join("")}</ul>` : "<p>No claims yet.</p>"}
     ${approved && item.status === "reserved" ? returnForm(ctx, item, approved) : item.status === "returned" ? '<div class="notice"><strong>Return recorded</strong><p>The item has been handed over and is no longer available.</p></div>' : ""}</section></div>
-    <section class="card stack"><h2>Activity</h2>${ctx.api.live ? "<p>Activity is recorded by the service. The activity feed is not available in this interface.</p>" : ""}${activity.length ? `<ol class="stack">${activity.map((a) => `<li><strong>${e(label(a.action))}</strong> · ${date(a.timestamp)}</li>`).join("")}</ol>` : ctx.api.live ? "" : "<p>No activity recorded.</p>"}</section>`,
+    ${ctx.api.photos ? photoPanel(item, photos) : ""}<section class="card stack"><h2>Activity</h2>${activity.length ? `<ol class="stack">${activity.map((a) => `<li><strong>${e(a.action === "photo_upload_reserved" ? "Photo received" : label(a.action))}</strong> · ${date(a.timestamp)}</li>`).join("")}</ol>` : "<p>No activity recorded.</p>"}</section>`,
     bind: (root) => {
       if (approved) bindReturn(root, ctx, item, approved);
+      bindPhotoPanel(root, ctx, item.id);
     },
   };
 }
@@ -391,7 +405,7 @@ async function reviewClaim(ctx: ViewContext, id: string): Promise<View> {
       `
     <div class="two-column"><section class="card stack"><p class="eyebrow">Item</p><h2><a href="${itemPath(ctx, item.id)}">${e(item.title)}</a></h2>${badge(item.status)}${itemImage(item)}<p>${e(item.publicDescription)}</p>${publicDetails(item)}<div class="privacy"><h3>Staff-only identifying notes</h3><p>${e(item.verificationNotes || "No notes recorded.")}</p><p><strong>Storage:</strong> ${e(item.storageLocation)}</p></div></section>
     <section class="card stack privacy"><p class="eyebrow">Private claim</p><h2>Ownership evidence</h2>${badge(claim.status)}<dl class="detail-list"><div><dt>Claim reference</dt><dd>${e(claim.id)}</dd></div><div><dt>${ctx.api.live ? "Claimant reference" : "Contact email"}</dt><dd>${e(ctx.api.live ? claim.claimantId : claim.contactEmail)}</dd></div><div><dt>Submitted</dt><dd>${date(claim.createdAt)}</dd></div></dl><blockquote>${e(claim.ownershipEvidence)}</blockquote>${ctx.api.live && claim.privateReviewNote ? `<h3>Private review note</h3><p>${e(claim.privateReviewNote)}</p>` : ""}
-    ${claim.status === "pending" ? `<div class="notice"><p>Compare the evidence with the private notes. A search match does not prove ownership.</p></div><form id="approve-form" class="stack"><div data-errors></div><p>Approval reserves this item for this claimant. Physical handover is recorded separately.</p><button type="submit"${item.status !== "available" ? " disabled" : ""}>Approve for collection</button>${item.status !== "available" ? '<p class="muted">This item is unavailable for approval. Refresh or reject the claim with an explanation.</p>' : ""}</form><hr><form id="reject-form" class="stack" novalidate><div data-errors></div><div class="field"><label for="reason">${ctx.api.live ? "Private review note" : "Reason for rejection"}</label><textarea id="reason" name="reason" required minlength="5" maxlength="500" rows="3" aria-describedby="reason-hint"></textarea><p id="reason-hint" class="muted">${ctx.api.live ? "This note is visible only to authorized staff. The claimant receives a generic rejected status." : "The claimant can see this reason. Do not reveal hidden identifying details."}</p></div><button type="submit" class="secondary">Reject claim</button></form>` : claim.status === "approved" ? returnForm(ctx, item, claim) : `<div class="notice"><strong>${claim.status === "fulfilled" ? "Item returned" : claim.status === "rejected" ? "Claim rejected" : label(claim.status)}</strong><p>${e(claim.status === "fulfilled" ? "The physical handover has been recorded." : claim.decisionReason || "No reason recorded.")}</p></div>`}</section></div>`,
+    ${claim.status === "pending" ? `<div class="notice"><p>Compare the evidence with the private notes. A search match does not prove ownership.</p></div><form id="approve-form" class="stack"><div data-errors></div><p>Approval reserves this item for this claimant. Physical handover is recorded separately.</p><button type="submit"${item.status !== "available" ? " disabled" : ""}>Approve for collection</button>${item.status !== "available" ? '<p class="muted">This item is unavailable for approval. Refresh or reject the claim with an explanation.</p>' : ""}</form><hr><form id="reject-form" class="stack" novalidate><div data-errors></div><div class="field"><label for="reason">Reason for rejection</label><textarea id="reason" name="reason" required minlength="5" maxlength="500" rows="3" aria-describedby="reason-hint"></textarea><p id="reason-hint" class="muted">The claimant can see this reason. Do not reveal hidden identifying details.</p></div>${ctx.api.live ? `<div class="field"><label for="privateNote">Private review note (optional)</label><textarea id="privateNote" name="privateNote" maxlength="1000" rows="3"></textarea><p class="muted">Only authorized staff can read this note.</p></div>` : ""}<button type="submit" class="secondary">Reject claim</button></form>` : claim.status === "approved" ? returnForm(ctx, item, claim) : `<div class="notice"><strong>${claim.status === "fulfilled" ? "Item returned" : claim.status === "rejected" ? "Claim rejected" : label(claim.status)}</strong><p>${e(claim.status === "fulfilled" ? "The physical handover has been recorded." : claim.decisionReason || "No reason recorded.")}</p></div>`}</section></div>`,
     bind: (root) => {
       const approve = root.querySelector<HTMLFormElement>("#approve-form");
       const reject = root.querySelector<HTMLFormElement>("#reject-form");
@@ -420,6 +434,13 @@ async function reviewClaim(ctx: ViewContext, id: string): Promise<View> {
             expectedVersion: claim.version,
             decision: "reject",
             reason: String(new FormData(reject).get("reason") || "").trim(),
+            ...(ctx.api.live
+              ? {
+                  privateNote: String(
+                    new FormData(reject).get("privateNote") || "",
+                  ).trim(),
+                }
+              : {}),
           });
           if (!root.isConnected) return;
           if (result.ok) ctx.refresh();
