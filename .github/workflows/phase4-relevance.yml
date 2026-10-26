@@ -1,0 +1,40 @@
+name: Phase 4 relevance diagnostics
+on:
+  workflow_dispatch:
+  push:
+    paths: ['tools/phase4/**', 'src/interface/**', 'src/lib/search/**', '.github/workflows/phase4-relevance.yml']
+  pull_request:
+    paths: ['tools/phase4/**', 'src/interface/**', 'src/lib/search/**', '.github/workflows/phase4-relevance.yml']
+permissions:
+  contents: read
+jobs:
+  relevance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: node --test --test-isolation=none tools/phase4/*.test.mjs
+      - run: npx tsx tools/phase4/evaluate.ts fallback > fallback-results.json
+      - run: npm run model:download
+      # Proposed relevance targets are diagnostic until founders/Overseer agree.
+      # Existing required Foundation checks are unchanged.
+      - id: quality
+        continue-on-error: true
+        run: npx tsx tools/phase4/evaluate.ts model > relevance-results.json
+      - name: Record quality outcome
+        env:
+          QUALITY_OUTCOME: ${{ steps.quality.outcome }}
+        run: echo "Proposed relevance gate outcome is $QUALITY_OUTCOME. Inspect the JSON artifact; diagnostic CI success is not phase acceptance." >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: founder-a-phase4-relevance
+          path: |
+            fallback-results.json
+            relevance-results.json
+          if-no-files-found: warn

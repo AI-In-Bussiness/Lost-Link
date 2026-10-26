@@ -1,0 +1,12 @@
+[
+ {"id":"20000000-0000-4000-8000-000000000001","organizationSlug":"maple-school","title":"Black athletic backpack","publicDescription":"Black bag with a white sports logo.","category":"bag","color":"black","publicLocation":"Gym entrance","foundDate":"2026-10-25"},
+ {"id":"20000000-0000-4000-8000-000000000002","organizationSlug":"cedar-school","title":"Blue water bottle","publicDescription":"Reusable blue bottle.","category":"bottle","color":"blue","publicLocation":"Library","foundDate":"2026-10-24"},
+ {"id":"m-umbrella","organizationSlug":"maple-school","title":"Red umbrella","publicDescription":"A folding umbrella with a curved handle.","category":"other","color":"red","publicLocation":"Front desk","foundDate":"2026-10-23"},
+ {"id":"m-keys","organizationSlug":"maple-school","title":"Orange key fob","publicDescription":"Two metal keys attached to an orange plastic tag.","category":"keys","color":"orange","publicLocation":"Car park","foundDate":"2026-10-23"},
+ {"id":"m-pencil","organizationSlug":"maple-school","title":"Teal pencil case","publicDescription":"Fabric pouch containing pencils and erasers.","category":"other","color":"teal","publicLocation":"Classroom","foundDate":"2026-10-23"},
+ {"id":"m-lunch","organizationSlug":"maple-school","title":"Green lunch box","publicDescription":"A rectangular container for sandwiches.","category":"other","color":"green","publicLocation":"Cafeteria","foundDate":"2026-10-23"},
+ {"id":"c-jacket","organizationSlug":"cedar-school","title":"White rain jacket","publicDescription":"A waterproof coat with a hood and zip.","category":"clothing","color":"white","publicLocation":"Reception","foundDate":"2026-10-23"},
+ {"id":"c-calculator","organizationSlug":"cedar-school","title":"Grey calculator","publicDescription":"A small pocket calculator with numeric buttons.","category":"electronics","color":"grey","publicLocation":"Math classroom","foundDate":"2026-10-23"},
+ {"id":"c-cap","organizationSlug":"cedar-school","title":"Yellow cap","publicDescription":"A baseball cap with an adjustable strap.","category":"clothing","color":"yellow","publicLocation":"Playground","foundDate":"2026-10-23"},
+ {"id":"c-earbuds","organizationSlug":"cedar-school","title":"Pink earbuds","publicDescription":"Wireless headphones in a charging case.","category":"electronics","color":"pink","publicLocation":"Music room","foundDate":"2026-10-23"}
+]

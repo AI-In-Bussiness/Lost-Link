@@ -7,6 +7,9 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { Action, encodeCursor, endpoints, queryObject, slug, uuid } from "./contracts";
 import { BodyError, readJsonBody } from "./body";
 
+import { enhanceSearch } from "@/lib/search/server";
+import { InventoryChanged } from "@/lib/search/service";
+
 const responseHeaders = { "Cache-Control": "private, no-store" };
 const failures: Record<string, { status: number; message: string }> = {
   VALIDATION_ERROR: { status: 400, message: "Check the submitted fields." },
@@ -49,7 +52,17 @@ export async function handleApi(request: NextRequest, action: Action, params: Re
     }
     if (!data || typeof data !== "object" || !("data" in data)) return fail("UNAVAILABLE");
     if (data.page?.nextCursor) data.page.nextCursor = encodeCursor(data.page.nextCursor);
-    return NextResponse.json(data, { status: endpoint.created ? 201 : 200, headers: { ...responseHeaders, "X-Request-Id": requestId } });
+    let result = data;
+    if (action === "search") {
+      try { result = await enhanceSearch(client, params.orgSlug, payload, data); }
+      catch (error) {
+        if (!(error instanceof InventoryChanged)) throw error;
+        const fresh = await client.rpc("backend_dispatch", { p_action: action, p_org_slug: params.orgSlug, p_payload: payload });
+        if (fresh.error || !Array.isArray(fresh.data?.data)) return fail("UNAVAILABLE");
+        result = {...fresh.data, search:{mode:"structured",semanticStatus:"unavailable"}};
+      }
+    }
+    return NextResponse.json(result, { status: endpoint.created ? 201 : 200, headers: { ...responseHeaders, "X-Request-Id": requestId } });
   } catch (error) {
     if (error instanceof z.ZodError) {
       const fields: Record<string, string> = {};

@@ -55,7 +55,7 @@ try{
  assert.equal(revised.version,2);
  await api(`${base}/staff/items/${item.id}`,{who:staff,method:'PATCH',body:{expectedVersion:1,title:'Stale edit'},status:409});
  const matches=(await api(`${base}/search`,{method:'POST',body:{query:'black backpack'}})).data;
- assert.ok(matches.some(x=>x.item.id===item.id && x.method==='structured'));
+ assert.ok(matches.some(x=>x.item.id===item.id && ['structured','hybrid'].includes(x.method)));
  assert.equal((await api(`${base}/search`,{method:'POST',body:{query:'zzzxxyy-nonmatching'}})).data.length,0);
  await api(`${base}/search`,{method:'POST',raw:'{bad-json',status:400});
  await api(`${base}/search`,{method:'POST',body:{query:'x'.repeat(18000)},status:413});
