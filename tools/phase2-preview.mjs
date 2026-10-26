@@ -12,6 +12,7 @@ const mime = {
   ".html": "text/html; charset=utf-8",
   ".css": "text/css; charset=utf-8",
   ".svg": "image/svg+xml",
+  ".ttf": "font/ttf",
   ".ts": "text/javascript; charset=utf-8",
 };
 const app = createServer(async (req, res) => {
@@ -37,6 +38,10 @@ const app = createServer(async (req, res) => {
       /^\/src\/mocks\/(client|fixtures)\.ts$/.test(path)
     )
       file = resolve(root, "." + path);
+    else if (
+      /^\/design\/(?:caveat\.ttf|patrick-hand\.ttf|paper\.svg)$/.test(path)
+    )
+      file = resolve(root, "public", "." + path);
     else if (path === "/mock-assets/item-placeholder.svg")
       file = resolve(root, "public/mock-assets/item-placeholder.svg");
     else if (
@@ -59,7 +64,7 @@ const app = createServer(async (req, res) => {
       return;
     }
     const ext = "." + file.split(".").pop();
-    const raw = await readFile(file, "utf8");
+    const raw = await readFile(file, ext === ".ttf" ? undefined : "utf8");
     const body =
       ext === ".ts" ? stripTypeScriptTypes(raw, { mode: "strip" }) : raw;
     res.writeHead(200, {
