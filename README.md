@@ -153,7 +153,8 @@ Start with [AGENTS.md](AGENTS.md), then the [shared agent hub](docs/coordination
 The [documentation index](docs/README.md) organizes existing plans and handoffs;
 the [repository map](docs/coordination/repository-map.md) explains file locations.
 
-All agents use `main` as the common integrated baseline. Related work shares a
-short-lived integration branch and a PR into `main`, following the workflow in
-AGENTS.md. Read the [delivery snapshot](docs/coordination/current-state.md) and
+All agents use `main` as the common integrated baseline and deliver changes
+through pull requests targeting `main`. Do not create new branches; reuse a
+suitable existing PR source branch, following the workflow in AGENTS.md.
+Read the [delivery snapshot](docs/coordination/current-state.md) and
 track file ownership in the [coordination board](docs/coordination/task-board.csv).

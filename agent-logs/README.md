@@ -55,6 +55,7 @@ shared phase acceptance still requires its review evidence.
 ## Repository consolidation
 
 - [Shared main integration and preservation report](codex-integrator-01__founder-vunassigned__phase-00-consolidation/codex-integrator-01__founder-vunassigned__phase-00-consolidation.md) — branch ancestry, conflict resolutions, combined checks and remaining UI boundaries.
+- [Issue #17 branch integration audit](codex-issue-17__founder-vunassigned__phase-00-branch-integration/codex-issue-17__founder-vunassigned__phase-00-branch-integration.md) — all seven branch heads integrated, all 236 file paths preserved, and no-new-branches PR guidance.
 
 ## Founder A Phase 2 UI refinement
 
