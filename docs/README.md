@@ -51,3 +51,4 @@ organization pass. Their interpretation remains in the existing phase documents.
 - [Founder B Phase 5 security checkpoint](phase-5/README.md) — bounded request streams and backend coverage matrix; full phase in progress.
 - [Founder B Phase 4 semantic matching checkpoint](phase-4/README.md) — free local CPU inference with synthetic evaluation; independent acceptance pending.
 - [Founder A Phase 4 cases and explanations](phase-4/founder-a-handoff.md) — frozen additional relevance set and reproducible diagnostics.
+- [Founder A Phase 5 browser quality](phase-5/founder-a-handoff.md) — focus recovery, phone text reflow and expanded live accessibility/error checks.

@@ -83,7 +83,7 @@ export function mountLostLink(root: HTMLElement, host: InterfaceHost) {
         const orgs = await api.listOrganizations();
         if (ticket !== generation || destroyed) return;
         if (!orgs.ok) {
-          const view = unavailable(orgs, () => void render());
+          const view = unavailable(orgs, () => void render(true));
           main.innerHTML = view.html;
           main.removeAttribute("aria-busy");
           view.bind?.(main);
@@ -125,7 +125,9 @@ export function mountLostLink(root: HTMLElement, host: InterfaceHost) {
           if (active()) navigate(path);
         },
         refresh: () => {
-          if (active()) void render();
+          // Retry and mutation actions replace their focused control. Move focus
+          // to the updated heading, retaining validation-summary focus below.
+          if (active()) void render(true);
         },
         demoSignIn: host.demoSignIn
           ? (kind, path) => {
@@ -177,7 +179,7 @@ export function mountLostLink(root: HTMLElement, host: InterfaceHost) {
             requestId: "ui",
           },
         },
-        () => void render(),
+        () => void render(true),
       );
       main.innerHTML = view.html;
       main.removeAttribute("aria-busy");

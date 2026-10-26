@@ -64,3 +64,4 @@ shared phase acceptance still requires its review evidence.
 - [Founder B Phase 4 semantic matching checkpoint](codex-founder-b-phase4__founder-vb__phase-04-semantic-matching/codex-founder-b-phase4__founder-vb__phase-04-semantic-matching.md) — free local CPU implementation evaluated; independent acceptance pending.
 
 - [Founder A Phase 4 search cases and explanations](codex-founder-a-04__founder-va__phase-04-search-cases/codex-founder-a-04__founder-va__phase-04-search-cases.md) — 28 additional labeled cases and clear match reasons; model evaluation and independent acceptance pending.
+- [Founder A Phase 5 browser quality](codex-founder-a-05__founder-va__phase-05-browser-quality/codex-founder-a-05__founder-va__phase-05-browser-quality.md) — keyboard regression fixes, 200% phone reflow and persisted browser/accessibility evidence.

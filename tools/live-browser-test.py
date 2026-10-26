@@ -30,9 +30,29 @@ class PersistedWorkflow(unittest.TestCase):
         cls.browser.close()
         cls.runtime.stop()
 
-    def login(self, account, path):
-        context = self.browser.new_context(viewport={'width': 1440, 'height': 1000})
+    def setUp(self):
+        self.errors = []
+
+    def tearDown(self):
+        self.assertEqual(self.errors, [], 'Uncaught errors in the live application')
+
+    def context(self, **options):
+        context = self.browser.new_context(**options)
+        context.on('page', lambda page: page.on('pageerror', lambda error: self.errors.append(str(error))))
         self.addCleanup(context.close)
+        return context
+
+    def keyboard_activate(self, page, target, key='Enter'):
+        expect(target).to_be_visible()
+        for _ in range(100):
+            if target.evaluate('node => node === document.activeElement'):
+                page.keyboard.press(key)
+                return
+            page.keyboard.press('Tab')
+        self.fail('Control is not reachable using Tab: ' + str(target))
+
+    def login(self, account, path):
+        context = self.context(viewport={'width': 1440, 'height': 1000})
         page = context.new_page()
         page.goto(self.origin + '/sign-in?returnTo=' + path)
         page.get_by_label('Email', exact=True).fill(account['email'])
@@ -45,15 +65,29 @@ class PersistedWorkflow(unittest.TestCase):
     def review(self, page, name):
         expect(page.locator('main h1')).to_have_count(1)
         expect(page.locator('main')).not_to_have_attribute('aria-busy', 'true')
-        for width in [320, 768, 1440]:
-            page.set_viewport_size({'width': width, 'height': 1000})
-            self.assertTrue(page.evaluate('document.documentElement.scrollWidth <= innerWidth'), f'{name} overflow at {width}')
-            page.screenshot(path=f'/tmp/lostlink-live-{name}-{width}.png', full_page=True)
         axe = Path('tools/phase2/node_modules/axe-core/axe.min.js')
         self.assertTrue(axe.exists(), 'Install the pinned tools/phase2 dependencies for accessibility checks.')
-        page.add_script_tag(path=str(axe))
-        results = page.evaluate("async () => (await axe.run(document, {runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}})).violations.map(v=>({id:v.id,impact:v.impact,targets:v.nodes.map(n=>n.target)}))")
-        self.assertEqual(results, [], f'{name} accessibility violations: {results}')
+        if not page.evaluate('typeof window.axe !== "undefined"'):
+            page.add_script_tag(path=str(axe))
+        for width, height in [(320, 1000), (390, 844), (568, 320), (768, 1000), (1440, 1000)]:
+            with self.subTest(route=name, width=width, height=height):
+                page.set_viewport_size({'width': width, 'height': height})
+                page.evaluate('async () => {await document.fonts.ready}')
+                self.assertTrue(page.evaluate('document.documentElement.scrollWidth <= innerWidth'), f'{name} overflow at {width}')
+                results = page.evaluate("async () => (await axe.run(document, {runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa','wcag22aa']}})).violations.map(v=>({id:v.id,impact:v.impact,targets:v.nodes.map(n=>n.target)}))")
+                self.assertEqual(results, [], f'{name} accessibility violations at {width}: {results}')
+                page.screenshot(path=f'/tmp/lostlink-live-{name}-{width}.png', full_page=True)
+        original_size = page.evaluate('document.documentElement.style.fontSize')
+        page.emulate_media(reduced_motion='reduce')
+        try:
+            page.set_viewport_size({'width': 320, 'height': 640})
+            page.evaluate("document.documentElement.style.fontSize=(parseFloat(getComputedStyle(document.documentElement).fontSize)*2)+'px'")
+            self.assertTrue(page.evaluate('document.documentElement.scrollWidth <= innerWidth'), f'{name} overflow at doubled text size')
+            page.screenshot(path=f'/tmp/lostlink-live-{name}-text-200.png', full_page=True)
+        finally:
+            page.evaluate('value => document.documentElement.style.fontSize=value', original_size)
+            page.emulate_media(reduced_motion='no-preference')
+            page.set_viewport_size({'width': 1440, 'height': 1000})
 
     def test_real_upload_claim_review_return_and_isolation(self):
         staff_context, staff = self.login(self.fixtures['staff'], self.school + '/staff/items/new')
@@ -77,8 +111,7 @@ class PersistedWorkflow(unittest.TestCase):
         self.assertTrue(private_photo.evaluate('(img)=>img.decode().then(()=>img.naturalWidth > 0)'))
         staff.reload()
         staff.get_by_text('Private preview · not published', exact=True).wait_for()
-        visitor_context = self.browser.new_context()
-        self.addCleanup(visitor_context.close)
+        visitor_context = self.context()
         visitor = visitor_context.new_page()
         visitor.goto(self.origin + item_path)
         visitor.get_by_role('heading', name='Blue acceptance backpack', exact=True).wait_for()
@@ -116,7 +149,24 @@ class PersistedWorkflow(unittest.TestCase):
         visitor.get_by_role('button', name='Sign in', exact=True).click()
         visitor.get_by_role('heading', name='Tell us what makes it yours.', exact=True).wait_for()
         self.review(visitor, 'claim-form')
-        visitor.get_by_label('How can staff tell').fill('A synthetic green dinosaur is inside the zipped pocket.')
+        evidence = visitor.get_by_label('How can staff tell')
+        self.keyboard_activate(visitor, visitor.get_by_role('button', name='Send private claim'))
+        expect(visitor.locator('.error-summary')).to_be_focused()
+        self.review(visitor, 'claim-validation')
+        self.keyboard_activate(visitor, visitor.locator('.error-summary a[href="#ownershipEvidence"]'))
+        expect(evidence).to_be_focused()
+        proof = 'A synthetic green dinosaur is inside the zipped pocket.'
+        evidence.fill(proof)
+        # Real browser network failure, without replacing any API response.
+        visitor_context.set_offline(True)
+        try:
+            self.keyboard_activate(visitor, visitor.get_by_role('button', name='Send private claim'))
+            expect(visitor.locator('.error-summary')).to_be_focused()
+            expect(visitor.locator('.error-summary')).to_contain_text('Unable to reach LostLink')
+            expect(evidence).to_have_value(proof)
+            expect(visitor.get_by_role('button', name='Send private claim')).to_be_enabled()
+        finally:
+            visitor_context.set_offline(False)
         visitor.get_by_role('button', name='Send private claim').click()
         visitor.get_by_role('heading', name='Your claim is with staff.', exact=True).wait_for()
         claim_id = visitor.url.split('?')[0].rsplit('/',1)[1]
@@ -129,10 +179,16 @@ class PersistedWorkflow(unittest.TestCase):
         other_context, other = self.login(self.fixtures['other'], '/my/claims')
         denied = other_context.request.get(self.origin + '/api/v1/me/claims').json()
         self.assertEqual(denied['data'], [])
+        other.goto(self.origin + '/my/claims/' + claim_id)
+        other.get_by_role('heading', name='This page is unavailable', exact=True).wait_for()
+        self.review(other, 'other-owner-denied')
         foreign_context, foreign = self.login(self.fixtures['foreign'], '/o/' + self.fixtures['orgs'][1]['slug'] + '/staff')
         for endpoint in ['/staff/items/' + item_id, '/staff/items/' + item_id + '/photos', '/staff/activity?itemId=' + item_id]:
             self.assertEqual(foreign_context.request.get(self.origin + '/api/v1/organizations/' + self.fixtures['orgs'][0]['slug'] + endpoint).status,404)
         self.assertEqual(foreign_context.request.get(self.origin + '/api/v1/organizations/' + self.fixtures['orgs'][0]['slug'] + '/staff/claims').status,404)
+        foreign.goto(self.origin + self.school + '/staff/claims/' + claim_id)
+        foreign.get_by_role('heading', name='This page is unavailable', exact=True).wait_for()
+        self.review(foreign, 'other-school-denied')
         staff.goto(self.origin + self.school + '/staff')
         staff.get_by_role('heading', name='Claim review queue', exact=True).wait_for()
         self.review(staff, 'dashboard')
@@ -142,18 +198,19 @@ class PersistedWorkflow(unittest.TestCase):
         staff.goto(self.origin + self.school + '/staff/claims/' + claim_id)
         staff.get_by_role('heading', name='Review this claim', exact=True).wait_for()
         self.review(staff, 'review')
-        staff.get_by_role('button', name='Approve for collection').focus()
-        staff.keyboard.press('Enter')
+        self.keyboard_activate(staff, staff.get_by_role('button', name='Approve for collection'))
         staff.get_by_role('heading', name='Record physical handover', exact=True).wait_for()
+        expect(staff.locator('main h1')).to_be_focused()
         staff.reload()
         staff.get_by_role('heading', name='Record physical handover', exact=True).wait_for()
         self.assertEqual(visitor_context.request.get(self.origin + public_photo_url).status,404)
         self.assertEqual(staff_context.request.get(self.origin + public_photo_url).status,404)
         visitor.goto(self.origin + '/my/claims/' + claim_id)
         visitor.get_by_role('heading', name='Ready for collection.', exact=True).wait_for()
-        staff.get_by_label('I confirm').check()
-        staff.get_by_role('button', name='Mark item returned').click()
+        self.keyboard_activate(staff, staff.get_by_label('I confirm'), 'Space')
+        self.keyboard_activate(staff, staff.get_by_role('button', name='Mark item returned'))
         staff.get_by_text('The physical handover has been recorded.', exact=True).wait_for()
+        expect(staff.locator('main h1')).to_be_focused()
         staff.reload()
         staff.get_by_text('The physical handover has been recorded.', exact=True).wait_for()
         visitor.reload()
@@ -185,7 +242,7 @@ class PersistedWorkflow(unittest.TestCase):
         self.assertNotIn('Synthetic private internal comparison only.',visitor.content())
         self.assertNotIn('dinosaur', visitor.url)
         self.assertEqual(visitor.evaluate('Object.keys(localStorage)'), [])
-        print('PASS: twelve live routes at 320/768/1440px, axe, real login/continuation, photos, date filters, private claims, approval/return persistence, school/owner isolation and safe rejection.')
+        print('PASS: twelve live routes at 320/390/568/768/1440px with axe, real login, photos, date filters, keyboard validation/approval/return, offline claim recovery, persistence, isolation and safe rejection.')
 
 
 if __name__ == '__main__':

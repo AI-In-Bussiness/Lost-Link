@@ -1,0 +1,49 @@
+# Phase Report: 05 — Browser quality
+
+## Metadata
+- **Agent:** codex-founder-a-05 (Codex)
+- **Founder version:** a, supplied by the task owner as Founder A
+- **Phase:** 05 — browser-quality
+- **Status:** Blocked (implementation delivered; expanded persisted verification pending)
+- **Date (UTC):** 2026-10-26
+- **Task / issue:** Task owner: “you are founder A phase 5”; plan.pdf Phase 5 / LL-038–LL-045
+- **Branch / commit:** codex/founder-b-phase-5; main baseline f18076d; shared Founder B checkpoint 5d3bf6d; PR #14
+
+## Objective and scope
+- **Goal:** Verify and improve the assigned browser, mobile, accessibility, error and usability behavior.
+- **In scope:** Shared DOM interface focus/reflow; existing standalone and persisted browser suites; evidence and handoff.
+- **Out of scope:** Founder B's backend/security ownership, ranking retuning, deployment, Phase 6 polish and independent Overseer approval.
+
+## Work performed
+- Read AGENTS.md, the shared hub/state/integration guide, upstream handoffs, UX/design specifications, CI and existing browser suites. Extracted plan.pdf to confirm actual Phase 5 ownership rather than infer it from the phase number.
+- Found existing related PR #14, attached it to the task and recorded Founder A ownership on its shared board. Retained all Founder B implementation and reports; fetched the later 5d3bf6d evidence update without overwriting it.
+- Reproduced two keyboard focus failures before changing the code: retry after a failed school read, and staff approval after a view refresh. Both new tests failed on unfocused headings. User-action refreshes now focus the updated heading while preserving validation-summary focus and generation guards.
+- Reproduced horizontal overflow at 320px with doubled computed root text size. Allowed heading/caption/reference wrapping and shrinkable stack/hero grid tracks. Added eleven-route phone reflow/control-bound checks.
+- Extended the persisted suite to scan five viewports per reviewed state with axe through WCAG 2.2 tags, check doubled text/reduced motion, exercise keyboard validation/approval/handover, preserve proof during real browser offline submission and retry, review other-owner/other-school denial screens and fail on uncaught page errors.
+- **Files created or modified:** src/interface/app.ts; src/interface/styles.css; tools/phase2-browser-test.py; tools/live-browser-test.py; docs/phase-5/founder-a-handoff.md; docs/README.md; docs/coordination/task-board.csv; agent-logs/README.md; this report.
+- **Decisions made:** Extend existing suites and CI entry points. Use real browser offline mode rather than fake API success/failure responses. Share PR #14 and serialize publication. No migration or hosted mutation.
+
+## Validation and results
+- **Commands / checks run:** npm run lint and npm run typecheck passed; npm test passed (46 tests); npm run test:mocks passed (14 tests); node --test --test-isolation=none tools/phase4/*.test.mjs passed (8 tests); scoped tools/phase2 typecheck and format:check passed; git diff --check passed.
+- `AXE_SCRIPT=tools/phase2/node_modules/axe-core/axe.min.js python tools/phase2-browser-test.py` passed all 17 cases in 146.760 seconds with no skips, including twelve-route axe checks and both new focus regressions. The doubled-text case checks eleven routes at 320px. Inspected desktop/mobile search screenshots and doubled-text claim-review screenshot.
+- `node_modules/.bin/next build` compiled and generated routes successfully. This bypassed the model-download prebuild because npm run model:download receives proxy HTTP 403 for Hugging Face; it is not evidence of packaged inference/model quality.
+- Python syntax compilation passed. Initial tsx IPC and preview socket restrictions were resolved by scoped execution permissions. Network-enabled execution restored Git/registry access; the Supabase installer was rebuilt with its supported npm proxy setting and normal checksum verification. The actual full branch, rather than the stale initial b52dd4c checkout, is the publication base.
+- **Tests not run:** Expanded persisted browser/SQL/HTTP checks and new-code remote CI are pending at this checkpoint. Local disposable Supabase image startup is in progress. Manual screen-reader, real device, WebKit/Firefox and native zoom audits were not run.
+- **Deliverables:** [Handoff](../../docs/phase-5/founder-a-handoff.md); [shared PR #14](https://github.com/AI-In-Bussiness/Lost-Link/pull/14); synthetic screenshots under /tmp/lostlink-*.png and existing CI artifacts.
+
+## Thoughts and reflections
+- **What worked well:** Observable failing browser regressions made the focus repair concrete. Doubling computed text size found overflow missed by normal-width checks. Existing injected transport and persisted fixture infrastructure avoided a second test framework.
+- **What was difficult or surprising:** The initial sandbox made the proxy appear unreachable; explicit network access fixed Git and registry calls. The CLI installer needs npm's proxy setting rather than only the usual HTTPS_PROXY. Model hosting is independently blocked. Docker image extraction is substantial on this workspace.
+- **Trade-offs and alternatives considered:** Focusing the heading after explicit refresh gives keyboard users an updated reading position; automatic host refresh behavior remains unchanged. Reflow wraps text rather than shrinking it. Live accessibility scans cost more time but now test actual mobile layouts rather than desktop alone.
+- **What I would improve next:** Independent assistive-technology and physical-device review; retain failures with exact viewport/state evidence. Resolve Phase 4 negative-case relevance separately without changing labels to improve scores.
+
+## Cross-agent and cross-phase comments
+- **For agents on other phases:** Founder B owns request/security files and the Phase 5 README/backend review; they are preserved. The expanded browser suite must pass on the combined branch. Overseer owns independent P0 and combined Phase 5 acceptance.
+- **Dependencies / assumptions:** Node 24; pinned tools/phase2 axe/TypeScript/formatter; Chromium; disposable local Supabase and real session accounts through scripts/test-browser.mjs. Existing workflows already invoke both changed suites and upload screenshots.
+- **Risks / integration concerns:** Browser engine coverage is Chromium only. Text-resize checks are not native pinch/zoom certification. A green Phase 4 diagnostic workflow does not resolve its five known negative/trap false positives. No hosted readiness is inferred from local tests.
+- **Questions / requested decisions:** Overseer must review the delivered quality evidence; no implementation-blocking task-owner question remains.
+
+## Follow-up and handoff
+- **Remaining work:** Finish local persisted verification and inspect exact shared-head CI. Keep the board at Review until independent review; do not merge or approve the phase gate by inference.
+- **Recommended next steps:** Run npm run db:test, build with local configuration, npm run test:live and CHROMIUM_PATH=/usr/bin/chromium npm run test:browser against disposable services; inspect Foundation/interface results on the published commit; record exact outcomes below.
+- **Relevant references:** plan.pdf Phase 5; docs/phase-0/ux-spec.md; DESIGN.md; docs/phase-5/README.md and backend-review.md; upstream Founder A Phase 3/4 handoffs; AGENTS.md.
