@@ -57,3 +57,20 @@ Verified code commit `83cd353e4c96cfadf8b536c42bdcef908640636f` on shared PR #14
 - [Phase 4 diagnostic workflow](https://github.com/AI-In-Bussiness/Lost-Link/actions/runs/40403763237) completed successfully; its existing diagnostic quality failure remains a separate relevance finding, not an acceptance pass.
 
 The follow-up commit changes documentation/board evidence only. It does not change the code or tests verified above. Local Docker and model-host limitations are superseded for automated verification by these remote executions, not silently described as local passes. No deployment, merge or independent phase approval was performed.
+
+## Conflict-resolution addendum — 2026-10-26 UTC
+
+The task owner requested conflict resolution for PR #14. Merged main `e913f89`
+(the Windows Supabase helper repair from PR #13) into the shared Phase 5 branch.
+The only conflict was adjacent task-board additions: retained WIN-001 and both
+Phase 5 rows with their original ownership, status and evidence. All main-side
+helper code, tests, workflow, README additions and report are preserved.
+
+Validation: parsed the resolved CSV, verified unique IDs and exact preservation
+of every row from both parents, confirmed every source path remains, compared
+the automatically merged main-side files to main, and passed all six native
+Supabase-helper tests. The initial sandboxed test invocation failed; rerunning
+with the native subprocess permissions required by the fixture passed.
+No application behavior was edited during resolution;
+full integration checks rerun in CI on the merge commit. The PR itself remains
+open for the task owner to merge after its checks.
