@@ -23,7 +23,6 @@ jobs:
           cache-dependency-path: tools/phase2/requirements.txt
       - run: npm ci --prefix tools/phase2
       - run: python -m pip install -r tools/phase2/requirements.txt
-      - run: python -m playwright install --with-deps chromium
       - run: npm run db:start
       - run: npm run env:local
       - run: npm run env:photos
@@ -35,6 +34,9 @@ jobs:
       - run: npm test
       - run: npm run test:mocks
       - run: npm run db:test
+      - run: npm run test:demo
+      # Account/data readiness does not depend on downloading browser packages.
+      - run: python -m playwright install --with-deps chromium
       - run: npm run build
       - run: npm run check:search:bundle
       - run: npm run test:live
