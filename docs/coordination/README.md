@@ -7,6 +7,7 @@ work without moving or deleting original artifacts.
 
 1. Read [repository instructions](../../AGENTS.md) and the task from the owner.
 2. Start from current `main` and follow the shared PR workflow in AGENTS.md.
+   Do not create branches; reuse an existing PR source branch for delivery.
    Confirm `git status --short`, `git branch --show-current`, and
    `git log -1 --oneline`. Preserve any existing uncommitted work.
 3. Read [current state](current-state.md), then the relevant

@@ -1,5 +1,23 @@
 # Repository state snapshot
 
+## Issue #17 branch integration audit — 2026-10-26 UTC
+
+At `main` commit `2b898c869af091d0ee6bd1d861bde6a3e64ccaeb`, all seven
+non-main remote branch heads are already ancestors of `main`. The union of
+file paths at all eight branch heads contains 236 paths, all present on
+`main`; no additional code merge or file restoration is needed. No files or
+branches were deleted. PRs #10–#16 are integrated; the older checkpoints below
+describe their original delivery states, not outstanding merges.
+
+[Issue #17](https://github.com/AI-In-Bussiness/Lost-Link/issues/17) also requires
+agents to stop creating branches. AGENTS.md now prohibits new agent branches
+and requires PRs targeting `main` using a suitable existing source branch.
+This guidance change reuses `codex/founder-b-phase-5`, whose previous head was
+already merged by PR #14; there were no open PRs at inspection. See the
+[preservation report](../../agent-logs/codex-issue-17__founder-vunassigned__phase-00-branch-integration/codex-issue-17__founder-vunassigned__phase-00-branch-integration.md)
+for exact branch SHAs, ancestry and path checks. This repository audit does not
+establish hosted deployment or independent product acceptance.
+
 ## Founder B Phase 5 started — 2026-10-26 UTC
 
 A focused branch `codex/founder-b-phase-5` starts from current main `b70777e`. It adds bounded request-stream deadlines and a backend security coverage matrix. See [Phase 5](../phase-5/README.md). Main advanced to f18076d during publication and merged Phase 4 PR12. That update is preserved in this branch; Founder B engineering is complete at 10061df with Foundation run 40402040638 passing backend/security and persisted-browser checks; independent phase acceptance remains separate.
@@ -50,9 +68,9 @@ README and Phase 3 validation conflicts were combined with both founders'
 evidence preserved. See the consolidation report linked from the agent index
 for exact checks and the integration PR.
 
-Use current main as the common baseline. Related assignments share a temporary
-PR branch as specified in AGENTS.md; permanent branches per founder or phase
-are no longer required. Original branches remain available as historical
+Use current main as the common baseline. Assignments deliver through PRs from
+existing source branches as specified in AGENTS.md; do not create new branches
+per founder, phase, or task. Original branches remain available as historical
 references; no branch was deleted or force-pushed.
 
 The live interface covers search, private claims, staff intake/review and return.
