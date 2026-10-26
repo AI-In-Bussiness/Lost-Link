@@ -1,0 +1,23 @@
+name: Cross-platform Supabase helpers
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  helpers:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Exercise helper spawning and credential-output boundaries
+        run: node --test tests/local-supabase.test.mjs
+      - name: Launch the installed pinned Supabase executable
+        run: node --input-type=module -e "import { execFileSync } from 'node:child_process'; import { supabaseBinary } from './scripts/supabase-binary.mjs'; execFileSync(supabaseBinary(), ['--version'], {stdio:'inherit'});"
