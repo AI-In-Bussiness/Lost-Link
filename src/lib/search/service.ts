@@ -3,7 +3,7 @@ export type SearchMeta = {mode:"structured"|"hybrid"; semanticStatus:"disabled"|
 type Inventory<T> = {items:T[]; overflow:boolean};
 export async function semanticSearch<T extends SearchItem>(options: {
   slug:string; query:string; limit:number; baseline:Match<T>[]; enabled:boolean;
-  inventory:()=>Promise<Inventory<T>>; reserve:()=>Promise<boolean>; embed:(input:string[])=>Promise<number[][]>;
+  inventory:()=>Promise<Inventory<T>>; embed:(input:string[])=>Promise<number[][]>;
 }):Promise<{data:Match<T>[]; search:SearchMeta}> {
   const fallback=(status:SearchMeta["semanticStatus"])=>({data:options.baseline, search:{mode:"structured" as const, semanticStatus:status}});
   if (!options.enabled) return fallback("disabled");
@@ -13,11 +13,10 @@ export async function semanticSearch<T extends SearchItem>(options: {
     // Fail closed even if a caller accidentally supplies staff or another school's inventory.
     if (before.items.some(i=>i.organizationSlug!==options.slug)) return fallback("unavailable");
     if (!before.items.length) return {data:[],search:{mode:"structured",semanticStatus:"available"}};
-    if (!await options.reserve()) return fallback("unavailable");
     const texts=before.items.map(publicText);
     const vectors=await options.embed([options.query,...texts]);
     const after=await options.inventory();
-    // Re-read visibility after external IO. New/edited/withdrawn inventory invalidates the batch.
+    // Re-read visibility after inference. New/edited/withdrawn inventory invalidates the batch.
     if (after.overflow || after.items.length!==before.items.length || after.items.some((item,i)=>item.organizationSlug!==options.slug || item.id!==before.items[i].id || publicText(item)!==texts[i])) {
       // Do not return an earlier baseline whose visibility may have changed.
       throw new InventoryChanged();

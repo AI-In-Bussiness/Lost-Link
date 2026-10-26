@@ -29,7 +29,7 @@ Lost-and-found for a competition demo. Despite the website being used as a demo,
 
 ## Phase 4 matching
 
-Founder B’s [semantic matching checkpoint](docs/phase-4/README.md) adds opt-in public-text embeddings, hybrid ranking and automatic keyword fallback. It stays disabled by default pending real-provider evaluation; no retrieval improvement is claimed yet.
+Founder B’s [semantic matching checkpoint](docs/phase-4/README.md) runs a free local MiniLM model on the app CPU, with hybrid ranking and keyword fallback. No inference API or key is needed. The production build installs pinned model files; runtime inference is offline. The synthetic evaluation found 8/8 positives versus 5/8 for keywords, with no results on four negative/trap cases; broader quality and independent acceptance remain open.
 
 ## Local development
 

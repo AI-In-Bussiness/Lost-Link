@@ -1,32 +1,46 @@
-# Founder B — Phase 4 semantic matching checkpoint
+# Founder B — Phase 4 local semantic matching
 
-Status: implementation ready for review; full Phase 4 quality gate blocked on a real-provider evaluation. Built from main `b70777e`. No hosted deployment or measured retrieval improvement is claimed.
+PR #12 now uses a free pretrained **MiniLM model on the app CPU**. There is no inference API, account, API key, per-query bill or outbound query transmission. Model files download once during setup/build; runtime loading is strictly local. Existing hosting still supplies CPU, memory and storage, so this does not promise unlimited free hosting.
 
-## Behavior and boundaries
+## Setup and operation
 
-The existing same-origin POST search endpoint keeps `{data:[{item,reasons,method}]}` and adds `search:{mode:"structured"|"hybrid",semanticStatus:"disabled"|"available"|"unavailable"}`. Clients ignoring the new metadata still work. The live interface shows AI + keyword matching only when returned rows actually use semantic ranking, and shows a fallback notice for an attempted but unavailable semantic path. Browsing without a query remains unchanged.
+Use the repository's Node 24/npm 11 versions:
 
-The server first runs the existing structured search. When explicitly enabled, it retrieves **only available public items from the published requested school**, applying category/color/inclusive date filters in SQL before embedding or ranking. It never uses staff inventory, claims, ownership evidence, identifying details, storage locations, contact details, photographs or filenames. An explicit allow-list builds each provider input from title, public description, category, color and broad public location. User queries are sent to OpenAI; users can still type personal information into that field. Approve provider data handling and the real-user privacy notice before public enablement.
+```sh
+npm ci
+npm run model:download
+npm run eval:search
+npm run dev
+```
 
-A single bounded request embeds the query and at most 50 items using OpenAI `text-embedding-3-small`, 256 dimensions, with a 2.5-second provider timeout, no redirects/retries and a 1 MiB response cap. The server validates vector dimensions, finite nonzero values and exact indexed batch coverage. No embeddings or queries are persisted or logged. The model cannot invoke tools or generate explanatory prose. Explanations are fixed descriptions of matching signals, never an ownership probability or proof.
+`npm run build` also runs the downloader automatically. It retrieves four public files (about 23.7 MB total) from a pinned Hugging Face revision and checks exact lengths/SHA-256 hashes in `src/lib/search/model-manifest.json`. Valid existing files are reused. These are static model downloads, not a hosted inference API. A fully disconnected build can use previously verified `models/all-MiniLM-L6-v2/` assets. Model weights stay ignored by Git. The downloader copies the model license and attribution notice into the packaged directory.
 
-Cosine similarity >=0.45 supplies semantic candidates. Reciprocal rank fusion (`rrf-60-v1`) combines semantic and structured ranks; ties use found date descending then ID. These settings are provisional until evaluated. Public inventory is re-read after the provider call; visibility/content changes invalidate the batch and cause a fresh structured search. RPCs use the caller-scoped Supabase client; no service-role key is used. Public projection is enforced even when staff are searching.
+The CPU binaries ship in the ONNX Runtime npm package. `.npmrc` sets its documented `onnxruntime-node-install=skip` flag to avoid optional CUDA downloads; npm 11 currently emits an unknown-config warning while passing it through to the installer. The pinned npm version supports this setting. No GPU is required.
 
-## Setup
+Semantic matching is enabled when model files are installed; `LOSTLINK_SEMANTIC_SEARCH=false` forces keyword-only operation. `OPENAI_API_KEY` is no longer read or required. There is no new database migration. The earlier unmerged paid-provider budget migration and its test were removed from this PR; previous application migrations stay intact.
 
-1. Apply the **additive** migration `202610260005_semantic_budget.sql` to a reviewed target. Existing migrations are preserved. Local command: `npx supabase migration up --local`.
-2. Bind `OPENAI_API_KEY` server-side and set `LOSTLINK_SEMANTIC_SEARCH=true` only in the disposable local evaluation environment. Neither variable is public. Default is disabled.
-3. Start the local seeded app with `npm run dev`; run `npm run eval:search`. The evaluator requires localhost app and local Supabase, uses only the public key and performs no provisioning/writes. Preserve both seed items as available. It compares real structured RPC results with the actual HTTP search endpoint; disabled/unavailable AI fails the run instead of recording fabricated semantic scores.
-4. Review the JSON output and synthetic relevance labels with Founder A/Overseer before enabling any hosted deployment. Queries and labels are in `evaluation-cases.json` (4 exact, 4 paraphrase, 2 no-match, 2 wrong-school). The proposed acceptance gate is 7/8 positives in top 3, zero false positives on the four negative/trap cases, and zero school leaks. The two-item seed is a small smoke evaluation, not a realistic retrieval benchmark; expand it with distractors before claiming quality or generalization.
+## Search and privacy
 
-The migration implements an atomic shared fixed-hour budget of **20 batches per published school per hour**, counting failures too. Old windows reset on the next reservation, using one private row per school. Public callers can consume the shared quota, including by directly invoking the reservation RPC; this can degrade AI availability but cannot bypass the budget or disable structured search. Provider-account spending limits remain an operator control. No IP/user tracking is stored by this change.
+The existing same-origin POST search keeps `{data:[{item,reasons,method}]}` and adds `search:{mode:"structured"|"hybrid",semanticStatus:"disabled"|"available"|"unavailable"}`. The interface shows AI + keyword matching only when returned rows actually use semantic ranking, and shows a fallback notice if local inference is unavailable. Browsing without a query is unchanged.
 
-## Fallback and limitations
+The existing structured SQL search runs first. Candidate retrieval uses the caller-scoped public RPC: only available items in the requested published school, with category/color/inclusive date filters applied before inference. An allow-list embeds public title, description, category, color and broad location. Claims, proof, identifying details, storage locations, contact details, photos and filenames never enter the model. Queries and embeddings are neither persisted nor logged. The worker disables remote model loading and replaces its fetch function with a rejection, so an absent asset cannot silently trigger a download or remote inference.
 
-Missing key/flag means `disabled` with no paid call. Overflow (>50 eligible items), quota denial, missing migration, provider errors/rate limits/timeouts or invalid embeddings mean structured results with `unavailable`. Never silently rank only the first page of a larger inventory. DB visibility failures trigger a fresh structured read or the existing safe API error. The 2.5-second timeout covers the provider fetch/body; database latency retains existing behavior.
+The pinned model is `Xenova/all-MiniLM-L6-v2` at revision `751bff37182d3f1213fa05d7196b954e230abad9` (Apache 2.0), running q8 ONNX on CPU. Mean pooling and normalization produce 384-dimensional vectors. One native inference thread processes chunks of four texts, truncated at 256 tokens. The model cannot invoke tools or generate prose. Explanations are fixed signal descriptions, never ownership probabilities or proof.
 
-This is an on-demand small-demo implementation, deliberately without a persistent embedding index or cache. Each eligible request re-embeds the filtered inventory. A pgvector index, model-versioned incremental indexing, durable jobs and cache invalidation are future scale work. The existing keyword path remains available across the full inventory. There is no language generation, image recognition, ownership inference, notification or automatic claim approval.
+One worker per search module handles at most one batch at a time; concurrent calls immediately use keyword fallback rather than queueing CPU work. A 15-second deadline terminates a stuck worker, allowing a later request to recreate it. At most 50 eligible items are embedded; larger inventories fall back to the full structured search instead of silently ranking only a first page. Model loading includes file-integrity checks. Warm weights remain in worker memory; no vector cache or persistent index is used.
 
-## Evidence
+Public inventory is re-read after inference. Visibility/content changes invalidate the batch and trigger a fresh structured search. Missing/corrupt files, a busy worker, unsupported native runtime, deadline or invalid vector output yield structured fallback. No service-role credential is used. Database errors retain the existing safe API behavior.
 
-See the [phase report](../../agent-logs/codex-founder-b-phase4__founder-vb__phase-04-semantic-matching/codex-founder-b-phase4__founder-vb__phase-04-semantic-matching.md). Unit tests use explicit fake vectors/provider responses to verify mechanics, fallback and privacy; they do **not** establish semantic relevance. The real-provider evaluation is not run: this environment has no configured OpenAI credential. Remote CI and independent review are tracked through the draft PR, separately from the quality gate.
+## Ranking and measured limits
+
+Semantic candidates require cosine similarity >=0.30, a >=0.05 gap between the best two candidate similarities, and similarity within 0.10 of the best. Ambiguous semantic results leave the keyword baseline intact. Reciprocal rank fusion (`rrf-60-v1`) combines semantic and structured ranks; ties use found date descending then ID. These gates were calibrated on the committed small synthetic set and need independent/held-out evaluation.
+
+`npm run eval:search` runs the actual local model, with network disabled in its worker, against twelve fixed labeled queries and ten fictional inventory items including eight distractors. It compares the hybrid path with a deterministic counterpart of SQL's public-field keyword algorithm. The [recorded result](evaluation-results.json) is 8/8 positive queries with a relevant item in top three versus 5/8 for keywords, no results on the two no-match/two wrong-school cases, and zero school leaks. One local run took about 0.3 seconds for all twelve cases including model load; this is not a hosting latency guarantee. Initial gates from the former provider underperformed; the revised local gates improved this calibration set. No held-out/general accuracy claim is made. This small English-oriented model has no validated multilingual retrieval coverage here.
+
+`npm run eval:search:live` separately compares the actual structured SQL RPC with the HTTP endpoint against the local seeded stack. It requires local `.env.local`, running Supabase/app and available seed items, and uses only a public key. The offline evaluation is not proof of database policy enforcement; existing SQL/HTTP/browser suites cover that boundary.
+
+## Packaging and checks
+
+`next.config.ts` traces the worker, model assets, license notices and native dependencies for the search route, selecting the build platform's ONNX binaries. `npm run check:search:bundle` copies only traced files into an isolated directory and executes real model inference there. Build and deployment architectures must match. Use Node hosting supporting worker threads/native addons; an edge isolate is unsupported. No hosted deployment has been performed.
+
+Validation commands: `npm test`, `npm run test:search:model`, `npm run eval:search`, `npm run lint`, `npm run typecheck`, `npm run build`, `npm run check:search:bundle`. CI runs the real model checks along with existing database/HTTP/browser suites. See the [phase report](../../agent-logs/codex-founder-b-phase4__founder-vb__phase-04-semantic-matching/codex-founder-b-phase4__founder-vb__phase-04-semantic-matching.md) for exact evidence. Persistent indexing, realistic held-out relevance data, hosted validation and independent Phase 4 acceptance remain follow-up work.

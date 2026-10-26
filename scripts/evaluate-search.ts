@@ -15,7 +15,7 @@ for (const [index,c] of cases.entries()) {
   if (baseline.error) throw Error("Baseline unavailable");
   const response=await fetch(`${base}/api/v1/organizations/${c.school}/search`,{method:"POST",headers:{Origin:base,"Content-Type":"application/json"},body:JSON.stringify(payload)});
   const hybrid=await response.json();
-  if (!response.ok || hybrid.search?.semanticStatus!=="available") throw Error(`Case ${index+1}: real provider unavailable/disabled or budget exhausted; no quality result claimed`);
+  if (!response.ok || hybrid.search?.semanticStatus!=="available") throw Error(`Case ${index+1}: local model unavailable/disabled; no quality result claimed`);
   const ids=(data:{item:{id:string;organizationSlug:string}}[])=>data.map(row=>row.item.id);
   const hit=(data:{item:{id:string;organizationSlug:string}}[])=>ids(data).some(id=>c.relevant.includes(id));
   if (c.relevant.length) {positives++;baselineHits+=Number(hit(baseline.data.data));hybridHits+=Number(hit(hybrid.data));}
