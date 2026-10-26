@@ -1,5 +1,18 @@
 # Repository state snapshot
 
+## Founder A Phase 6 presentation checkpoint — 2026-10-26 UTC
+
+Delivered for review on shared PR #15: homepage privacy copy, pending-first
+staff dashboard with collection guidance, responsive wrapping from Phase 5,
+and brand/demo/pitch drafts. See [Founder A handoff](../phase-6/founder-a-handoff.md).
+Local lint/type/format checks, 38 unit tests, 14 mocks and 14 browser scenarios
+including axe passed. Home/dashboard also passed four-width/200% text probes.
+These are builder presentation checks in the mock harness, not hosted evidence.
+The task owner excluded the competition summary. Independent acceptance,
+real-app timed rehearsal, team/research/disclosure inputs and final combined
+hosted release verification remain open. Founder B's demo runbook and scripts
+retain their own ownership and evidence.
+
 ## Founder B Phase 4 checkpoint — 2026-10-26 UTC
 
 Based on integrated main `b70777e`, draft PR #12 (`codex/founder-b-phase-4`) now runs local CPU MiniLM embeddings with no paid inference API/key. Public-only scoped retrieval, hybrid ranking and keyword fallback remain. The unmerged paid-provider quota migration was removed. Pinned model assets download during build; inference disables network access. Real local-model evaluation on twelve fixed synthetic queries with ten inventory items found 8/8 positive queries in top three versus 5/8 for the keyword counterpart, zero false positives on four negative/trap cases and zero school leaks. These are calibration results, not held-out accuracy. See [Phase 4](../phase-4/README.md); hosted verification and independent acceptance remain open.

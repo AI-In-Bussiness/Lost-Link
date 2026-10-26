@@ -65,3 +65,5 @@ shared phase acceptance still requires its review evidence.
 - [Founder A Phase 4 search cases and explanations](codex-founder-a-04__founder-va__phase-04-search-cases/codex-founder-a-04__founder-va__phase-04-search-cases.md) — 28 additional labeled cases and clear match reasons; model evaluation and independent acceptance pending.
 
 - [Founder B Phase 6 demo reliability](codex-founder-b-phase6__founder-vb__phase-06-demo-reliability/codex-founder-b-phase6__founder-vb__phase-06-demo-reliability.md).
+
+- [Founder A Phase 6 competition polish](codex-founder-a-06__founder-va__phase-06-competition-polish/codex-founder-a-06__founder-va__phase-06-competition-polish.md) — presentation changes and pitch draft; summary excluded by task owner.
