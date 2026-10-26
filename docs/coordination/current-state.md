@@ -1,5 +1,10 @@
 # Repository state snapshot
 
+## Founder B Phase 4 checkpoint — 2026-10-26 UTC
+
+Based on integrated main `b70777e`, `codex/founder-b-phase-4` adds opt-in bounded semantic matching, public-only provider inputs, hybrid ranking, a shared SQL budget and keyword fallback. See [Phase 4](../phase-4/README.md). Implementation evidence is separate from the unexecuted real-provider quality evaluation and independent acceptance. The code is disabled by default; no hosted deployment is claimed.
+
+
 ## Overseer remediation — 2026-10-26 UTC
 
 Work starts from current main `dc58f92` on `codex/overseer-phase-0-3-fixes`.

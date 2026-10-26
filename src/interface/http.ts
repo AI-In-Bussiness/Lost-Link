@@ -13,7 +13,7 @@ type ClaimDto = {
   decisionReason: string | null; version: number; claimantId?: string; reviewedBy?: string;
   privateReviewNote?: string | null; claimantReason?: string | null;
 };
-type Envelope<T> = { data: T; page?: { nextCursor: string | null } };
+type Envelope<T> = { data: T; page?: { nextCursor: string | null }; search?: { mode: "structured" | "hybrid"; semanticStatus: "disabled" | "available" | "unavailable" } };
 const ok = <T>(data: T): Result<T> => ({ ok: true, data });
 const failure = (code: "INTERNAL_ERROR" | "NOT_FOUND" | "VALIDATION_ERROR", message: string): Result<never> =>
   ({ ok: false, error: { code, message, requestId: "browser" } });
@@ -142,7 +142,7 @@ export function createHttpApi(slugs: string[], transport: typeof fetch = fetch):
         const result = await request<{ item: ItemDto; reasons: string[] }[]>(path + "/search", { query: input.query.trim(), ...filters, limit: 50 });
         if (!result.ok) return result;
         const paged = page(result.data.data.map(row => ({ ...item(row.item), matchReasons: row.reasons })), input);
-        return paged.ok ? ok({ ...paged.data, mode: "keyword" as const, smartMatchingUnavailable: false, limited: true }) : paged;
+        return paged.ok ? ok({ ...paged.data, mode: result.data.search?.mode === "hybrid" ? "hybrid" as const : "keyword" as const, smartMatchingUnavailable: result.data.search?.semanticStatus === "unavailable", limited: true }) : paged;
       }
       const params = new URLSearchParams(filters);
       const result = await all<ItemDto>(path + "/items" + (params.size ? "?" + params : ""));

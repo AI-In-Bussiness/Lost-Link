@@ -59,3 +59,5 @@ shared phase acceptance still requires its review evidence.
 ## Founder A Phase 2 UI refinement
 
 - [Research, visual changes and verification](codex-ui-01__founder-va__phase-02-ui-refinement/codex-ui-01__founder-va__phase-02-ui-refinement.md).
+
+- [Founder B Phase 4 semantic matching checkpoint](codex-founder-b-phase4__founder-vb__phase-04-semantic-matching/codex-founder-b-phase4__founder-vb__phase-04-semantic-matching.md) — implementation delivered; provider quality gate pending.

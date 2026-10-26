@@ -39,7 +39,7 @@ export interface SearchInput extends Pagination {
 }
 export interface SearchItem extends PublicItem { matchReasons: string[] }
 export interface SearchResults extends Page<SearchItem> {
-  limited?: boolean; mode: 'keyword'; smartMatchingUnavailable: boolean;
+  limited?: boolean; mode: 'keyword' | 'hybrid'; smartMatchingUnavailable: boolean;
 }
 export interface ClaimInput { orgSlug: string; itemId: string; contactEmail: string; ownershipEvidence: string }
 /** Upload metadata is simulated only; real byte validation/storage belongs to Founder B. */

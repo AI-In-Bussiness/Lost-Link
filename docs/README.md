@@ -47,3 +47,5 @@ organization pass. Their interpretation remains in the existing phase documents.
 - [Runnable interface guide](phase-2/interface-guide.md)
 - [Overseer response and route/state evidence](phase-2/review-response.md)
 - [Founder A Phase 2 handoff](phase-2/founder-a-handoff.md)
+
+- [Founder B Phase 4 semantic matching checkpoint](phase-4/README.md) — opt-in implementation, evaluation still pending.

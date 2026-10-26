@@ -25,7 +25,8 @@
     "test:mocks": "node --experimental-strip-types --test src/mocks/client.test.ts",
     "env:photos": "node scripts/configure-photo-worker.mjs",
     "test:photos": "node scripts/smoke-photos.mjs",
-    "test:browser": "node scripts/test-browser.mjs"
+    "test:browser": "node scripts/test-browser.mjs",
+    "eval:search": "tsx --env-file=.env.local scripts/evaluate-search.ts"
   },
   "dependencies": {
     "@supabase/ssr": "0.12.7",

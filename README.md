@@ -27,6 +27,10 @@ Lost-and-found searches can take time for both the person looking and the staff 
 
 Lost-and-found for a competition demo. Despite the website being used as a demo, it needs to be fully operational and full-featured for the judges to test. The application combines Founder B's Next.js, TypeScript and Supabase foundation with Founder A's real API interface for search, inventory, private claims, review and return. Founder B's Phase 3 backend adds sanitized photo processing, review/publication/delivery APIs and staff activity. The live interface includes real photo upload, private review/publication, found-date filters, claimant-visible rejection explanations and item activity; semantic AI remains later work. See the [Phase 2 API handoff](docs/phase-2/README.md), [interface handoff](docs/phase-3/founder-a-handoff.md), and [photo/backend handoff](docs/phase-3/README.md).
 
+## Phase 4 matching
+
+Founder B’s [semantic matching checkpoint](docs/phase-4/README.md) adds opt-in public-text embeddings, hybrid ranking and automatic keyword fallback. It stays disabled by default pending real-provider evaluation; no retrieval improvement is claimed yet.
+
 ## Local development
 
 Use Node 24 (`.nvmrc`), npm 11 and Docker. Run from this repository root:
