@@ -1,0 +1,464 @@
+{
+  "version": "founder-a-04-v1",
+  "items": [
+    {
+      "id": "a-duffel",
+      "organizationSlug": "evaluation-maple",
+      "title": "Black Nike duffel",
+      "publicDescription": "Soft sports bag with a white swoosh and two short carry handles.",
+      "category": "bag",
+      "color": "black",
+      "publicLocation": "Basketball court",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "a-pack",
+      "organizationSlug": "evaluation-maple",
+      "title": "Black school backpack",
+      "publicDescription": "Two shoulder straps and a padded laptop sleeve.",
+      "category": "bag",
+      "color": "black",
+      "publicLocation": "Library",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "a-flask",
+      "organizationSlug": "evaluation-maple",
+      "title": "Purple insulated flask",
+      "publicDescription": "Metal drinking bottle with a screw cap and carry loop.",
+      "category": "bottle",
+      "color": "purple",
+      "publicLocation": "Sports hall",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "a-hoody",
+      "organizationSlug": "evaluation-maple",
+      "title": "Navy hooded sweatshirt",
+      "publicDescription": "Cotton pullover with a hood and a large front pocket.",
+      "category": "clothing",
+      "color": "navy",
+      "publicLocation": "Changing rooms",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "a-buds",
+      "organizationSlug": "evaluation-maple",
+      "title": "White wireless earbuds",
+      "publicDescription": "Two small in-ear headphones in a white charging case.",
+      "category": "electronics",
+      "color": "white",
+      "publicLocation": "Cafeteria",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "a-case",
+      "organizationSlug": "evaluation-maple",
+      "title": "Blue pencil case",
+      "publicDescription": "Zipped fabric pouch for pens and erasers.",
+      "category": "other",
+      "color": "blue",
+      "publicLocation": "Classroom",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "a-umbrella",
+      "organizationSlug": "evaluation-maple",
+      "title": "Yellow folding umbrella",
+      "publicDescription": "Small rain umbrella with a wrist strap.",
+      "category": "other",
+      "color": "yellow",
+      "publicLocation": "Reception",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "a-lunch",
+      "organizationSlug": "evaluation-maple",
+      "title": "Green lunch box",
+      "publicDescription": "Rectangular sandwich container with clips.",
+      "category": "other",
+      "color": "green",
+      "publicLocation": "Cafeteria",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "a-old-flask",
+      "organizationSlug": "evaluation-maple",
+      "title": "Purple insulated flask",
+      "publicDescription": "Metal drinking bottle with a screw cap and carry loop.",
+      "category": "bottle",
+      "color": "purple",
+      "publicLocation": "Sports hall",
+      "foundDate": "2026-09-01"
+    },
+    {
+      "id": "b-tote",
+      "organizationSlug": "evaluation-cedar",
+      "title": "Red canvas tote",
+      "publicDescription": "Open cloth shopping bag with two long shoulder handles.",
+      "category": "bag",
+      "color": "red",
+      "publicLocation": "Art room",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "b-glasses",
+      "organizationSlug": "evaluation-cedar",
+      "title": "Black reading glasses",
+      "publicDescription": "Rectangular spectacles with thin black frames.",
+      "category": "other",
+      "color": "black",
+      "publicLocation": "Library",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "b-keys",
+      "organizationSlug": "evaluation-cedar",
+      "title": "Keys on green lanyard",
+      "publicDescription": "Two silver keys attached to a green neck strap.",
+      "category": "keys",
+      "color": "green",
+      "publicLocation": "Reception",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "b-scarf",
+      "organizationSlug": "evaluation-cedar",
+      "title": "Grey knitted scarf",
+      "publicDescription": "Long wool neck warmer with fringed ends.",
+      "category": "clothing",
+      "color": "grey",
+      "publicLocation": "Playground",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "b-bottle",
+      "organizationSlug": "evaluation-cedar",
+      "title": "Blue water bottle",
+      "publicDescription": "Clear blue reusable plastic drinking bottle.",
+      "category": "bottle",
+      "color": "blue",
+      "publicLocation": "Gym",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "b-ball",
+      "organizationSlug": "evaluation-cedar",
+      "title": "Orange basketball",
+      "publicDescription": "Round orange sports ball with black seams.",
+      "category": "other",
+      "color": "orange",
+      "publicLocation": "Court",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "b-pack",
+      "organizationSlug": "evaluation-cedar",
+      "title": "Black school backpack",
+      "publicDescription": "Two shoulder straps and a padded laptop sleeve.",
+      "category": "bag",
+      "color": "black",
+      "publicLocation": "Library",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "b-jacket",
+      "organizationSlug": "evaluation-cedar",
+      "title": "Red rain jacket",
+      "publicDescription": "Waterproof zip-up coat with hood.",
+      "category": "clothing",
+      "color": "red",
+      "publicLocation": "Reception",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "b-pencil",
+      "organizationSlug": "evaluation-cedar",
+      "title": "Yellow pencil case",
+      "publicDescription": "Small zip pouch containing pencils.",
+      "category": "other",
+      "color": "yellow",
+      "publicLocation": "Classroom",
+      "foundDate": "2026-10-20"
+    }
+  ],
+  "cases": [
+    {
+      "id": "exact-1",
+      "kind": "exact",
+      "school": "evaluation-maple",
+      "query": "black Nike duffel",
+      "relevant": [
+        "a-duffel"
+      ],
+      "rationale": "Public title and attributes identify the target; nearby categories remain distractors."
+    },
+    {
+      "id": "paraphrase-1",
+      "kind": "paraphrase",
+      "school": "evaluation-maple",
+      "query": "dark gym holdall with a white tick",
+      "relevant": [
+        "a-duffel"
+      ],
+      "rationale": "Ordinary student phrasing differs from the listing title; ownership is not inferred."
+    },
+    {
+      "id": "exact-2",
+      "kind": "exact",
+      "school": "evaluation-maple",
+      "query": "navy hooded sweatshirt",
+      "relevant": [
+        "a-hoody"
+      ],
+      "rationale": "Public title and attributes identify the target; nearby categories remain distractors."
+    },
+    {
+      "id": "paraphrase-2",
+      "kind": "paraphrase",
+      "school": "evaluation-maple",
+      "query": "dark blue jumper with a hood",
+      "relevant": [
+        "a-hoody"
+      ],
+      "rationale": "Ordinary student phrasing differs from the listing title; ownership is not inferred."
+    },
+    {
+      "id": "exact-3",
+      "kind": "exact",
+      "school": "evaluation-maple",
+      "query": "white wireless earbuds",
+      "relevant": [
+        "a-buds"
+      ],
+      "rationale": "Public title and attributes identify the target; nearby categories remain distractors."
+    },
+    {
+      "id": "paraphrase-3",
+      "kind": "paraphrase",
+      "school": "evaluation-maple",
+      "query": "little cord-free earphones in their charging box",
+      "relevant": [
+        "a-buds"
+      ],
+      "rationale": "Ordinary student phrasing differs from the listing title; ownership is not inferred."
+    },
+    {
+      "id": "exact-4",
+      "kind": "exact",
+      "school": "evaluation-maple",
+      "query": "blue pencil case",
+      "relevant": [
+        "a-case"
+      ],
+      "rationale": "Public title and attributes identify the target; nearby categories remain distractors."
+    },
+    {
+      "id": "paraphrase-4",
+      "kind": "paraphrase",
+      "school": "evaluation-maple",
+      "query": "blue zip pouch for writing supplies",
+      "relevant": [
+        "a-case"
+      ],
+      "rationale": "Ordinary student phrasing differs from the listing title; ownership is not inferred."
+    },
+    {
+      "id": "exact-5",
+      "kind": "exact",
+      "school": "evaluation-cedar",
+      "query": "red canvas tote",
+      "relevant": [
+        "b-tote"
+      ],
+      "rationale": "Public title and attributes identify the target; nearby categories remain distractors."
+    },
+    {
+      "id": "paraphrase-5",
+      "kind": "paraphrase",
+      "school": "evaluation-cedar",
+      "query": "red cloth shopping carrier with long handles",
+      "relevant": [
+        "b-tote"
+      ],
+      "rationale": "Ordinary student phrasing differs from the listing title; ownership is not inferred."
+    },
+    {
+      "id": "exact-6",
+      "kind": "exact",
+      "school": "evaluation-cedar",
+      "query": "black reading glasses",
+      "relevant": [
+        "b-glasses"
+      ],
+      "rationale": "Public title and attributes identify the target; nearby categories remain distractors."
+    },
+    {
+      "id": "paraphrase-6",
+      "kind": "paraphrase",
+      "school": "evaluation-cedar",
+      "query": "black framed spectacles for seeing text",
+      "relevant": [
+        "b-glasses"
+      ],
+      "rationale": "Ordinary student phrasing differs from the listing title; ownership is not inferred."
+    },
+    {
+      "id": "exact-7",
+      "kind": "exact",
+      "school": "evaluation-cedar",
+      "query": "keys green lanyard",
+      "relevant": [
+        "b-keys"
+      ],
+      "rationale": "Public title and attributes identify the target; nearby categories remain distractors."
+    },
+    {
+      "id": "paraphrase-7",
+      "kind": "paraphrase",
+      "school": "evaluation-cedar",
+      "query": "door keys hanging from a green neck strap",
+      "relevant": [
+        "b-keys"
+      ],
+      "rationale": "Ordinary student phrasing differs from the listing title; ownership is not inferred."
+    },
+    {
+      "id": "exact-8",
+      "kind": "exact",
+      "school": "evaluation-cedar",
+      "query": "grey knitted scarf",
+      "relevant": [
+        "b-scarf"
+      ],
+      "rationale": "Public title and attributes identify the target; nearby categories remain distractors."
+    },
+    {
+      "id": "paraphrase-8",
+      "kind": "paraphrase",
+      "school": "evaluation-cedar",
+      "query": "grey wool wrap to keep my neck warm",
+      "relevant": [
+        "b-scarf"
+      ],
+      "rationale": "Ordinary student phrasing differs from the listing title; ownership is not inferred."
+    },
+    {
+      "id": "negative-1",
+      "kind": "no-match",
+      "school": "evaluation-maple",
+      "query": "gold wedding ring",
+      "relevant": [],
+      "rationale": "No corresponding item exists at either school."
+    },
+    {
+      "id": "negative-2",
+      "kind": "no-match",
+      "school": "evaluation-maple",
+      "query": "pink ballet slippers",
+      "relevant": [],
+      "rationale": "No corresponding item exists at either school."
+    },
+    {
+      "id": "negative-3",
+      "kind": "no-match",
+      "school": "evaluation-cedar",
+      "query": "silver laptop computer",
+      "relevant": [],
+      "rationale": "No corresponding item exists at either school."
+    },
+    {
+      "id": "negative-4",
+      "kind": "no-match",
+      "school": "evaluation-cedar",
+      "query": "wooden violin in a hard case",
+      "relevant": [],
+      "rationale": "No corresponding item exists at either school."
+    },
+    {
+      "id": "school-1",
+      "kind": "wrong-school",
+      "school": "evaluation-maple",
+      "query": "red canvas tote",
+      "relevant": [],
+      "rationale": "Exact target exists only in the other school; similar in-school items are not relevant."
+    },
+    {
+      "id": "school-2",
+      "kind": "wrong-school",
+      "school": "evaluation-maple",
+      "query": "grey knitted scarf",
+      "relevant": [],
+      "rationale": "Exact target exists only in the other school; similar in-school items are not relevant."
+    },
+    {
+      "id": "school-3",
+      "kind": "wrong-school",
+      "school": "evaluation-cedar",
+      "query": "white wireless earbuds",
+      "relevant": [],
+      "rationale": "Exact target exists only in the other school; similar in-school items are not relevant."
+    },
+    {
+      "id": "school-4",
+      "kind": "wrong-school",
+      "school": "evaluation-cedar",
+      "query": "navy hooded sweatshirt",
+      "relevant": [],
+      "rationale": "Exact target exists only in the other school; similar in-school items are not relevant."
+    },
+    {
+      "id": "filter-date",
+      "kind": "filter",
+      "school": "evaluation-maple",
+      "query": "purple insulated flask",
+      "relevant": [
+        "a-flask"
+      ],
+      "rationale": "Inclusive bounds exclude an otherwise identical older bottle.",
+      "filters": {
+        "from": "2026-10-20",
+        "to": "2026-10-20"
+      }
+    },
+    {
+      "id": "filter-category",
+      "kind": "filter",
+      "school": "evaluation-maple",
+      "query": "black bag",
+      "relevant": [
+        "a-duffel",
+        "a-pack"
+      ],
+      "rationale": "Either bag is relevant; do not manufacture certainty from an ambiguous query.",
+      "filters": {
+        "category": "bag"
+      }
+    },
+    {
+      "id": "filter-color",
+      "kind": "filter",
+      "school": "evaluation-cedar",
+      "query": "rain jacket",
+      "relevant": [
+        "b-jacket"
+      ],
+      "rationale": "Red jacket passes the selected color.",
+      "filters": {
+        "color": "red"
+      }
+    },
+    {
+      "id": "filter-excludes",
+      "kind": "filter",
+      "school": "evaluation-cedar",
+      "query": "rain jacket",
+      "relevant": [],
+      "rationale": "The only jacket is red; a blue filter must exclude it.",
+      "filters": {
+        "color": "blue",
+        "category": "clothing"
+      }
+    }
+  ]
+}

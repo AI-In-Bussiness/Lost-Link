@@ -43,3 +43,10 @@
 - **Remaining work:** Remote checks and PR review; real local Windows Docker startup remains the user's environment check.
 - **Recommended next steps:** Review/merge the PR, preserve the user's manual helper edits before updating their checkout, then retry db:start and environment configuration without a database reset.
 - **Relevant references:** README.md; docs/coordination/task-board.csv; user-reported spawnSync EINVAL and CMD node_modules errors; https://github.com/supabase/cli/blob/v2.75.0/scripts/postinstall.js.
+
+## Dated addendum — 2026-10-26: integrate current main
+
+- Main advanced to f18076d with Phase 4 work during publication. Fetched both refs with approved shell network access, merged main into this PR branch, and retained WIN-001 plus both Phase 4 coordination rows. README merged cleanly; all other upstream files remain intact.
+- Full npm ci failed at the Supabase installer download with EAI_AGAIN. npm ci --ignore-scripts succeeded, enabling npm run lint, npm run typecheck and npm test: all passed, including 38 unit tests. The focused helper suite passed again on the combined source, and git diff --check plus CSV width/unique-ID checks passed.
+- The actual Supabase CLI and native Windows execution remain CI checks. No full application build or SQL/HTTP/browser workflow was run locally for this helper-only change. No database reset, hosted write or dependency change was performed.
+- Delivery: https://github.com/AI-In-Bussiness/Lost-Link/pull/13. Review and Windows CI remain separate from these local results.

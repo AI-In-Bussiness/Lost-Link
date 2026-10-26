@@ -123,3 +123,13 @@ test("claimant explanation is separate from private staff notes", async () => {
   assert.equal(found.data.decisionReason, "The details do not match. Contact staff.");
   assert.equal(found.data.privateReviewNote, undefined);
 });
+
+test("search maps semantic metadata and fallback notice without claiming ownership", async () => {
+  for (const [mode,semanticStatus] of [["hybrid","available"],["structured","unavailable"],["structured","disabled"]]) {
+    const api=createHttpApi([],async()=>response({data:[],search:{mode,semanticStatus}}));
+    const result=await api.searchItems({orgSlug:"maple-school",query:"rucksack"});
+    assert.ok(result.ok);
+    assert.equal(result.data.mode,mode==="hybrid"?"hybrid":"keyword");
+    assert.equal(result.data.smartMatchingUnavailable,semanticStatus==="unavailable");
+  }
+});

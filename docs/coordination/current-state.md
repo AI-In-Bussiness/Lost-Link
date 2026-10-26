@@ -1,5 +1,9 @@
 # Repository state snapshot
 
+## Founder B Phase 4 checkpoint — 2026-10-26 UTC
+
+Based on integrated main `b70777e`, draft PR #12 (`codex/founder-b-phase-4`) now runs local CPU MiniLM embeddings with no paid inference API/key. Public-only scoped retrieval, hybrid ranking and keyword fallback remain. The unmerged paid-provider quota migration was removed. Pinned model assets download during build; inference disables network access. Real local-model evaluation on twelve fixed synthetic queries with ten inventory items found 8/8 positive queries in top three versus 5/8 for the keyword counterpart, zero false positives on four negative/trap cases and zero school leaks. These are calibration results, not held-out accuracy. See [Phase 4](../phase-4/README.md); hosted verification and independent acceptance remain open.
+
 ## Overseer remediation — 2026-10-26 UTC
 
 Work starts from current main `dc58f92` on `codex/overseer-phase-0-3-fixes`.
