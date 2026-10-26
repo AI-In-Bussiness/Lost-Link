@@ -6,6 +6,7 @@ on:
       - 'src/interface/**'
       - 'src/mocks/**'
       - 'public/mock-assets/**'
+      - 'public/design/**'
       - 'tools/phase2*'
       - 'tools/phase2/**'
       - '.github/workflows/phase2-interface.yml'
@@ -15,6 +16,7 @@ on:
       - 'src/interface/**'
       - 'src/mocks/**'
       - 'public/mock-assets/**'
+      - 'public/design/**'
       - 'tools/phase2*'
       - 'tools/phase2/**'
       - '.github/workflows/phase2-interface.yml'
@@ -26,7 +28,8 @@ permissions:
 jobs:
   interface:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # Hosted apt mirrors can take ~14 minutes; reserve time for the test suite.
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -41,7 +44,9 @@ jobs:
           cache-dependency-path: tools/phase2/requirements.txt
       - run: npm ci --prefix tools/phase2
       - run: python -m pip install -r tools/phase2/requirements.txt
-      - run: python -m playwright install --with-deps chromium
+      - name: Install headless Chromium and system dependencies
+        timeout-minutes: 20
+        run: python -m playwright install --with-deps --only-shell chromium
       - run: npm --prefix tools/phase2 run typecheck
       - run: npm --prefix tools/phase2 run format:check
       - run: npm --prefix tools/phase2 run test:mocks
@@ -55,6 +60,7 @@ jobs:
           cat /tmp/lostlink-preview.log
           exit 1
       - name: Browser journeys and accessibility
+        timeout-minutes: 5
         env:
           AXE_SCRIPT: ${{ github.workspace }}/tools/phase2/node_modules/axe-core/axe.min.js
         run: python tools/phase2-browser-test.py

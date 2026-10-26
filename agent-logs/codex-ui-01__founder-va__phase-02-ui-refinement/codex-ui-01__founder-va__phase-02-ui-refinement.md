@@ -70,3 +70,19 @@
   twelve routes at 320/768/1440px. Three new asset responses matched source bytes
   and correct MIME types; four unlisted/private paths returned 404. Formatting and
   git diff --check passed. No independent phase acceptance or deployment claimed.
+
+## Dated addendum — 2026-10-26: PR check timeout repair
+
+- **Trigger:** User reported the PR check did not pass.
+- **Evidence:** Interface run 40318689791 was cancelled at its 15-minute job
+  deadline. Apt downloaded 24.9 MB in 13m42s; browser tests started at 12:10:11
+  and were cancelled at 12:11:05. The first five cases, including axe, passed.
+  Foundation run 40318689932 passed on the same 74129fc head.
+- **Fix:** Allow 30 minutes overall, bound browser/system installation at 20 minutes
+  and browser checks at 5 minutes. Install only the pinned headless Chromium shell
+  used by Playwright's default headless launch. Preserve all dependency installation,
+  assertions, axe checks and artifact collection. Include public/design in workflow
+  path triggers so future font/texture changes receive interface coverage.
+- **Scope:** Workflow and coordination/report only; no product source changes.
+- **Validation:** Installed Playwright CLI confirms --only-shell support. YAML
+  structure and git diff whitespace checked locally; remote results pending below.
