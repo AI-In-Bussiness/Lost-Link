@@ -6,6 +6,7 @@ import {
 } from "../mocks/client.ts";
 import type { Persona } from "../mocks/contracts.ts";
 import type { Session } from "./types.ts";
+import { demoSignInView } from "./demo-signin.ts";
 import { mountLostLink } from "./app.ts";
 import { createDemoPhotos } from "./demo-photos.ts";
 const localPhotos = createDemoPhotos();
@@ -41,6 +42,7 @@ const session = (): Session | null =>
               : [],
       };
 const app = mountLostLink(document.querySelector<HTMLElement>("#app")!, {
+  signInView: demoSignInView,
   getApi: () =>
     localPhotos.wrap(
       createMockApi(store, {

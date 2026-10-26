@@ -5,7 +5,6 @@ import type { CreateItemInput, Result } from './contracts.ts';
 
 function data<T>(result: Result<T>): T {
   assert.equal(result.ok, true, JSON.stringify(result));
-  if (!result.ok) throw new Error(result.error.message);
   return result.data;
 }
 function error(result: Result<unknown>, code: string) {

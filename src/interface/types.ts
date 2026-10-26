@@ -1,8 +1,4 @@
-import type {
-  CreateItemInput,
-  LostLinkApi,
-  Photo,
-} from "../mocks/contracts.ts";
+import type { CreateItemInput, LostLinkApi, Photo } from "./contracts.ts";
 
 /** Host-owned photo preparation; the Phase 2 host keeps bytes in this browser. */
 export interface PreparedPhoto {

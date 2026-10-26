@@ -7,7 +7,7 @@
     "typecheck": "tsc --project tsconfig.json",
     "test:mocks": "node --experimental-strip-types ../../src/mocks/client.test.ts",
     "test:browser": "python ../phase2-browser-test.py",
-    "format:check": "prettier --check ../../src/interface ../phase2-preview.mjs ../phase2-preview.html"
+    "format:check": "prettier --check ../../src/interface/app.ts ../../src/interface/claims.ts ../../src/interface/demo.ts ../../src/interface/demo-signin.ts ../../src/interface/demo-photos.ts ../../src/interface/photo-input.ts ../../src/interface/public.ts ../../src/interface/shared.ts ../../src/interface/staff.ts ../../src/interface/types.ts ../../src/interface/styles.css ../phase2-preview.mjs ../phase2-preview.html"
   },
   "devDependencies": {
     "axe-core": "4.14.0",

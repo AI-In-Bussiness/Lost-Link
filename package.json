@@ -1,0 +1,51 @@
+{
+  "name": "lostlink",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "packageManager": "npm@11.9.0",
+  "scripts": {
+    "dev": "next dev --hostname 0.0.0.0",
+    "build": "next build",
+    "start": "next start --hostname 0.0.0.0",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts",
+    "db:start": "node scripts/start-database.mjs",
+    "db:stop": "supabase stop",
+    "db:reset": "supabase db reset",
+    "db:test": "node scripts/test-database.mjs",
+    "demo:accounts": "node scripts/provision-demo.mjs",
+    "env:local": "node scripts/configure-local.mjs",
+    "test:integration": "node scripts/smoke-auth.mjs",
+    "test:live": "node scripts/test-live.mjs",
+    "test:backend": "node scripts/smoke-backend.mjs",
+    "test:mocks": "node --experimental-strip-types --test src/mocks/client.test.ts"
+  },
+  "dependencies": {
+    "@supabase/ssr": "0.12.7",
+    "@supabase/supabase-js": "2.118.0",
+    "next": "16.4.3",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "server-only": "0.0.1",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.3.3",
+    "@types/node": "26.6.5",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.4.3",
+    "supabase": "2.75.0",
+    "tailwindcss": "4.3.3",
+    "tsx": "4.23.15",
+    "typescript": "6.0.3"
+  },
+  "overrides": {
+    "tar": "7.5.22"
+  }
+}

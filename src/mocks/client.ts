@@ -1,7 +1,7 @@
 /** DEVELOPMENT ONLY. The mock includes all fictional personas/evidence in memory.
  * Never import into production or interpret mock permission checks as backend security.
  */
-import type { Activity, Category, Claim, ClaimStatus, CreateItemInput, ErrorCode, ItemStatus,
+import type { Activity, Category, Claim, ClaimStatus, ErrorCode, ItemStatus,
   LostLinkApi, MockOptions, MyClaim, Page, Pagination, Persona, PublicItem, Result, StaffItem } from './contracts.ts';
 import { collectionInstructions, DEMO_NOW, organizations, personas, seedActivity, seedClaims, seedItems } from './fixtures.ts';
 
