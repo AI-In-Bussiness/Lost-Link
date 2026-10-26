@@ -35,6 +35,7 @@ jobs:
       - run: npm test
       - run: npm run test:mocks
       - run: npm run db:test
+      - run: npm run test:demo
       - run: npm run build
       - run: npm run check:search:bundle
       - run: npm run test:live
