@@ -25,7 +25,7 @@
 - **Commands / checks run:** git diff --check; npm run lint; npm run typecheck; npm test (25 passed); npm run test:mocks (14 passed); npm --prefix tools/phase2 run typecheck; npm --prefix tools/phase2 run format:check. All passed.
 - File audit and independent branch-audit review: all 171 paths from all ten remote snapshots survive. Every source/script/test/migration matches one input branch; inspected conflict resolutions retain both sets of additions.
 - Locked dependencies installed with --ignore-scripts after Supabase postinstall failed direct DNS. Downloaded the same CLI v2.75.0 through the configured proxy and verified its release SHA-256 checksum. TLS and package integrity remain enabled.
-- **Tests not run:** Hosted deployment and independent real authenticated browser acceptance. Database and live HTTP checks executed successfully in remote CI; the local database startup was not used for these results.
+- **Tests not run:** Hosted deployment and independent real authenticated browser acceptance. Database and live HTTP checks executed successfully in remote CI; local database startup failed while extracting the large PostgreSQL image because the cloud filesystem ran out of space; these successful database/live results come from CI. The local attempt was stopped and its containers cleaned up.
 - **Deliverables:** Combined tree, shared workflow and [PR #9](https://github.com/AI-In-Bussiness/Lost-Link/pull/9). The PR records final publication/merge status.
 
 ## Thoughts and reflections
