@@ -59,3 +59,11 @@ test('multipart stream caps cannot be bypassed by a small Content-Length',async(
   await assert.rejects(()=>uploadBytes(streamed(stream,{'content-type':'multipart/form-data; boundary=x','content-length':'1'})),(e)=>e instanceof BodyError&&e.status===413);
   assert.ok(cancelled);
 });
+
+test('many tiny chunks preserve exact bytes within the same fixed memory bound',async()=>{
+  let count=0;
+  const stream=new ReadableStream<Uint8Array>({pull(c){if(count===20000)c.close();else c.enqueue(new Uint8Array([count++%256]));}});
+  const bytes=await readBoundedBody(streamed(stream),20000);
+  assert.equal(bytes.length,20000);
+  for(let i=0;i<bytes.length;i++)assert.equal(bytes[i],i%256);
+});

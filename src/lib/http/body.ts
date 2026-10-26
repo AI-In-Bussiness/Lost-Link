@@ -13,19 +13,17 @@ export async function readBoundedBody(request: Request, maxBytes: number, timeou
   if (!reader) throw new BodyReadError("missing");
   let timer: ReturnType<typeof setTimeout> | undefined;
   const read = async () => {
-    const chunks: Uint8Array[] = [];
+    // A fixed buffer also bounds bookkeeping memory for highly fragmented input.
+    const buffer = new Uint8Array(maxBytes);
     let total = 0;
     while (true) {
       const { value, done } = await reader.read();
       if (done) break;
       total += value.byteLength;
       if (total > maxBytes) throw new BodyReadError("too-large");
-      chunks.push(value);
+      buffer.set(value, total - value.byteLength);
     }
-    const bytes = new Uint8Array(total);
-    let offset = 0;
-    for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.length; }
-    return bytes;
+    return buffer.slice(0, total);
   };
   try {
     return await Promise.race([read(), new Promise<never>((_, reject) => {
