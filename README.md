@@ -25,7 +25,7 @@ Lost-and-found searches can take time for both the person looking and the staff 
 
 ## Development and Founder B handoff
 
-Lost-and-found for a fictional school competition demo. The application combines Founder B's Next.js, TypeScript and Supabase foundation with Founder A's real API interface for search, inventory, private claims, review and return. Founder B's Phase 3 backend adds sanitized photo processing, review/publication/delivery APIs and staff activity. Photo and activity controls still need wiring in the live interface; semantic AI remains later work. See the [Phase 2 API handoff](docs/phase-2/README.md), [interface handoff](docs/phase-3/founder-a-handoff.md), and [photo/backend handoff](docs/phase-3/README.md).
+Lost-and-found for a competition demo. Despite the website being used as a demo, it needs to be fully operational and full-featured for the judges to test. The application combines Founder B's Next.js, TypeScript and Supabase foundation with Founder A's real API interface for search, inventory, private claims, review and return. Founder B's Phase 3 backend adds sanitized photo processing, review/publication/delivery APIs and staff activity. Photo and activity controls still need wiring in the live interface; semantic AI remains later work. See the [Phase 2 API handoff](docs/phase-2/README.md), [interface handoff](docs/phase-3/founder-a-handoff.md), and [photo/backend handoff](docs/phase-3/README.md).
 
 ## Local development
 
