@@ -42,3 +42,13 @@
 - **Remaining work:** Independent judging/presentation acceptance and hosted Phase7 verification.
 - **Recommended next steps:** Review PR, integrate with Phase5, run preflight and matching evidence on the intended rehearsal machine, then follow the fresh-intake journey.
 - **Relevant references:** plan.pdf Phase6; docs/phase-6/README.md; docs/phase-4/evaluation-results.json; PR14; Foundation workflow.
+
+## Final evidence and handoff
+
+Delivered ready-for-review PR15: https://github.com/AI-In-Bussiness/Lost-Link/pull/15. Initial full real-stack run 40404673688 passed. During validation main advanced to e913f89 with the Windows launcher fix; merged it cleanly, retaining both contributions and reports. All six helper tests, lint and typecheck passed locally afterward. Final combined code f7b6c754e372cca05f7f51e666fa2bcd12336dcf passed Foundation run 40405351921 and Windows/Linux helper run 40405351767.
+
+Foundation verified the new seed/account test against real disposable Supabase: two non-destructive seed replays, two provisioning attempts with different supplied passwords, original-password login, unchanged user IDs, exact memberships, public projection, owner receipt reads and foreign-school denial. It also passed all existing SQL, unit/mocks, actual model checks/evaluation, production build, isolated traced inference, Auth/backend/photo HTTP and persisted browser/accessibility journeys. No required check was disabled. Moved Chromium installation after account/data checks to report readiness failures earlier; all browser checks remain enabled.
+
+Matching evidence was rerun locally: calibration exit0, 8/8 positive top-three hits versus 5/8 baseline, zero calibration negative/trap results; additional frozen evaluation exit1, 16/16 positive hits but proposed gate false; fallback exit0 across 28 cases. Runbook retains those limits honestly.
+
+Verified runs: https://github.com/AI-In-Bussiness/Lost-Link/actions/runs/40405351921 and https://github.com/AI-In-Bussiness/Lost-Link/actions/runs/40405351767. Founder B Phase6 engineering deliverables complete. Board remains Review pending independent judging; no self-asserted Overseer approval, hosted rehearsal, data reset, password rotation, deployment or PR merge. Final documentation-only commit records the tested code state; any new automatically triggered workflow is separate from that evidence.
