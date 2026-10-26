@@ -9,6 +9,7 @@ const set = JSON.parse(readFileSync(fileURLToPath(new URL("./relevance-set.json"
 const mode = process.argv[2] ?? "model";
 if (!["model","fallback"].includes(mode)) throw Error("Use model or fallback");
 const rows = [];
+let exitCode = 0;
 try {
   for (const c of set.cases) {
     const items = scoped(set.items,c), keyword = baseline(items,c.query);
@@ -34,5 +35,8 @@ try {
     baselineCoreHits:core.filter(r=>r.keyword.hit).length,
     coreMRR:core.reduce((sum,r)=>sum+r.actual.reciprocalRank,0)/core.length,
     proposedGatePassed:mode==="model"?passed:null,rows},null,2));
-  if (mode === "model" && !passed) process.exitCode=1;
+  if (mode === "model" && !passed) exitCode=1;
 } finally { await closeEmbedder(); }
+
+// Native runtime shutdown can change process.exitCode; report the gate after cleanup.
+process.exitCode = exitCode;
