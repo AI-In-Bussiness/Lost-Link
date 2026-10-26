@@ -45,6 +45,38 @@ npm run dev
 
 Do not create another Git worktree for ordinary cloud tasks: use this task's existing isolated checkout. Processes need restarting after restoring an environment snapshot.
 
+### Windows setup
+
+Docker Desktop must be running with Linux containers enabled. The local helpers
+launch the pinned Supabase native executable directly, including from paths with
+spaces; no manual shell or path edits are needed.
+
+If npm reports that the Supabase install script was blocked, run:
+
+```cmd
+npm install-scripts approve supabase
+npm rebuild supabase
+npx supabase --version
+```
+
+Then follow the local development commands above. Stop at the first failing
+command. If `.env.local` already exists, preserve it and skip `env:local`;
+`env:photos` preserves existing processor credentials.
+
+For demo-account provisioning in Windows Command Prompt, set your own unique
+12+ character password locally (replace the placeholder), provision, then clear
+the terminal variable:
+
+```cmd
+set "LOSTLINK_DEMO_PASSWORD=REPLACE_WITH_YOUR_OWN_12_PLUS_CHARACTER_PASSWORD"
+npm run demo:accounts
+set "LOSTLINK_DEMO_PASSWORD="
+npm run dev
+```
+
+Open http://localhost:3000 and sign in with a synthetic account below and your
+chosen password. Existing demo-account passwords are preserved on repeated runs.
+
 ### Demo accounts
 
 Choose a unique 12+ character `LOSTLINK_DEMO_PASSWORD` through your terminal or secure environment settings, then run:
