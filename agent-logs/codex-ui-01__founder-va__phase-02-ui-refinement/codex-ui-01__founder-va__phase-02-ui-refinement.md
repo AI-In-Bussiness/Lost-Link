@@ -107,3 +107,9 @@
   SQL/live database checks will run in CI against the combined tree.
 - **Browser completion:** All 14 interface cases passed with axe enabled on the
   combined tree, including twelve routes at three widths and keyboard workflows.
+- **Remote integration follow-up:** Foundation run 40339913972 passed SQL and live
+  HTTP checks, then failed at tools/live-browser-test.py:101 waiting for the old
+  homepage heading `Find what you lost.`. Updated that single heading locator to
+  the redesigned `Lost something?` H1; kept all persisted-workflow, photo,
+  isolation, responsive and accessibility assertions intact. Interface run
+  40339914236 passed. Python syntax checked; full remote rerun required.

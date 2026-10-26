@@ -98,7 +98,7 @@ class PersistedWorkflow(unittest.TestCase):
         public_photo_url = photo.get_attribute('src')
         self.review(visitor, 'public-item')
         visitor.goto(self.origin)
-        visitor.get_by_role('heading', name='Find what you lost.').wait_for()
+        visitor.get_by_role('heading', level=1, name='Lost something?').wait_for()
         self.review(visitor, 'home')
         visitor.goto(self.origin + self.school + '/search?from=2026-01-02')
         visitor.get_by_text('No matching items found.', exact=True).wait_for()
