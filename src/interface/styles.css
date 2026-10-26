@@ -138,6 +138,7 @@ h3 {
   line-height: 1.17;
   letter-spacing: -0.035em;
   font-weight: 650;
+  overflow-wrap: anywhere;
 }
 h1 {
   font-size: clamp(2.1rem, 4vw, 3.25rem);
@@ -335,7 +336,9 @@ img {
 }
 .stack {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 24px;
+  overflow-wrap: anywhere;
 }
 .two-column {
   display: grid;
@@ -727,6 +730,7 @@ td a {
 }
 .hero-art figcaption {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: end;
   gap: 16px;
@@ -1520,13 +1524,14 @@ th {
     margin-inline: 5px;
   }
   .hero {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     padding-block: 8px 36px;
     gap: 32px;
   }
   .hero h1 {
     font-size: clamp(2.65rem, 9vw, 4rem);
     max-width: 550px;
+    overflow-wrap: anywhere;
   }
   .hero-copy > p {
     font-size: 0.94rem;
@@ -1682,6 +1687,45 @@ th {
   .art-note {
     font-size: 1.75rem;
   }
+}
+.hero-assurance {
+  margin: 24px 0 0;
+  padding-left: 18px;
+  border-left: 2px solid var(--teal);
+  max-width: 480px;
+}
+.hero-assurance strong,
+.hero-assurance span {
+  display: block;
+}
+.hero-assurance span {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+.staff-brief {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px 32px;
+  padding: 24px;
+  margin-bottom: 36px;
+  border-block: 1px dashed var(--line);
+  border-left: 3px solid var(--teal);
+}
+.staff-brief > div {
+  flex: 1 1 320px;
+  min-width: 0;
+}
+.staff-brief h2 {
+  margin-bottom: 10px;
+}
+.staff-brief p:last-child {
+  max-width: 650px;
+  margin-bottom: 0;
+}
+.staff-brief .button {
+  max-width: 100%;
 }
 @media (prefers-reduced-motion: reduce) {
   *,

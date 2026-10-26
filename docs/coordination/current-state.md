@@ -1,5 +1,18 @@
 # Repository state snapshot
 
+## Founder A Phase 6 presentation checkpoint — 2026-10-26 UTC
+
+Delivered for review on `codex/founder-a-phase-6` after PR15 merged: homepage privacy copy, pending-first
+staff dashboard with collection guidance, responsive wrapping from Phase 5,
+and brand/demo/pitch drafts. See [Founder A handoff](../phase-6/founder-a-handoff.md).
+Local lint/type/format checks, 38 unit tests, 14 mocks and 14 browser scenarios
+including axe passed. Home/dashboard also passed four-width/200% text probes.
+These are builder presentation checks in the mock harness, not hosted evidence.
+The task owner excluded the competition summary. Independent acceptance,
+real-app timed rehearsal, team/research/disclosure inputs and final combined
+hosted release verification remain open. Founder B's demo runbook and scripts
+retain their own ownership and evidence.
+
 ## Founder B Phase 6 completed — 2026-10-26 UTC
 
 PR15 provides repeatable seed/account checks, operational preflight and the demo/evidence/recovery runbook. Final code f7b6c75 includes main e913f89 and passes Foundation run 40405351921 and Windows/Linux helper run 40405351767. See [Phase 6](../phase-6/README.md). Founder A presentation and independent judging remain separate; Phase5 PR14 integration and hosted Phase7 verification are still release dependencies.
