@@ -1,0 +1,9 @@
+requirement,source,status,artifact_or_evidence,remaining_owner_action
+Working website,competition_rules.pptx slide 3,Review,README.md;../../README.md;../../.github/workflows/ci.yml,Founder B and Overseer verify final combined hosted release in Phase 7
+60-second demo,competition_rules.pptx slides 3 and 19,Blocked,presentation.md timed storyboard,Team records actual persisted flow and times playback; no final recording exists
+3-5 minute pitch,competition_rules.pptx slides 3 and 16,Review,presentation.md four-minute spoken draft and Q&A,Team resolves inputs and rehearses; Overseer independently challenges claims
+One-page summary,competition_rules.pptx slide 3,Not Started,Not delivered by explicit task-owner instruction,Excluded from this assignment; any later submission requirement belongs to the team
+AI and spend disclosure,competition_rules.pptx slides 3 and 6-7,Blocked,../phase-0/competition-and-evidence.md rules and ledger,Team confirms actual plans costs currency credits assets outside help and eligibility track; do not assume zero spend
+Need and demand research,competition_rules.pptx slides 3 and 12,Blocked,../phase-0/competition-and-evidence.md E-01 to E-05,Team supplies real findings and sourced alternative comparison; synthetic tests are not demand evidence
+Submission logistics,competition_rules.pptx slide 18,Blocked,../phase-0/competition-and-evidence.md,Team and organizers confirm competition-period dates deadline destination and paid-track interpretation
+Matching claim support,plan.pdf Phase 6,Review,README.md matching evidence;../phase-4/founder-a-handoff.md,Keep calibration and broader false-positive findings together; preserve failed quality gate

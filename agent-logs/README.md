@@ -68,3 +68,5 @@ shared phase acceptance still requires its review evidence.
 
 
 - [Founder B Phase 6 demo reliability](codex-founder-b-phase6__founder-vb__phase-06-demo-reliability/codex-founder-b-phase6__founder-vb__phase-06-demo-reliability.md).
+
+- [Founder A Phase 6 competition polish](codex-founder-a-06__founder-va__phase-06-competition-polish/codex-founder-a-06__founder-va__phase-06-competition-polish.md) — presentation changes and pitch draft; summary excluded by task owner.

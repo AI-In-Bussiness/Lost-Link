@@ -54,4 +54,6 @@ organization pass. Their interpretation remains in the existing phase documents.
 - [Founder A Phase 5 browser quality](phase-5/founder-a-handoff.md) — focus recovery, phone text reflow and expanded live accessibility/error checks.
 
 
+- [Founder A Phase 6 presentation polish](phase-6/founder-a-handoff.md) — dashboard/privacy polish, demo narrative and pitch draft; competition summary excluded by task owner.
+
 - [Founder B Phase 6 demo reliability](phase-6/README.md) — repeatable seed/accounts, honest matching evidence, rehearsal and recovery.

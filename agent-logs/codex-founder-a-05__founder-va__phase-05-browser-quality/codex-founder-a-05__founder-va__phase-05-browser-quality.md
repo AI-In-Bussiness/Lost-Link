@@ -92,3 +92,14 @@ pass Node syntax checks; lint and TypeScript checks pass on the combined tree.
 Full database/model/live/browser validation reruns in CI; it was not repeated
 locally for this documentation-only resolution. The PR remains open for the
 task owner to merge after checks.
+
+### Concurrent main advance during resolution
+
+Before publication main advanced once more to `f3ab5a5` through Founder A
+Phase 6 PR #16. Included that merge as well, preserving both state-summary
+sections and all Phase 6 UI/presentation files, alongside the Phase 5 report
+links and task rows. The final merged CSS matches current main exactly,
+including the wrapping fixes Phase 6 had already carried forward. The shared
+Phase 5 focus/security code and expanded browser tests remain present.
+Structural preservation checks cover both main advances; integration CI
+reruns on the resulting shared branch. No PR merge or deployment is performed.
