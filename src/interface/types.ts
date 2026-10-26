@@ -1,4 +1,21 @@
-import type { LostLinkApi } from "../mocks/contracts.ts";
+import type {
+  CreateItemInput,
+  LostLinkApi,
+  Photo,
+} from "../mocks/contracts.ts";
+
+/** Host-owned photo preparation; the Phase 2 host keeps bytes in this browser. */
+export interface PreparedPhoto {
+  photo: Photo;
+  upload: CreateItemInput["upload"];
+}
+export interface PhotoUpload {
+  upload(
+    file: File,
+    onProgress?: (percent: number) => void,
+  ): Promise<PreparedPhoto>;
+  release(url: string): void;
+}
 
 /** Host-provided session display only. Authorization always belongs in the adapter. */
 export interface Session {
@@ -21,4 +38,5 @@ export interface ViewContext {
   refresh(): void;
   /** Development-only session actions are injected by the preview host. */
   demoSignIn?: (kind: "student" | "staff", returnTo: string) => void;
+  photoUpload?: PhotoUpload;
 }

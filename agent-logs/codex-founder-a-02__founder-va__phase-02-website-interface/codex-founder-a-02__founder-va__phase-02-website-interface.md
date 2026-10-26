@@ -43,3 +43,12 @@
 - **Remaining work:** Independent Phase 2 acceptance; production foundation and later workflows; real photographs/auth/persistence/security; final contract/task mapping.
 - **Recommended next steps:** Run the guide's preview command, rehearse the full mock return journey, inspect mobile evidence, then coordinate frontend adaptation with Founder B before Phase 3 work.
 - **Relevant references:** `AGENTS.md`, `plan.pdf`, `competition_rules.pptx`, all `docs/phase-0` and `docs/phase-1` documents; public/mock, claim and staff subagent reports under `agent-logs/`.
+
+
+## Dated addendum — 2026-10-26 UTC: merge-readiness follow-up
+
+User requested completion against the plan and Overseer comments, then authorized merge when checks pass. Read the Overseer's chat and merged PR #5 reports plus the shared coordination guidance. Merged current main into the PR branch; preserved every historical report and downstream Phase 3 branch. Recorded ownership in INT-003 before shared edits.
+
+Peer audit and QA exposed missing school context, incomplete photo interactions and unreliable error-field/skip-link focus. Completed those fixes, added sign-in failure feedback, and integrated partially prepared photo/QA contributions after their agent turns ended before final verification. The primary agent owns the final integration and test results; no unfinished independent acceptance is claimed. Added isolated pinned tools/lockfile and GitHub Actions with screenshot artifacts; no root framework scaffold or backend contract change.
+
+All twelve required routes are covered by the expanded browser matrix. See `docs/phase-2/review-response.md` and the final validation addendum for executed results. Production auth, uploads, persistence and formal upstream/Overseer gate approval remain separate; implementation tasks stay Review. The original independent acceptance report records pre-fix findings and is retained unchanged.

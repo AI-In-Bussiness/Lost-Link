@@ -10,7 +10,7 @@ From the repository root, with Node **24+**:
 node tools/phase2-preview.mjs
 ```
 
-Open <http://127.0.0.1:4173>. No package installation is needed to run it. `LOSTLINK_PREVIEW_PORT` can change the port. The server binds to loopback and refuses `NODE_ENV=production`. Stop with Ctrl+C.
+Open <http://127.0.0.1:4173>. No package installation is needed to run it. For reproducible checks, run `npm ci --prefix tools/phase2`, install `tools/phase2/requirements.txt`, and run `npm --prefix tools/phase2 run typecheck`. The scoped tools directory does not establish a second root application. `LOSTLINK_PREVIEW_PORT` can change the port. The server binds to loopback and refuses `NODE_ENV=production`. Stop with Ctrl+C.
 
 The persistent prototype notice explains that every person/item is fictional, accounts are simulated, and refreshing resets changes. Expand **Demo controls** below the footer to switch personas, simulate slow loading, empty inventory, request errors, rate limits or smart-matching unavailability. Reset restores the original data. All personas share one in-memory store until reset/refresh. No evidence is written to browser storage, URLs, server logs or a database.
 
@@ -54,9 +54,9 @@ Also try the seeded approved jacket, two competing bottle claims, rejected backp
 
 `public.ts`, `claims.ts` and `staff.ts` return typed views and bind native DOM events. `shared.ts` supplies escaped text/attributes, public cards, dates, badges, pagination, form errors and submit locking. `styles.css` contains original navy/teal/neutral design tokens, breakpoints and reduced-motion behavior. No external fonts, templates or image services are requested. The homepage illustration is original inline SVG; inventory photography remains the explicitly labeled Phase 1 placeholder.
 
-Only `demo.ts` imports runtime mocks. All other interface references to `src/mocks/contracts.ts` are erased type imports. Do not include `demo.ts`, mock clients, fixtures, response JSON or this preview server in a production bundle. Reconcile the proposed DTOs with Founder B before moving the type contract into a shared production module.
+Only the development composition (`demo.ts` and its local photo projection) imports runtime mocks. All other interface references to `src/mocks/contracts.ts` are erased type imports. Do not include `demo.ts`, mock clients, fixtures, response JSON or this preview server in a production bundle. Reconcile the proposed DTOs with Founder B before moving the type contract into a shared production module.
 
-The repository has no agreed Next.js application/toolchain yet. This isolated, dependency-free browser interface lets Phase 2 proceed without introducing a competing root project. Founder B/integrator should decide how to adapt these views into the planned Next.js client routes/components and coordinate history ownership. This is an explicit integration cost, not evidence of a passing Next.js build. Real Supabase sign-in, photo selection/upload, persistence, RLS, transactions and semantic matching belong to later work.
+This PR remains a standalone mock interface. Founder B’s foundation exists on its separate branch, and real Next.js/API integration is tracked in PR #7. This isolated, dependency-free browser interface lets Phase 2 proceed without introducing a competing root project. Founder B/integrator should decide how to adapt these views into the planned Next.js client routes/components and coordinate history ownership. This is an explicit integration cost, not evidence of a passing Next.js build. Real Supabase sign-in, photo selection/upload, persistence, RLS, transactions and semantic matching belong to later work.
 
 ## Validation
 
@@ -77,3 +77,10 @@ tsc --noEmit --strict --target ES2022 --module ESNext --moduleResolution bundler
 ```
 
 See the [handoff](founder-a-handoff.md) and phase reports for executed results and remaining work.
+
+
+## Merge-readiness follow-up (2026-10-26 UTC)
+
+Read the [Overseer response and evidence matrix](review-response.md). Intake now supports local JPEG/PNG/WebP selection, decode/size errors, preparation progress, preview, replacement and removal. No bytes leave the browser. The development host projects the selected blob photo over the unchanged placeholder-only mock adapter; reset/refresh releases those temporary images. Production uploads remain separately scoped.
+
+The Phase 2 GitHub Actions workflow runs locked TypeScript/format checks, mock tests and the expanded Chromium suite with axe enabled. Its downloadable review artifact contains viewport screenshots. Run locally with `AXE_SCRIPT=$PWD/tools/phase2/node_modules/axe-core/axe.min.js python tools/phase2-browser-test.py` after starting the preview. Install Chromium with `python -m playwright install chromium` if no system browser is available.

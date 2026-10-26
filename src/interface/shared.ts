@@ -55,7 +55,8 @@ export function itemImage(item: PublicItem, className = ""): string {
     (url.startsWith("/") &&
       !url.startsWith("//") &&
       !/[\\\x00-\x1f]/.test(url)) ||
-    /^https:\/\//i.test(url);
+    /^https:\/\//i.test(url) ||
+    url.startsWith("blob:" + location.origin + "/");
   return `<div class="item-image ${e(className)}"><img src="${e(safe ? url : "/mock-assets/item-placeholder.svg")}" alt="${e(item.photo.alt)}" loading="lazy">${item.photo.isPlaceholder ? '<span class="photo-label">Illustration · demo item</span>' : ""}</div>`;
 }
 export function itemCard(
@@ -110,12 +111,26 @@ export function formError(
       ? "<ul>" +
         Object.entries(fields)
           .map(
-            ([name, text]) => `<li><a href="#${e(name)}">${e(text)}</a></li>`,
+            ([name, text]) =>
+              `<li><a href="#${e(name)}" data-error-field="${e(name)}">${e(text)}</a></li>`,
           )
           .join("") +
         "</ul>"
       : ""
   }`;
+  box.onclick = (event) => {
+    const link = (event.target as Element).closest<HTMLAnchorElement>(
+      "[data-error-field]",
+    );
+    if (!link) return;
+    const input = form.elements.namedItem(
+      link.dataset.errorField || "",
+    ) as HTMLElement | null;
+    if (input && typeof input.focus === "function") {
+      event.preventDefault();
+      input.focus();
+    }
+  };
   for (const [name, text] of Object.entries(fields)) {
     const input = form.elements.namedItem(name) as HTMLElement | null;
     if (!input || !("setAttribute" in input)) continue;

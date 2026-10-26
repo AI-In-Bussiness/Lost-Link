@@ -40,3 +40,8 @@ Founder B should integrate `mountLostLink`'s `InterfaceHost` seam or adapt the v
 ## Tools and disclosure
 
 Codex and three subagents assisted source, review and documentation. Node, Chromium, Python Playwright, TypeScript, Prettier and axe-core were used for execution/verification. Compiler/formatter/scanner packages were fetched into a temporary cache; no root package manifest, dependency lockfile or paid service was added. The team must disclose actual AI entitlements and project costs; no $0 claim is made. The design and homepage SVG are original; the existing Apache-2.0 repository license remains in place.
+
+
+## Merge-readiness follow-up — 2026-10-26 UTC
+
+Addressed the Overseer matrix in [review-response.md](review-response.md). Added local photo selection/validation/preparation/replace/remove with browser-only projection, retained school context through sign-in and claims, sign-in failure feedback, reliable error-field and skip-link focus, expanded browser coverage and locked scoped verification tools/CI. Main's shared documentation and original Overseer reports were merged without modification to their historical findings. Founder B's backend and the separate Phase 3 PR exist; their integration is outside this standalone Phase 2 PR. Formal phase-gate acceptance remains Review.
