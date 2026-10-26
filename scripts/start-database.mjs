@@ -1,5 +1,6 @@
 import { spawnSync } from 'node:child_process';
-const binary=process.platform==='win32'?'node_modules/.bin/supabase.cmd':'node_modules/.bin/supabase';
+import { supabaseBinary } from './supabase-binary.mjs';
+const binary = supabaseBinary();
 // The CLI prints local API keys in its success table; suppress that table.
 // Keep startup/error diagnostics, and preserve the underlying exit status.
 const result=spawnSync(binary,['start','-x','realtime,imgproxy,postgres-meta,studio,edge-runtime,logflare,vector,supavisor'],{stdio:['ignore','ignore','inherit']});
