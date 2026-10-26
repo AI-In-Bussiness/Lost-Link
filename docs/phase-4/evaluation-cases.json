@@ -1,0 +1,14 @@
+[
+ {"kind":"exact","school":"maple-school","query":"black athletic backpack","relevant":["20000000-0000-4000-8000-000000000001"]},
+ {"kind":"exact","school":"maple-school","query":"black bag white sports logo","relevant":["20000000-0000-4000-8000-000000000001"]},
+ {"kind":"exact","school":"cedar-school","query":"blue water bottle","relevant":["20000000-0000-4000-8000-000000000002"]},
+ {"kind":"exact","school":"cedar-school","query":"reusable blue bottle library","relevant":["20000000-0000-4000-8000-000000000002"]},
+ {"kind":"paraphrase","school":"maple-school","query":"rucksack for carrying kit to training","relevant":["20000000-0000-4000-8000-000000000001"]},
+ {"kind":"paraphrase","school":"maple-school","query":"dark pack worn on shoulders for exercise","relevant":["20000000-0000-4000-8000-000000000001"]},
+ {"kind":"paraphrase","school":"cedar-school","query":"azure flask for drinking from again","relevant":["20000000-0000-4000-8000-000000000002"]},
+ {"kind":"paraphrase","school":"cedar-school","query":"refillable container to stay hydrated","relevant":["20000000-0000-4000-8000-000000000002"]},
+ {"kind":"no-match","school":"maple-school","query":"gold wedding ring","relevant":[]},
+ {"kind":"no-match","school":"cedar-school","query":"silver laptop computer","relevant":[]},
+ {"kind":"wrong-school","school":"maple-school","query":"blue water bottle","relevant":[]},
+ {"kind":"wrong-school","school":"cedar-school","query":"black athletic backpack","relevant":[]}
+]

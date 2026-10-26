@@ -4,7 +4,7 @@ First implementation checkpoint; full Phase 5 remains in progress. Source: plan.
 
 ## Baseline and delivery
 
-Started from current main `b70777e` on `codex/founder-b-phase-5`. Phase 4 PR #12 is still open; its local model, additional relevance cases and known negative-case false positives are not assumed integrated or accepted. This focused PR can be reviewed against main without carrying Phase 4 commits. After integration, rerun combined checks on the merged tree. No database migration or deployment is included.
+Started from main `b70777e` on `codex/founder-b-phase-5`. During publication main advanced to `f18076d`, merging Phase 4 PR #12. That main update is merged into this branch with both sets of reports and board entries preserved. Phase 4 local inference and its known negative-case relevance findings remain part of the combined tree; no Phase 4 quality acceptance is inferred. No database migration or deployment is included.
 
 ## Request-body hardening
 
@@ -26,7 +26,7 @@ The ten-second deadline applies to reading the request body, not the whole route
 | CSRF / redirects / unknown fields | Existing auth-security and api-contracts tests | Unit suite passes |
 | Cross-layer persistent journey | test:live and test:browser | CI retained; no local stack reset/start performed |
 | Deployment and real-user operations | Retention/cleanup scheduling, shared deployment throttling, operator configuration and hosted smoke checks | Still open; not approved by this checkpoint |
-| Phase 4 integration | PR12's model, private-input isolation and additional relevance findings | Separate open PR; rerun after integration |
+| Phase 4 integration | PR12's model, private-input isolation and additional relevance findings | PR12 merged during publication; combined checks rerun |
 
 Validation: npm run lint, npm run typecheck, npm test, npm run build, npm run test:mocks, and git diff --check. The existing Foundation workflow also runs SQL, real Auth/backend/photo HTTP and persisted browser tests. Check the PR for actual remote results; a workflow definition is not passing evidence.
 

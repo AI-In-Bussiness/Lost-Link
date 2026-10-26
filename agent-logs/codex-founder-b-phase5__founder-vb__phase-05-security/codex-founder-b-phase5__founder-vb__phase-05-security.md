@@ -47,3 +47,7 @@
 ## Final local validation
 
 Production build, lint, typecheck and all 14 mock tests passed. The first build identified unknown error types in two new assertion callbacks; explicit BodyError narrowing fixed those callbacks, and the final build/typecheck passed. All 36 unit tests passed before that type-only correction. Remote SQL/HTTP/browser results remain pending the PR workflow.
+
+## Concurrent main update
+
+Main advanced to f18076d during publication, merging PR12. Fast-forward synchronization stopped safely; merged the newer main without dropping either contribution. Resolved only additive documentation/index/board conflicts by retaining both versions. Phase 4 code and reports remain intact. Initial baseline and earlier PR-state statements above describe orientation time; current combined baseline includes Phase 4. Combined validation is rerun before delivery.

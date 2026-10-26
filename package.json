@@ -25,9 +25,16 @@
     "test:mocks": "node --experimental-strip-types --test src/mocks/client.test.ts",
     "env:photos": "node scripts/configure-photo-worker.mjs",
     "test:photos": "node scripts/smoke-photos.mjs",
-    "test:browser": "node scripts/test-browser.mjs"
+    "test:browser": "node scripts/test-browser.mjs",
+    "eval:search": "tsx scripts/evaluate-search-offline.ts",
+    "model:download": "node --use-env-proxy scripts/download-search-model.mjs",
+    "eval:search:live": "tsx --env-file=.env.local scripts/evaluate-search.ts",
+    "prebuild": "npm run model:download",
+    "check:search:bundle": "node scripts/check-search-bundle.mjs",
+    "test:search:model": "tsx --test tests/local-model.integration.ts"
   },
   "dependencies": {
+    "@huggingface/transformers": "4.3.1",
     "@supabase/ssr": "0.12.7",
     "@supabase/supabase-js": "2.118.0",
     "next": "16.4.3",

@@ -9,3 +9,6 @@ coverage/
 playwright-report/
 test-results/
 *.tsbuildinfo
+
+# Pinned public model assets are installed by npm run model:download.
+models/

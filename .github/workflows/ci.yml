@@ -27,12 +27,16 @@ jobs:
       - run: npm run db:start
       - run: npm run env:local
       - run: npm run env:photos
+      - run: npm run model:download
+      - run: npm run test:search:model
+      - run: npm run eval:search
       - run: npm run lint
       - run: npm run typecheck
       - run: npm test
       - run: npm run test:mocks
       - run: npm run db:test
       - run: npm run build
+      - run: npm run check:search:bundle
       - run: npm run test:live
       - run: npm run test:browser
       - uses: actions/upload-artifact@v4
