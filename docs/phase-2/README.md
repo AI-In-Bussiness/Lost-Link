@@ -78,3 +78,7 @@ See [validation.md](validation.md). `npm run db:test` now runs both SQL suites; 
 ## Repository integration
 
 The pushed Founder B branch retains current main's Founder A mocks/documents. See [integration notes](integration-notes.md) for DTO/state differences that need an explicit adapter or shared decision before connecting the interface. The additional14 mock tests pass and are included in CI; this does not imply they share the backend's proposed lifecycle.
+
+## Phase3 superseding note
+
+[Phase3 photo/activity APIs](../phase-3/README.md) now fill the photo and activity gaps described above. Public DTO photos are populated only after processed-photo review/publication. Phase2 inventory/claim behavior and Founder A contract differences remain unchanged.

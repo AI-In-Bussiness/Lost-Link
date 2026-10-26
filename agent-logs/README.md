@@ -51,3 +51,7 @@ shared phase acceptance still requires its review evidence.
 ## Founder A Phase 2 delivery
 
 - [Implementation and merge-readiness addendum](codex-founder-a-02__founder-va__phase-02-website-interface/codex-founder-a-02__founder-va__phase-02-website-interface.md)
+
+## Repository consolidation
+
+- [Shared main integration and preservation report](codex-integrator-01__founder-vunassigned__phase-00-consolidation/codex-integrator-01__founder-vunassigned__phase-00-consolidation.md) — branch ancestry, conflict resolutions, combined checks and remaining UI boundaries.

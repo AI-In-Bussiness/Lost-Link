@@ -148,8 +148,38 @@ their own snapshot and may predate another founder's work.
 
 Use [the coordination board](docs/coordination/task-board.csv) for shared
 integration dependencies. Record your agent ID, branch, affected paths, status,
-and handoff evidence before overlapping edits. Use a separate branch/worktree
-for concurrent work. Do not change another agent's branch or working tree.
+and handoff evidence before overlapping edits. All agents share `main` as the
+canonical source of integrated work. Start each assignment from current `main`
+and bring completed work back through a pull request targeting `main` promptly.
+There is no requirement to create a separate branch or worktree per agent,
+founder, or phase. Use the task's existing checkout and coordinate file ownership
+before simultaneous edits; never overwrite another agent's uncommitted work.
+
+### Shared branch and pull request workflow
+
+1. Synchronize with `main` before starting. Check status and preserve local work
+   before pulling; use fast-forward updates and stop to resolve divergence.
+2. For related work, use one short-lived shared integration branch and one PR
+   into `main`. Agents on that assignment contribute to the same branch, with
+   disjoint file ownership recorded on the board. A PR needs a source branch
+   distinct from its target; this temporary branch exists for review, not as a
+   permanent founder or agent workspace. Unrelated changes may use focused PRs.
+3. Serialize commits and pushes on a shared branch. Refresh its remote head
+   before publishing; merge newer commits and resolve conflicts without
+   discarding either contributor's work. Do not force-push shared history or
+   switch/reset a checkout while another agent is using it.
+4. Include all contributors' files and phase reports in the PR. Check the
+   combined result with relevant tests/builds and inspect every conflict
+   resolution and deletion. Keep both versions of independently written reports
+   with clear attribution when their original paths collide.
+5. Merge after required checks and review, with task-owner authorization where
+   needed. Use merge commits when preserving existing branch ancestry. Then
+   synchronize all agents to the updated `main`; retain historical branches
+   until their commits and files are confirmed integrated.
+
+Use `main` as everyone's common baseline and delivery destination. Direct
+commits to `main` require an explicit task-owner instruction; ordinary work goes
+through the shared PR so checks and review happen before integration.
 
 Keep historical plans, reports, source references, and existing file paths.
 Organize new shared guidance under `docs/coordination/`; link to original

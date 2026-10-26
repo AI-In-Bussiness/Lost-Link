@@ -1,6 +1,9 @@
 # Integration checklist
 
-This is a record of unresolved differences, not approval of either contract.
+This checklist records the original contract differences. The interface adapter
+and backend are now integrated on the common main baseline; see
+[current state](current-state.md) for remaining work and the Phase 3 handoffs for
+the implemented mappings. Historical proposals do not establish acceptance.
 Sources: [Founder A proposal](../phase-0/shared-contract-proposal.md),
 [mock guide](../phase-1/frontend-mock-guide.md), and
 [Founder B's inspected integration notes](https://github.com/AI-In-Bussiness/Lost-Link/blob/5be324e220528d6d6fcef070c177c42dde6be040/docs/phase-2/integration-notes.md).
@@ -24,17 +27,17 @@ Sources: [Founder A proposal](../phase-0/shared-contract-proposal.md),
 
 ## Review sequence
 
-1. Refresh both branch heads and review existing handoffs. Preserve the active
-   interface PR and all original reports.
+1. Refresh from current main and review the existing handoffs. Preserve all
+   original reports and coordinate affected files on the shared PR.
 2. Record joint contract choices with affected fields, states, routes, owner,
    reviewer, and evidence. Update the shared board; do not mark agreement by inference.
 3. Review the backend foundation as its own change against current main. Keep
    original migrations and original agent reports intact.
-4. Integrate the interface on a separate branch based on the reviewed foundation.
+4. Make further interface integration changes through the shared PR into main.
    Preserve the standalone preview as reference until the task owner decides its
    future. Replace the mock/session composition with the agreed production adapter.
 5. Run a combined build and the relevant unit, mock, SQL, HTTP, browser and
-   accessibility checks using that branch's documented setup. Record actual
+   accessibility checks using the shared integration setup. Record actual
    command results and any environment blockers.
 6. Have an independent reviewer verify the full staff intake → scoped search →
    private claim → approval → physical return workflow, including refresh
@@ -44,5 +47,6 @@ Sources: [Founder A proposal](../phase-0/shared-contract-proposal.md),
    evidence remain separately scoped work.
 
 Do not run database-reset or data-removal commands just to organize the repo.
-This documentation change neither merges the feature branches nor decides their
-contract differences.
+Historical contract proposals and phase acceptance remain distinct from the
+repository consolidation. Photo APIs are present; photo/activity UI wiring and
+independent browser acceptance remain outstanding.

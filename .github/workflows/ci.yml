@@ -18,6 +18,7 @@ jobs:
       - run: npm ci
       - run: npm run db:start
       - run: npm run env:local
+      - run: npm run env:photos
       - run: npm run lint
       - run: npm run typecheck
       - run: npm test
