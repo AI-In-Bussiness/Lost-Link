@@ -151,22 +151,19 @@ integration dependencies. Record your agent ID, branch, affected paths, status,
 and handoff evidence before overlapping edits. All agents share `main` as the
 canonical source of integrated work. Start each assignment from current `main`
 and bring completed work back through a pull request targeting `main` promptly.
-Do not create new branches or worktrees for agents, founders, phases, or tasks.
-Use the task's existing checkout and coordinate file ownership
+There is no requirement to create a separate branch or worktree per agent,
+founder, or phase. Use the task's existing checkout and coordinate file ownership
 before simultaneous edits; never overwrite another agent's uncommitted work.
 
 ### Shared branch and pull request workflow
 
 1. Synchronize with `main` before starting. Check status and preserve local work
    before pulling; use fast-forward updates and stop to resolve divergence.
-2. Deliver changes through a pull request targeting `main`. Reuse an existing
-   PR and its source branch for related work, or open a PR from an existing
-   source branch after confirming it has no conflicting active assignment.
-   A PR needs a source branch distinct from `main`; this does not authorize
-   creating a branch. If no suitable existing source branch is available,
-   prepare the change in the existing checkout and ask the task owner to
-   designate one. Record disjoint file ownership on the board before sharing
-   a branch. Do not create separate branches for agents, founders, or phases.
+2. For related work, use one short-lived shared integration branch and one PR
+   into `main`. Agents on that assignment contribute to the same branch, with
+   disjoint file ownership recorded on the board. A PR needs a source branch
+   distinct from its target; this temporary branch exists for review, not as a
+   permanent founder or agent workspace. Unrelated changes may use focused PRs.
 3. Serialize commits and pushes on a shared branch. Refresh its remote head
    before publishing; merge newer commits and resolve conflicts without
    discarding either contributor's work. Do not force-push shared history or
