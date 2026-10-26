@@ -55,3 +55,7 @@ shared phase acceptance still requires its review evidence.
 ## Repository consolidation
 
 - [Shared main integration and preservation report](codex-integrator-01__founder-vunassigned__phase-00-consolidation/codex-integrator-01__founder-vunassigned__phase-00-consolidation.md) — branch ancestry, conflict resolutions, combined checks and remaining UI boundaries.
+
+## Founder A Phase 2 UI refinement
+
+- [Research, visual changes and verification](codex-ui-01__founder-va__phase-02-ui-refinement/codex-ui-01__founder-va__phase-02-ui-refinement.md).
