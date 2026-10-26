@@ -106,9 +106,9 @@ try{
  const rejectedItem=await create('Rejection test bag');
  const rejectedClaim=(await api(`${base}/items/${rejectedItem.id}/claims`,{who:other,method:'POST',body:{evidenceText:proof},status:201})).data;
  await api(`${base}/claims/${rejectedClaim.id}/withdraw`,{who:claimant,method:'POST',body:{expectedVersion:1},status:404});
- assert.equal((await api(`${base}/staff/claims/${rejectedClaim.id}/review`,{who:staff,method:'POST',body:{decision:'reject',expectedVersion:1,privateNote:'Staff-only reason'}})).data.status,'rejected');
+ assert.equal((await api(`${base}/staff/claims/${rejectedClaim.id}/review`,{who:staff,method:'POST',body:{decision:'reject',expectedVersion:1,claimantReason:'The supplied details do not match. Contact staff for help.',privateNote:'Staff-only reason'}})).data.status,'rejected');
  const safeRejected=(await api('/me/claims',{who:other})).data.find(x=>x.id===rejectedClaim.id);
- assert.equal(safeRejected.decisionReason,'rejected');assert.ok(!JSON.stringify(safeRejected).includes('Staff-only reason'));
+ assert.equal(safeRejected.decisionReason,'rejected');assert.equal(safeRejected.claimantReason,'The supplied details do not match. Contact staff for help.');assert.ok(!JSON.stringify(safeRejected).includes('Staff-only reason'));
  const quotaUser=await actor();
  for(let i=0;i<6;i++){
   const quotaItem=await create(`Quota test bag ${i}`);

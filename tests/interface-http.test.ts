@@ -30,10 +30,10 @@ test("review and return send the rendered version and private notes without retr
     calls.push({ url: String(url), body: JSON.parse(String(init?.body)) });
     return response({ error: { code: "CONFLICT", message: "Internal SQL must not be shown" } }, 409);
   });
-  const result = await api.decideClaim({ orgSlug: "maple-school", claimId: dto.id, decision: "reject", reason: "Private note", expectedVersion: 7 });
+  const result = await api.decideClaim({ orgSlug: "maple-school", claimId: dto.id, decision: "reject", reason: "The details do not match.", privateNote: "Private note", expectedVersion: 7 });
   assert.equal(result.ok, false);
   assert.equal(calls.length, 1);
-  assert.deepEqual(calls[0].body, { expectedVersion: 7, decision: "reject", privateNote: "Private note" });
+  assert.deepEqual(calls[0].body, { expectedVersion: 7, decision: "reject", claimantReason: "The details do not match.", privateNote: "Private note" });
   await api.recordReturn({ orgSlug: "maple-school", itemId: dto.itemId, approvedClaimId: dto.id, expectedVersion: 8 });
   assert.deepEqual(calls[1].body, { expectedVersion: 8, ownershipVerified: true });
   assert.equal((await api.decideClaim({ orgSlug: "maple-school", claimId: dto.id, decision: "approve" })).ok, false);
@@ -63,19 +63,19 @@ test("cursor loops fail visibly instead of presenting truncated totals", async (
   assert.equal(count, 2);
 });
 
-test("search uses ranked endpoint, exposes a bounded result set, and rejects unsupported filters", async () => {
+test("search uses ranked endpoint, exposes a bounded result set, and passes date filters and rejects unsupported categories", async () => {
   let count = 0;
   const api = createHttpApi([], async (url, init) => {
     count++;
     assert.equal(url, "/api/v1/organizations/maple-school/search");
-    assert.deepEqual(JSON.parse(String(init?.body)), { query: "black bag", category: "bag", limit: 50 });
+    assert.deepEqual(JSON.parse(String(init?.body)), { query: "black bag", category: "bag", from: "2026-01-01", to: "2026-10-24", limit: 50 });
     return response({ data: [{ item: { id: "item-1", organizationSlug: "maple-school", title: "Bag", publicDescription: "Public facts", category: "bag", color: "black", publicLocation: "Gym", foundDate: "2026-10-24" }, reasons: ["Matching public item details"] }] });
   });
-  const result = await api.searchItems({ orgSlug: "maple-school", query: "black bag", category: "bag" });
+  const result = await api.searchItems({ orgSlug: "maple-school", query: "black bag", category: "bag", from: "2026-01-01", to: "2026-10-24" });
   assert.ok(result.ok);
   assert.equal(result.data.limited, true);
   assert.deepEqual(result.data.items[0].matchReasons, ["Matching public item details"]);
-  assert.equal((await api.searchItems({ orgSlug: "maple-school", from: "2026-01-01" })).ok, false);
+  assert.equal((await api.searchItems({ orgSlug: "maple-school", category: "accessory" })).ok, false);
   assert.equal(count, 1);
 });
 
@@ -96,4 +96,30 @@ test("safe failures map validation fields, authentication, throttling and malfor
 test("sign-in continuation permits product routes while rejecting disguised external paths", () => {
   for (const path of ["/my/claims", "/my/claims/claim-1", "/o/maple-school/items/item-1/claim", "/o/maple-school/staff/items/new", "/o/maple-school/staff"]) assert.equal(safeReturnPath(path), path);
   for (const path of ["//evil.test", "/\\evil.test", "/%2f%2fevil.test", "/sign-in", "/api/auth/sign-out", "/o/maple-school/search?next=//evil.test", "/my/claims\n"]) assert.equal(safeReturnPath(path), "/account");
+});
+
+
+test("published photographs replace illustrations and upload uses multipart without JSON labels", async () => {
+  const api = createHttpApi([], async (url, init) => {
+    if (init?.body instanceof FormData) {
+      assert.equal(url, "/api/v1/organizations/maple-school/staff/items/item-1/photos");
+      assert.equal(init.headers, undefined, "browser must provide the multipart boundary");
+      assert.equal((init.body.get("file") as File).name, "item.png");
+      return response({data:{id:"photo-1",status:"pending"}},201);
+    }
+    return response({data:{id:"item-1",organizationSlug:"maple-school",title:"Blue bag",photos:[{url:"/api/v1/safe-content",alt:"Blue bag"}]}});
+  });
+  const found = await api.getPublicItem("maple-school", "item-1");
+  assert.ok(found.ok);
+  assert.equal(found.data.photo.isPlaceholder, false);
+  assert.equal(found.data.photo.url, "/api/v1/safe-content");
+  assert.ok((await api.photos!.upload("maple-school","item-1",new File(["bytes"],"item.png"))).ok);
+});
+
+test("claimant explanation is separate from private staff notes", async () => {
+  const api = createHttpApi([], async () => response({data:[{...dto,status:"rejected",claimantReason:"The details do not match. Contact staff.",privateReviewNote:undefined}],page:{nextCursor:null}}));
+  const found = await api.getMyClaim("claim-1");
+  assert.ok(found.ok);
+  assert.equal(found.data.decisionReason, "The details do not match. Contact staff.");
+  assert.equal(found.data.privateReviewNote, undefined);
 });

@@ -82,7 +82,7 @@ begin
  perform set_config('request.jwt.claim.sub',owner2::text,true);
  c:=(public.backend_dispatch('submit_claim','maple-school',item,'{"evidenceText":"New explicit resubmission with private evidence."}')->'data'->>'id')::uuid;
  perform set_config('request.jwt.claim.sub',staff::text,true);
- perform public.backend_dispatch('review_claim','maple-school',c,'{"expectedVersion":1,"decision":"reject","privateNote":"Another secret staff note"}');
+ perform public.backend_dispatch('review_claim','maple-school',c,'{"expectedVersion":1,"decision":"reject","claimantReason":"The supplied details do not match. Contact staff for help.","privateNote":"Another secret staff note"}');
  perform set_config('request.jwt.claim.sub',owner1::text,true);
  c:=(public.backend_dispatch('submit_claim','maple-school',item,'{"evidenceText":"Resubmitted evidence before withdrawing this claim."}')->'data'->>'id')::uuid;
  j:=public.backend_dispatch('withdraw_claim','maple-school',c,'{"expectedVersion":1}');

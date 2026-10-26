@@ -1,5 +1,7 @@
 # Founder A / Founder B integration notes
 
+Historical Phase 2 merge inventory. These implementation gaps are now reconciled in the [current contract](../coordination/implemented-contract.md); Phase 3 photos are populated after review. The original table is preserved to explain prior mismatches.
+
 The Founder B branch includes current main through `412010c`, preserving Founder A's documents, standalone mock package, mock assets, competition materials and the repository agent rules. The generated Next.js rules are appended to AGENTS.md. Required retrospective per-agent/per-phase reports are included in agent-logs; they distinguish local completion from the blocked hosted gate.
 
 The mock package is still an independent proposal and is not imported into production routes. This merge does not wire mock-backed screens to the real backend. Founder A/integrator must reconcile these differences explicitly:

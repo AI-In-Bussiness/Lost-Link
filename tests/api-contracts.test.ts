@@ -50,3 +50,19 @@ test("JSON reader enforces content type, byte caps and valid JSON independently 
   await assert.rejects(()=>readJsonBody(request(JSON.stringify("é".repeat(MAX_JSON_BYTES)))),(error)=>error instanceof BodyError&&error.status===413);
   await assert.rejects(()=>readJsonBody(request("{}",{"content-length":String(MAX_JSON_BYTES+1)})),(error)=>error instanceof BodyError&&error.status===413);
 });
+
+
+test("date filters validate real calendar dates and ordered ranges before retrieval", () => {
+  for (const schema of [endpoints.items.query, endpoints.search.body]) {
+    const base = schema === endpoints.search.body ? {query:"bag"} : {};
+    assert.equal(schema.safeParse({...base,from:"2026-01-01",to:"2026-01-01"}).success,true);
+    for (const filter of [{from:"2025-02-30"},{to:"yesterday"},{from:"2026-02-01",to:"2026-01-01"}])
+      assert.equal(schema.safeParse({...base,...filter}).success,false);
+  }
+});
+
+test("rejections require a separate claimant-safe explanation", () => {
+  assert.equal(endpoints.review_claim.body.safeParse({expectedVersion:1,decision:"reject",claimantReason:"The details do not match.",privateNote:"Staff-only note"}).success,true);
+  for (const body of [{expectedVersion:1,decision:"reject",privateNote:"Private only"},{expectedVersion:1,decision:"reject",claimantReason:" "},{expectedVersion:1,decision:"approve",claimantReason:"Unrelated reason"}])
+    assert.equal(endpoints.review_claim.body.safeParse(body).success,false);
+});
