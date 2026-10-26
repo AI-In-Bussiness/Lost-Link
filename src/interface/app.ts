@@ -1,6 +1,6 @@
 import type { LostLinkApi } from "./contracts.ts";
 import type { Session, View, ViewContext } from "./types.ts";
-import { e, schoolPath, unavailable } from "./shared.ts";
+import { e, safeReturnPath, schoolPath, unavailable } from "./shared.ts";
 import { publicView } from "./public.ts";
 import { claimsView } from "./claims.ts";
 import { staffView } from "./staff.ts";
@@ -12,11 +12,17 @@ export interface InterfaceHost {
   getSession(): Session | null;
   signOut(): void;
   demoSignIn?: ViewContext["demoSignIn"];
+  photoUpload?: ViewContext["photoUpload"];
 }
 /** Mountable browser interface. The host supplies transport and session behavior. */
 export function mountLostLink(root: HTMLElement, host: InterfaceHost) {
   let generation = 0;
   let destroyed = false;
+  // Session-only context: no private form values or user data enter storage.
+  let activeOrgSlug =
+    host.getSession()?.staffOrgSlugs[0] ??
+    (host.live ? "maple-school" : "cedar-grove");
+  let activeOrgName = "";
   const navigate = (path: string) => {
     const next = new URL(path, location.origin);
     if (next.origin !== location.origin) return;
@@ -47,7 +53,20 @@ export function mountLostLink(root: HTMLElement, host: InterfaceHost) {
           return "";
         }
       });
-    const orgSlug = parts[0] === "o" ? parts[1] : session?.staffOrgSlugs[0] ?? (host.live ? "maple-school" : "cedar-grove");
+    const schoolRoute =
+      parts[0] === "sign-in"
+        ? safeReturnPath(url.searchParams.get("returnTo"))
+            .split("/")
+            .filter(Boolean)
+            .map((part) => {
+              try {
+                return decodeURIComponent(part);
+              } catch {
+                return "";
+              }
+            })
+        : parts;
+    const orgSlug = schoolRoute[0] === "o" ? schoolRoute[1] : activeOrgSlug;
     const base = schoolPath(orgSlug);
     const staff = session?.staffOrgSlugs.includes(orgSlug);
     const nav = `<a href="${base}/search" ${parts[2] === "search" ? 'aria-current="page"' : ""}>Find an item</a><a href="/my/claims" ${parts[0] === "my" ? 'aria-current="page"' : ""}>My claims</a>${staff ? `<a href="${base}/staff" ${parts[2] === "staff" ? 'aria-current="page"' : ""}>Staff workspace</a>` : ""}`;
@@ -59,8 +78,8 @@ export function mountLostLink(root: HTMLElement, host: InterfaceHost) {
     });
     const main = root.querySelector<HTMLElement>("main")!;
     try {
-      let orgName = "";
-      if (parts[0] === "o") {
+      let orgName = activeOrgName;
+      if (schoolRoute[0] === "o") {
         const orgs = await api.listOrganizations();
         if (ticket !== generation || destroyed) return;
         if (!orgs.ok) {
@@ -89,6 +108,8 @@ export function mountLostLink(root: HTMLElement, host: InterfaceHost) {
           return;
         }
         orgName = org.name;
+        activeOrgSlug = org.slug;
+        activeOrgName = org.name;
       }
       root.querySelector("#school-name")!.textContent =
         orgName || "Your school, your belongings";
@@ -99,6 +120,7 @@ export function mountLostLink(root: HTMLElement, host: InterfaceHost) {
         orgSlug,
         orgName,
         session,
+        photoUpload: host.photoUpload,
         navigate: (path) => {
           if (active()) navigate(path);
         },
@@ -124,7 +146,8 @@ export function mountLostLink(root: HTMLElement, host: InterfaceHost) {
             requestId: "ui",
           },
         });
-      else if (parts[0] === "sign-in" && host.signInView) view = host.signInView(ctx);
+      else if (parts[0] === "sign-in" && host.signInView)
+        view = host.signInView(ctx);
       else if (parts[2] === "staff") view = await staffView(ctx);
       else if (
         parts[0] === "sign-in" ||
@@ -185,6 +208,15 @@ export function mountLostLink(root: HTMLElement, host: InterfaceHost) {
     );
     if (!anchor || anchor.target || anchor.hasAttribute("download")) return;
     const url = new URL(anchor.href);
+    if (
+      url.hash === "#main" &&
+      url.pathname === location.pathname &&
+      url.search === location.search
+    ) {
+      event.preventDefault();
+      root.querySelector<HTMLElement>("main")?.focus();
+      return;
+    }
     if (
       url.origin !== location.origin ||
       (url.hash &&

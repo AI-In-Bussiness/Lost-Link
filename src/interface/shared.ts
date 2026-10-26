@@ -21,12 +21,14 @@ export const e = (value: unknown): string =>
 export const label = (value: string): string =>
   value.replaceAll("_", " ").replace(/^./, (c) => c.toUpperCase());
 export const date = (value: string): string =>
-  !value ? "Not provided" : new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(new Date(value.length === 10 ? value + "T12:00:00Z" : value));
+  !value
+    ? "Not provided"
+    : new Intl.DateTimeFormat("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        timeZone: "UTC",
+      }).format(new Date(value.length === 10 ? value + "T12:00:00Z" : value));
 export const schoolPath = (slug: string): string =>
   "/o/" + encodeURIComponent(slug);
 export const badge = (status: string): string =>
@@ -55,7 +57,8 @@ export function itemImage(item: PublicItem, className = ""): string {
     (url.startsWith("/") &&
       !url.startsWith("//") &&
       !/[\\\x00-\x1f]/.test(url)) ||
-    /^https:\/\//i.test(url);
+    /^https:\/\//i.test(url) ||
+    url.startsWith("blob:" + location.origin + "/");
   return `<div class="item-image ${e(className)}"><img src="${e(safe ? url : "/mock-assets/item-placeholder.svg")}" alt="${e(item.photo.alt)}" loading="lazy">${item.photo.isPlaceholder ? '<span class="photo-label">No photograph · illustration</span>' : ""}</div>`;
 }
 export function itemCard(
@@ -110,12 +113,26 @@ export function formError(
       ? "<ul>" +
         Object.entries(fields)
           .map(
-            ([name, text]) => `<li><a href="#${e(name)}">${e(text)}</a></li>`,
+            ([name, text]) =>
+              `<li><a href="#${e(name)}" data-error-field="${e(name)}">${e(text)}</a></li>`,
           )
           .join("") +
         "</ul>"
       : ""
   }`;
+  box.onclick = (event) => {
+    const link = (event.target as Element).closest<HTMLAnchorElement>(
+      "[data-error-field]",
+    );
+    if (!link) return;
+    const input = form.elements.namedItem(
+      link.dataset.errorField || "",
+    ) as HTMLElement | null;
+    if (input && typeof input.focus === "function") {
+      event.preventDefault();
+      input.focus();
+    }
+  };
   for (const [name, text] of Object.entries(fields)) {
     const input = form.elements.namedItem(name) as HTMLElement | null;
     if (!input || !("setAttribute" in input)) continue;

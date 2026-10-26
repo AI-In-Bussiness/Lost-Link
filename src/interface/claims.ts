@@ -30,7 +30,6 @@ const missing = (): Extract<Result<unknown>, { ok: false }> => ({
   },
 });
 
-
 async function claimsList(ctx: ViewContext): Promise<View> {
   const result = await ctx.api.listMyClaims({
     page: Number(ctx.url.searchParams.get("page") ?? 1),
@@ -68,9 +67,15 @@ function statusMessage(claim: MyClaim): { heading: string; body: string } {
         body: "This item was not allocated to this claim. Read the decision below or contact staff for help.",
       };
     case "withdrawn":
-      return { heading: "Claim withdrawn.", body: "This claim is closed. Contact staff if you need help." };
+      return {
+        heading: "Claim withdrawn.",
+        body: "This claim is closed. Contact staff if you need help.",
+      };
     case "cancelled":
-      return { heading: "Reservation cancelled.", body: "Staff cancelled this reservation. Contact the school office for help." };
+      return {
+        heading: "Reservation cancelled.",
+        body: "Staff cancelled this reservation. Contact the school office for help.",
+      };
     case "fulfilled":
       return {
         heading: "Back where it belongs.",

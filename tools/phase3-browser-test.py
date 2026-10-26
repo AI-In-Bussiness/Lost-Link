@@ -11,7 +11,7 @@ from urllib.parse import urlparse
 from playwright.sync_api import sync_playwright
 
 ORIGIN = os.environ.get("LOSTLINK_APP_URL", "http://localhost:3000")
-HARNESS = "http://127.0.0.1:4173"
+HARNESS = os.environ.get("LOSTLINK_HARNESS_URL", "http://127.0.0.1:4173")
 
 
 class WorkflowChecks(unittest.TestCase):

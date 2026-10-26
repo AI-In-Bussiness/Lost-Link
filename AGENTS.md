@@ -137,3 +137,28 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+## 7. Shared orientation and coordination
+
+Before editing, read [the agent hub](docs/coordination/README.md),
+[the current-state snapshot](docs/coordination/current-state.md), and
+[the integration checklist](docs/coordination/integration.md).
+Confirm your actual branch and commit with Git; branch-specific handoffs describe
+their own snapshot and may predate another founder's work.
+
+Use [the coordination board](docs/coordination/task-board.csv) for shared
+integration dependencies. Record your agent ID, branch, affected paths, status,
+and handoff evidence before overlapping edits. Use a separate branch/worktree
+for concurrent work. Do not change another agent's branch or working tree.
+
+Keep historical plans, reports, source references, and existing file paths.
+Organize new shared guidance under `docs/coordination/`; link to original
+artifacts rather than copying competing versions of contracts or moving active
+source trees. A future move must preserve content and update imports, links,
+scripts, and checks together.
+
+The hub is a navigation and coordination layer. Existing phase-report rules
+above remain required. A board row marked Done requires an independent review
+reference; a delivered artifact awaiting review is Review. An implementation
+contract on a branch is evidence of that branch's behavior, not proof that both
+founders approved it or that it is deployed.

@@ -1,3 +1,4 @@
+import { photoInputHtml, bindPhotoInput } from "./photo-input.ts";
 import type {
   Category,
   Claim,
@@ -85,8 +86,18 @@ function valid(form: HTMLFormElement): boolean {
 
 async function dashboard(ctx: ViewContext): Promise<View> {
   const status = (ctx.url.searchParams.get("status") || "pending") as
-    ClaimStatus | "all";
-  if (!["pending", "approved", "rejected", "fulfilled", "all", ...(ctx.api.live ? ["withdrawn", "cancelled"] : [])].includes(status))
+    | ClaimStatus
+    | "all";
+  if (
+    ![
+      "pending",
+      "approved",
+      "rejected",
+      "fulfilled",
+      "all",
+      ...(ctx.api.live ? ["withdrawn", "cancelled"] : []),
+    ].includes(status)
+  )
     return failureView(ctx, "Unknown claim filter.");
   const [available, reserved, returned, pending, claims] = await Promise.all([
     ctx.api.listStaffInventory({
@@ -166,7 +177,15 @@ async function dashboard(ctx: ViewContext): Promise<View> {
 
 async function inventory(ctx: ViewContext): Promise<View> {
   const status = ctx.url.searchParams.get("status") || "";
-  if (status && !["available", "reserved", "returned", ...(ctx.api.live ? ["archived"] : [])].includes(status))
+  if (
+    status &&
+    ![
+      "available",
+      "reserved",
+      "returned",
+      ...(ctx.api.live ? ["archived"] : []),
+    ].includes(status)
+  )
     return failureView(ctx, "Unknown item filter.");
   const result = await ctx.api.listStaffInventory({
     orgSlug: ctx.orgSlug,
@@ -222,10 +241,15 @@ async function intake(ctx: ViewContext): Promise<View> {
     <form id="intake-form" class="stack" novalidate><div data-errors></div><div class="two-column"><section class="card stack"><p class="eyebrow">Visible to students</p><h2>Public listing</h2>
     <div class="field"><label for="title">Item title</label><input id="title" name="title" required minlength="3" maxlength="100" placeholder="For example, Purple pencil case"></div>
     <div class="field"><label for="publicDescription">Public description</label><textarea id="publicDescription" name="publicDescription" required minlength="10" maxlength="1000" rows="4" aria-describedby="public-hint"></textarea><p id="public-hint" class="muted">Describe the outside. Keep hidden marks and contents for verification.</p></div>
-    <div class="two-column"><div class="field"><label for="category">Category</label><select id="category" name="category" required>${categories.filter(c => !ctx.api.live || c !== "accessory").map((c) => `<option value="${c}">${e(label(c))}</option>`).join("")}</select></div><div class="field"><label for="color">Color</label><input id="color" name="color" required maxlength="40" pattern="[a-z]+([ \\-][a-z]+)*" aria-describedby="color-hint"><p id="color-hint" class="muted">Use lowercase color words, for example black or dark blue.</p></div></div>
+    <div class="two-column"><div class="field"><label for="category">Category</label><select id="category" name="category" required>${categories
+      .filter((c) => !ctx.api.live || c !== "accessory")
+      .map((c) => `<option value="${c}">${e(label(c))}</option>`)
+      .join(
+        "",
+      )}</select></div><div class="field"><label for="color">Color</label><input id="color" name="color" required maxlength="40" pattern="[a-z]+([ \\-][a-z]+)*" aria-describedby="color-hint"><p id="color-hint" class="muted">Use lowercase color words, for example black or dark blue.</p></div></div>
     <div class="field"><label for="foundLocation">Broad found location</label><input id="foundLocation" name="foundLocation" required maxlength="100" placeholder="For example, Library"></div>
     <div class="field"><label for="foundDate">Date found</label><input id="foundDate" name="foundDate" type="date" required max="${new Date().toISOString().slice(0, 10)}"></div>
-    <div class="notice"><strong>Item illustration</strong><p>${ctx.api.live ? "Photographs are unavailable with the current service. The saved listing will use an illustration." : "This preview uses the checked-in illustration. Photo selection and secure upload will be connected with the live service."}</p><img src="/mock-assets/item-placeholder.svg" alt="Development illustration for found items" width="200" height="150"></div>
+    ${photoInputHtml(Boolean(ctx.photoUpload))}
     <div class="field"><label for="photo.alt">Image description</label><input id="photo.alt" name="photo.alt" required maxlength="200" value="Fictional found-item illustration, not a photograph"><p class="muted">Describe only public details for people using screen readers.</p></div></section>
     <section class="card stack privacy"><p class="eyebrow">Staff only</p><h2>Private verification</h2><p>These details never appear in the public preview.</p><div class="field"><label for="verificationNotes">${ctx.api.live ? "Identifying notes (required)" : "Identifying notes (optional)"}</label><textarea id="verificationNotes" name="verificationNotes" ${ctx.api.live ? "required" : ""} maxlength="2000" rows="5" aria-describedby="private-hint"></textarea><p id="private-hint" class="muted">Record a hidden mark or contents staff can compare with a claim. Use fictional details in this demo.</p></div><div class="field"><label for="storageLocation">Staff storage location</label><input id="storageLocation" name="storageLocation" required maxlength="100"></div></section></div>
     <div class="actions"><button type="submit">Preview public listing &gt;</button><a href="${base(ctx)}/items">Cancel</a></div>
@@ -233,6 +257,7 @@ async function intake(ctx: ViewContext): Promise<View> {
     bind: (root) => {
       const form = root.querySelector<HTMLFormElement>("#intake-form")!;
       const preview = root.querySelector<HTMLElement>("#public-preview")!;
+      const photo = bindPhotoInput(form, ctx.photoUpload);
       let reviewed = false;
       const value = (name: string) =>
         String(new FormData(form).get(name) || "").trim();
@@ -245,11 +270,10 @@ async function intake(ctx: ViewContext): Promise<View> {
         foundLocation: value("foundLocation"),
         foundDate: value("foundDate"),
         photo: {
-          url: "/mock-assets/item-placeholder.svg",
+          ...photo.value()!.photo,
           alt: value("photo.alt"),
-          isPlaceholder: true,
         },
-        upload: { mimeType: "image/jpeg", sizeBytes: 240000 },
+        upload: photo.value()!.upload,
         verificationNotes: value("verificationNotes"),
         storageLocation: value("storageLocation"),
       });
@@ -263,11 +287,11 @@ async function intake(ctx: ViewContext): Promise<View> {
       });
       form.addEventListener("submit", (event) => {
         event.preventDefault();
-        if (!valid(form)) return;
+        if (!photo.ready() || !valid(form)) return;
         const item = input();
         reviewed = true;
         // Deliberately construct the public preview from its allowlisted fields.
-        preview.innerHTML = `<p class="eyebrow">Public preview</p><h2 id="preview-heading">${e(item.title)}</h2><div class="two-column"><div class="item-image"><img src="/mock-assets/item-placeholder.svg" alt="${e(item.photo.alt)}"><span class="photo-label">Illustration · demo item</span></div><div><p>${e(item.publicDescription)}</p><dl class="detail-list"><div><dt>Category</dt><dd>${e(label(item.category))}</dd></div><div><dt>Color</dt><dd>${e(item.color)}</dd></div><div><dt>Found at</dt><dd>${e(item.foundLocation)}</dd></div><div><dt>Found on</dt><dd>${date(item.foundDate)}</dd></div></dl></div></div><p class="muted">Only the listing above will be shown publicly.</p><div class="actions"><button type="button" id="publish-item">${ctx.api.live ? "Publish found item" : "Publish demo item"}</button><button type="button" class="secondary" id="edit-item">Back to editing</button></div>`;
+        preview.innerHTML = `<p class="eyebrow">Public preview</p><h2 id="preview-heading">${e(item.title)}</h2><div class="two-column"><div class="item-image"><img src="${e(item.photo.url)}" alt="${e(item.photo.alt)}"><span class="photo-label">${item.photo.isPlaceholder ? "Illustration · demo item" : "Local photo · not uploaded"}</span></div><div><p>${e(item.publicDescription)}</p><dl class="detail-list"><div><dt>Category</dt><dd>${e(label(item.category))}</dd></div><div><dt>Color</dt><dd>${e(item.color)}</dd></div><div><dt>Found at</dt><dd>${e(item.foundLocation)}</dd></div><div><dt>Found on</dt><dd>${date(item.foundDate)}</dd></div></dl></div></div><p class="muted">Only the listing above will be shown publicly.</p><div class="actions"><button type="button" id="publish-item">${ctx.api.live ? "Publish found item" : "Publish demo item"}</button><button type="button" class="secondary" id="edit-item">Back to editing</button></div>`;
         preview.hidden = false;
         preview.focus();
         preview.querySelector("#edit-item")!.addEventListener("click", () => {
@@ -278,7 +302,7 @@ async function intake(ctx: ViewContext): Promise<View> {
         preview
           .querySelector("#publish-item")!
           .addEventListener("click", () => {
-            if (!reviewed || !valid(form)) return;
+            if (!reviewed || !photo.ready() || !valid(form)) return;
             void submitting(form, async () => {
               const result = await ctx.api.createItem(input());
               if (!root.isConnected) return;

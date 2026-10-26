@@ -8,6 +8,9 @@ import type { Persona } from "../mocks/contracts.ts";
 import type { Session } from "./types.ts";
 import { demoSignInView } from "./demo-signin.ts";
 import { mountLostLink } from "./app.ts";
+import { createDemoPhotos } from "./demo-photos.ts";
+const localPhotos = createDemoPhotos();
+window.addEventListener("beforeunload", () => localPhotos.reset());
 
 const host = location.hostname;
 if (!["localhost", "127.0.0.1", "[::1]"].includes(host))
@@ -41,22 +44,30 @@ const session = (): Session | null =>
 const app = mountLostLink(document.querySelector<HTMLElement>("#app")!, {
   signInView: demoSignInView,
   getApi: () =>
-    createMockApi(store, {
-      persona,
-      latencyMs: scenario === "slow" ? 1800 : 120,
-      aiUnavailable: scenario === "aiUnavailable",
-      ...(scenario === "network" || scenario === "rateLimit"
-        ? { failure: scenario }
-        : {}),
-    }),
+    localPhotos.wrap(
+      createMockApi(store, {
+        persona,
+        latencyMs: scenario === "slow" ? 1800 : 120,
+        aiUnavailable: scenario === "aiUnavailable",
+        ...(scenario === "network" || scenario === "rateLimit"
+          ? { failure: scenario }
+          : {}),
+      }),
+    ),
+  photoUpload: localPhotos.service,
   getSession: session,
   signOut: () => {
     persona = "anonymous";
     personas.value = persona;
   },
   demoSignIn: (kind, returnTo) => {
-    persona = kind;
-    personas.value = kind;
+    if (scenario === "network" || scenario === "rateLimit")
+      throw new Error("Demo sign-in unavailable");
+    persona =
+      kind === "staff" && returnTo.startsWith("/o/maple-hill/")
+        ? "otherStaff"
+        : kind;
+    personas.value = persona;
     app.navigate(returnTo);
   },
 });
@@ -67,11 +78,17 @@ personas.addEventListener("change", () => {
 scenarios.addEventListener("change", () => {
   const wasEmpty = scenario === "empty";
   scenario = scenarios.value;
-  if (scenario === "empty") store = createEmptyMockStore();
-  else if (wasEmpty) store = createMockStore();
+  if (scenario === "empty") {
+    localPhotos.reset();
+    store = createEmptyMockStore();
+  } else if (wasEmpty) {
+    localPhotos.reset();
+    store = createMockStore();
+  }
   app.refresh();
 });
 document.querySelector("#demo-reset")!.addEventListener("click", () => {
+  localPhotos.reset();
   store = createMockStore();
   scenario = "normal";
   scenarios.value = scenario;

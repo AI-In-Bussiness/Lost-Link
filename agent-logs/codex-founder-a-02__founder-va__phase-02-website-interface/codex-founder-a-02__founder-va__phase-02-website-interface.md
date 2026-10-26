@@ -43,3 +43,25 @@
 - **Remaining work:** Independent Phase 2 acceptance; production foundation and later workflows; real photographs/auth/persistence/security; final contract/task mapping.
 - **Recommended next steps:** Run the guide's preview command, rehearse the full mock return journey, inspect mobile evidence, then coordinate frontend adaptation with Founder B before Phase 3 work.
 - **Relevant references:** `AGENTS.md`, `plan.pdf`, `competition_rules.pptx`, all `docs/phase-0` and `docs/phase-1` documents; public/mock, claim and staff subagent reports under `agent-logs/`.
+
+
+## Dated addendum — 2026-10-26 UTC: merge-readiness follow-up
+
+User requested completion against the plan and Overseer comments, then authorized merge when checks pass. Read the Overseer's chat and merged PR #5 reports plus the shared coordination guidance. Merged current main into the PR branch; preserved every historical report and downstream Phase 3 branch. Recorded ownership in INT-003 before shared edits.
+
+Peer audit and QA exposed missing school context, incomplete photo interactions and unreliable error-field/skip-link focus. Completed those fixes, added sign-in failure feedback, and integrated partially prepared photo/QA contributions after their agent turns ended before final verification. The primary agent owns the final integration and test results; no unfinished independent acceptance is claimed. Added isolated pinned tools/lockfile and GitHub Actions with screenshot artifacts; no root framework scaffold or backend contract change.
+
+All twelve required routes are covered by the expanded browser matrix. See `docs/phase-2/review-response.md` and the final validation addendum for executed results. Production auth, uploads, persistence and formal upstream/Overseer gate approval remain separate; implementation tasks stay Review. The original independent acceptance report records pre-fix findings and is retained unchanged.
+
+
+## Dated addendum — 2026-10-26 UTC: PR #8 conflict resolution
+
+Task owner requested resolving the open PR so they can merge. PR #4 was already merged; the sole open PR was #8 (`codex/founder-b-phase-2`, at `bfabae5`, already including Phase 3). Used isolated worktree `/workspace/pr8-conflicts` and branch `codex/resolve-pr8`; merged `origin/main` at `17f1b41` without rewriting history.
+
+Resolved 14 conflicting paths. Used the original Phase 2 commit `5fc1007` as the common content baseline for the cherry-picked interface, preserving both the Phase 3 live transport/session/receipt/version behavior and main's photo projection, school context, errors and keyboard fixes. Kept demo sign-in in its development-only module. Retained both README/AGENTS additions and every historical report. Scoped the Phase 2 formatter to its owned files so it does not impose formatting on separate live-adapter modules. Made the Phase 3 harness URL configurable for isolated regression checks.
+
+Validation: `npm run lint`, `npm run typecheck`, `npm test` (18 passed), `npm run test:mocks` (14 passed), and `npm run build` passed. The four Phase 3 browser checks passed against the production server plus isolated HTTP-fixture harness. Phase 2 browser/axe results are recorded in the accompanying completion note. Database SQL/live HTTP tests were not rerun: resolution changes interface composition and documentation, not migrations or backend contracts. Fixture tests do not establish real Supabase persistence or security. Initial unit execution needed the execution tool's socket/network capability for tsx IPC; rerun succeeded with it.
+
+Files affected: merged main guidance/reports/tooling; `src/interface/{app,claims,demo-signin,demo,public,shared,staff,types}.ts`; scoped tools configuration; `tools/phase3-browser-test.py`; coordination entry INT-006. Push the merge resolution to the existing PR branch with a normal fast-forward push. Do not merge PR #8 on the user's behalf: this request reserves that action for them.
+
+Completion note: all 14 expanded Phase 2 Chromium tests passed with axe enabled (12 route/persona scans). Scoped TypeScript and formatting passed; no unresolved index entries or conflict markers remain. All four Phase 3 browser checks passed. The PR remains open for the task owner.

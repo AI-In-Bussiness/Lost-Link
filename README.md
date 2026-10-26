@@ -92,3 +92,14 @@ Architecture and security decisions: [Phase 0 handoff](docs/phase-0/README.md). 
 The homepage, `/o/:slug/search`, item/claim screens, `/my/claims` and staff workspace now use the real cookie-authenticated API. `LOSTLINK_ORGANIZATION_SLUGS` optionally sets the school selector’s comma-separated public slugs (defaults to the two fictional seed schools). Direct organization URLs are also resolved by the API. Sign in with an operator-provisioned account; the real application has no demo persona controls.
 
 For repeatable browser checks, start `npm start` and, separately, `node tools/phase2-preview.mjs`, then run `python tools/phase3-browser-test.py` with Python Playwright and Chromium installed. This suite checks production routes and exercises authenticated interactions in an isolated HTTP-fixture harness. It does **not** prove Supabase persistence. See the Phase 3 handoff for the blocked live check and missing photo support.
+
+## Working in this repository
+
+Start with [AGENTS.md](AGENTS.md), then the [shared agent hub](docs/coordination/README.md).
+The [documentation index](docs/README.md) organizes existing plans and handoffs;
+the [repository map](docs/coordination/repository-map.md) explains file locations.
+
+Implementation is currently split across branches. Check the
+[branch and delivery snapshot](docs/coordination/current-state.md) before assuming
+a feature or toolchain exists on your branch. Track shared integration work in
+the [coordination board](docs/coordination/task-board.csv).

@@ -4,7 +4,9 @@ Requires Python Playwright and a Chromium executable (CHROMIUM_PATH optional).
 Fictional evidence only; generated screenshots go to /tmp, never source control.
 """
 import os
+import struct
 import unittest
+import zlib
 from pathlib import Path
 from playwright.sync_api import sync_playwright, expect
 
@@ -12,12 +14,24 @@ BASE = os.environ.get('LOSTLINK_PREVIEW_URL', 'http://127.0.0.1:4173')
 SCHOOL = '/o/cedar-grove'
 
 
+def png_bytes(red=160):
+    """Original, tiny raster fixture; no external assets or image library needed."""
+    def chunk(kind, data):
+        return struct.pack('!I', len(data)) + kind + data + struct.pack('!I', zlib.crc32(kind + data))
+    pixels = b''.join(b'\0' + bytes([red, 80, 120, 255]) * 4 for _ in range(4))
+    return (b'\x89PNG\r\n\x1a\n' + chunk(b'IHDR', struct.pack('!IIBBBBB', 4, 4, 8, 6, 0, 0, 0))
+            + chunk(b'IDAT', zlib.compress(pixels)) + chunk(b'IEND', b''))
+
+
 class InterfaceTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.runtime = sync_playwright().start()
+        chromium = os.environ.get('CHROMIUM_PATH')
+        if not chromium and Path('/usr/bin/chromium').exists():
+            chromium = '/usr/bin/chromium'
         cls.browser = cls.runtime.chromium.launch(
-            executable_path=os.environ.get('CHROMIUM_PATH', '/usr/bin/chromium'),
+            **({'executable_path': chromium} if chromium else {}),
             headless=True, args=['--no-sandbox'])
 
     @classmethod
@@ -38,6 +52,7 @@ class InterfaceTest(unittest.TestCase):
         self.assertEqual(self.errors, [], 'Uncaught browser errors')
 
     def ready(self):
+        self.page.locator('form[aria-busy="true"]').wait_for(state='hidden')
         self.page.locator('main:not([aria-busy])').wait_for()
 
     def route(self, path):
@@ -48,6 +63,19 @@ class InterfaceTest(unittest.TestCase):
         self.page.locator('.demo-panel details').evaluate('node => node.open = true')
         self.page.locator('#demo-' + kind).select_option(value)
         self.ready()
+
+    def tab_to(self, target):
+        """Find a control with native Tab navigation; never programmatically focus it."""
+        expect(target).to_be_visible()
+        for _ in range(100):
+            if target.evaluate('node => node === document.activeElement'):
+                return
+            self.page.keyboard.press('Tab')
+        self.fail('Control was not reachable using the Tab key: ' + str(target))
+
+    def keyboard_activate(self, target, key='Enter'):
+        self.tab_to(target)
+        self.page.keyboard.press(key)
 
     def test_public_search_filters_and_private_boundary(self):
         p = self.page
@@ -133,6 +161,101 @@ class InterfaceTest(unittest.TestCase):
         expect(p.locator('main')).to_contain_text('No matching items found.')
         self.route('/my/claims/claim-competing')
         expect(p.locator('h1')).to_have_text('This page is unavailable')
+
+    def test_keyboard_only_search_claim_review_and_return(self):
+        p = self.page
+        self.tab_to(p.get_by_label('What are you looking for?'))
+        p.keyboard.type('black Nike duffel')
+        p.keyboard.press('Enter')
+        self.ready()
+        self.keyboard_activate(p.get_by_role('link', name='Black Nike duffel bag', exact=True))
+        self.ready()
+        self.keyboard_activate(p.get_by_role('link', name='This might be mine'))
+        self.ready()
+        self.keyboard_activate(p.get_by_role('button', name='Continue as demo student'))
+        self.ready()
+        self.tab_to(p.get_by_label('How can staff tell this belongs to you?'))
+        p.keyboard.type('Fictional purple jump rope in the inside pocket.')
+        self.keyboard_activate(p.get_by_role('button', name='Send private claim'))
+        self.ready()
+        claim_id = p.url.split('/my/claims/')[1].split('?')[0]
+        # The persona control is review-harness setup, outside the product journey.
+        self.control('persona', 'staff')
+        self.keyboard_activate(p.locator('.main-nav').get_by_role('link', name='Staff workspace'))
+        self.ready()
+        self.keyboard_activate(p.locator(f'a[href="{SCHOOL}/staff/claims/{claim_id}"]'))
+        self.ready()
+        self.keyboard_activate(p.get_by_role('button', name='Approve for collection'))
+        self.ready()
+        self.keyboard_activate(p.locator('#handover'), key='Space')
+        self.keyboard_activate(p.get_by_role('button', name='Mark item returned'))
+        self.ready()
+        expect(p.locator('main')).to_contain_text('Item returned')
+        self.assertEqual(p.evaluate('localStorage.length + sessionStorage.length'), 0)
+
+    def test_own_statuses_duplicate_receipt_and_empty_lists(self):
+        p = self.page
+        self.control('persona', 'student')
+        for claim_id, status in [('claim-pending', 'pending'), ('claim-approved', 'approved'),
+                                 ('claim-rejected', 'rejected')]:
+            self.route('/my/claims/' + claim_id)
+            expect(p.locator('.badge.' + status)).to_be_visible()
+            if status == 'approved':
+                expect(p.locator('main')).to_contain_text('Collection instructions')
+            else:
+                self.assertEqual(p.get_by_role('heading', name='Collection instructions').count(), 0)
+        self.control('persona', 'otherStudent')
+        self.route('/my/claims/claim-fulfilled')
+        expect(p.locator('.badge.fulfilled')).to_be_visible()
+        self.control('persona', 'student')
+        for _ in range(2):
+            self.route(SCHOOL + '/items/item-duffel/claim')
+            p.get_by_label('How can staff tell this belongs to you?').fill('Fictional purple jump rope in the inside pocket.')
+            p.get_by_role('button', name='Send private claim').click()
+            self.ready()
+            current = p.url.split('/my/claims/')[1].split('?')[0]
+            if _ == 0:
+                first_receipt = current
+            else:
+                self.assertEqual(current, first_receipt)
+        self.control('scenario', 'empty')
+        self.route('/my/claims')
+        expect(p.locator('main')).to_contain_text('No claims yet')
+        self.control('persona', 'staff')
+        self.route(SCHOOL + '/staff')
+        expect(p.locator('main')).to_contain_text('No pending claims here.')
+        self.route(SCHOOL + '/staff/items')
+        expect(p.locator('main')).to_contain_text('No items in this view.')
+
+    def test_history_and_cross_school_sign_in_context(self):
+        p = self.page
+        p.get_by_label('Your school', exact=True).select_option('maple-hill')
+        p.get_by_label('What are you looking for?').fill('duffel')
+        p.get_by_role('button', name='Find my item').click()
+        self.ready()
+        search_url = p.url
+        p.get_by_role('link', name='Black Nike duffel bag', exact=True).click()
+        self.ready()
+        item_url = p.url
+        p.go_back()
+        self.ready()
+        self.assertEqual(p.url, search_url)
+        expect(p.get_by_label('Describe your item')).to_have_value('duffel')
+        p.go_forward()
+        self.ready()
+        self.assertEqual(p.url, item_url)
+        p.get_by_role('link', name='This might be mine').click()
+        self.ready()
+        expect(p.locator('#school-name')).to_have_text('Maple Hill School')
+        expect(p.get_by_role('link', name='Back to school search')).to_have_attribute('href', '/o/maple-hill/search')
+        p.get_by_role('button', name='Continue as demo student').click()
+        self.ready()
+        self.assertIn('/o/maple-hill/items/item-maple-duffel/claim', p.url)
+        p.get_by_label('How can staff tell this belongs to you?').fill('Fictional Maple Hill ownership detail in the inner pocket.')
+        p.get_by_role('button', name='Send private claim').click()
+        self.ready()
+        expect(p.locator('#school-name')).to_have_text('Maple Hill School')
+        expect(p.locator('.main-nav').get_by_role('link', name='Find an item')).to_have_attribute('href', '/o/maple-hill/search')
 
     def test_staff_intake_public_preview_and_rejection(self):
         p = self.page
@@ -232,8 +355,129 @@ class InterfaceTest(unittest.TestCase):
         expect(p.locator('.error-summary')).to_be_focused()
         expect(p.get_by_label('How can staff tell this belongs to you?')).to_have_value(evidence)
         p.get_by_role('button', name='Send private claim').click()
-        p.wait_for_function("window.__claimPath?.startsWith('/my/claims/')")
+        p.wait_for_function("() => window.__claimPath?.startsWith('/my/claims/')")
         self.assertEqual(p.evaluate('localStorage.length + sessionStorage.length'), 0)
+
+    def test_conflict_recovery_preserves_forms_and_error_links_focus(self):
+        p = self.page
+        p.evaluate("""async () => {
+          const {claimsView} = await import('/src/interface/claims.ts');
+          const {createMockApi,createMockStore} = await import('/src/mocks/client.ts');
+          const api = createMockApi(createMockStore(), {persona:'student'});
+          const conflict={ok:false,error:{code:'CONFLICT',message:'This item is no longer available.',requestId:'test'}};
+          const ctx={api:{...api,submitClaim:async()=>conflict},
+            url:new URL('/o/cedar-grove/items/item-duffel/claim',location.origin),
+            orgSlug:'cedar-grove',orgName:'Cedar Grove School',
+            session:{name:'Avery',email:'avery@example.invalid',staffOrgSlugs:[]},navigate:()=>{},refresh:()=>{}};
+          const view=await claimsView(ctx);
+          const section=document.createElement('section');section.id='conflict-test';
+          document.querySelector('#app').hidden=true;section.innerHTML=view.html;
+          document.body.append(section);view.bind(section);
+        }""")
+        evidence = 'Fictional purple jump rope in the inside pocket.'
+        p.get_by_label('How can staff tell this belongs to you?').fill(evidence)
+        p.get_by_role('button', name='Send private claim').click()
+        expect(p.locator('.error-summary')).to_be_focused()
+        expect(p.get_by_label('How can staff tell this belongs to you?')).to_have_value(evidence)
+        expect(p.get_by_role('link', name='Refresh item availability')).to_have_attribute('href', SCHOOL + '/items/item-duffel')
+        p.evaluate("""async () => {
+          document.querySelector('#conflict-test').remove();
+          const {staffView}=await import('/src/interface/staff.ts');
+          const {createMockApi,createMockStore}=await import('/src/mocks/client.ts');
+          const api=createMockApi(createMockStore(),{persona:'staff'});
+          const conflict={ok:false,error:{code:'CONFLICT',message:'Another staff member reviewed this claim.',requestId:'test'}};
+          const ctx={api:{...api,decideClaim:async()=>conflict},
+            url:new URL('/o/cedar-grove/staff/claims/claim-pending',location.origin),
+            orgSlug:'cedar-grove',orgName:'Cedar Grove School',
+            session:{name:'Staff',email:'staff@example.invalid',staffOrgSlugs:['cedar-grove']},
+            navigate:()=>{},refresh:()=>window.__refreshed=true};
+          const view=await staffView(ctx);
+          const section=document.createElement('section');section.id='conflict-test';section.innerHTML=view.html;
+          document.body.append(section);view.bind(section);
+        }""")
+        reason = 'The fictional identifying detail did not match.'
+        p.get_by_label('Reason for rejection').fill(reason)
+        p.get_by_role('button', name='Reject claim').click()
+        expect(p.locator('.error-summary')).to_be_focused()
+        expect(p.get_by_label('Reason for rejection')).to_have_value(reason)
+        expect(p.locator('.badge.pending')).to_be_visible()
+        p.get_by_role('button', name='Refresh current status').click()
+        self.assertTrue(p.evaluate('window.__refreshed'))
+        p.evaluate("document.querySelector('#conflict-test').remove(); document.querySelector('#app').hidden=false")
+        self.control('persona', 'staff')
+        self.route(SCHOOL + '/staff/items/new')
+        p.get_by_label('Image description').fill('')
+        p.get_by_role('button', name='Preview public listing').click()
+        p.locator('.error-summary a[href="#photo.alt"]').click()
+        expect(p.get_by_label('Image description')).to_be_focused()
+
+    def test_local_photo_selection_errors_replace_remove_and_publish(self):
+        p = self.page
+        self.control('persona', 'staff')
+        self.route(SCHOOL + '/staff/items/new')
+        upload = p.locator('#photo')
+        for payload in [
+            {'name': 'unsafe.svg', 'mimeType': 'image/svg+xml', 'buffer': b'<svg xmlns="http://www.w3.org/2000/svg"/>'},
+            {'name': 'large.png', 'mimeType': 'image/png', 'buffer': b'x' * (5 * 1024 * 1024 + 1)},
+            {'name': 'broken.png', 'mimeType': 'image/png', 'buffer': b'not an image'}]:
+            upload.set_input_files(payload)
+            expect(p.locator('.error-summary')).to_be_focused()
+            expect(upload).to_have_attribute('aria-invalid', 'true')
+        for shade in [160, 210]:
+            upload.set_input_files({'name': 'fictional-item.png', 'mimeType': 'image/png', 'buffer': png_bytes(shade)})
+            p.wait_for_function("() => document.querySelector('#photo-preview')?.complete && document.querySelector('#photo-preview')?.naturalWidth > 0")
+            photo_url = p.locator('#photo-preview').get_attribute('src')
+            self.assertTrue(photo_url.startswith('blob:'))
+            if shade == 160:
+                first_photo = photo_url
+            else:
+                self.assertNotEqual(first_photo, photo_url)
+        p.locator('#photo-remove').click()
+        p.get_by_role('button', name='Preview public listing').click()
+        expect(upload).to_have_attribute('aria-invalid', 'true')
+        p.locator('#photo-demo').click()
+        expect(p.locator('#photo-preview')).to_have_attribute('src', '/mock-assets/item-placeholder.svg')
+        upload.set_input_files({'name': 'fictional-item.png', 'mimeType': 'image/png', 'buffer': png_bytes()})
+        p.wait_for_function("() => document.querySelector('#photo-preview')?.complete && document.querySelector('#photo-preview')?.naturalWidth > 0")
+        selected_photo = p.locator('#photo-preview').get_attribute('src')
+        for field, value in [('Item title', 'Fictional photographed pencil case'),
+                             ('Public description', 'Purple pencil case shown in a local test photograph.'),
+                             ('Color', 'purple'), ('Broad found location', 'Art room'),
+                             ('Date found', '2026-10-25'), ('Staff storage location', 'Fictional cabinet C')]:
+            p.get_by_label(field, exact=True).fill(value)
+        p.get_by_label('Image description').fill('Fictional purple pencil case test photograph')
+        p.get_by_role('button', name='Preview public listing').click()
+        expect(p.locator('#public-preview img')).to_have_attribute('src', selected_photo)
+        p.get_by_role('button', name='Publish demo item').click()
+        self.ready()
+        item_id = p.url.rsplit('/', 1)[1]
+        self.control('persona', 'anonymous')
+        self.route(SCHOOL + '/items/' + item_id)
+        expect(p.locator('main img')).to_have_attribute('src', selected_photo)
+        self.assertEqual(p.evaluate('localStorage.length + sessionStorage.length'), 0)
+
+    def test_latest_route_loading_resize_text_and_reduced_motion(self):
+        p = self.page
+        self.control('scenario', 'slow')
+        p.evaluate("history.pushState({}, '', '/o/cedar-grove/search?q=duffel'); dispatchEvent(new PopStateEvent('popstate'))")
+        expect(p.locator('.loading-state')).to_be_visible()
+        p.evaluate("history.pushState({}, '', '/sign-in'); dispatchEvent(new PopStateEvent('popstate'))")
+        self.ready()
+        p.wait_for_timeout(4000)
+        self.assertEqual(p.url, BASE + '/sign-in')
+        expect(p.locator('h1')).to_have_text('Pick up where you left off.')
+        self.control('scenario', 'normal')
+        self.control('persona', 'staff')
+        p.emulate_media(reduced_motion='reduce')
+        p.evaluate("document.documentElement.style.fontSize='200%'")
+        for path in [SCHOOL + '/search', SCHOOL + '/staff', SCHOOL + '/items/item-duffel/claim']:
+            self.route(path)
+            self.assertFalse(p.evaluate('document.documentElement.scrollWidth > innerWidth'), path)
+            p.locator('.skip-link').focus()
+            p.keyboard.press('Enter')
+            expect(p.locator('main')).to_be_focused()
+        p.evaluate("document.querySelector('main').insertAdjacentHTML('beforeend','<span class=spinner id=motion-check></span>')")
+        self.assertEqual(p.locator('#motion-check').evaluate('n=>getComputedStyle(n).animationName'), 'none')
 
     def test_navigation_races_keyboard_and_invalid_search(self):
         p = self.page
@@ -259,7 +503,8 @@ class InterfaceTest(unittest.TestCase):
 
     def test_responsive_pages_landmarks_and_screenshots(self):
         p = self.page
-        routes = ['/', SCHOOL + '/search', SCHOOL + '/items/item-duffel', '/my/claims',
+        routes = ['/', SCHOOL + '/search', SCHOOL + '/items/item-duffel', '/sign-in', '/my/claims',
+                  '/my/claims/claim-approved',
                   SCHOOL + '/items/item-duffel/claim', SCHOOL + '/staff',
                   SCHOOL + '/staff/items', SCHOOL + '/staff/items/new',
                   SCHOOL + '/staff/items/item-jacket', SCHOOL + '/staff/claims/claim-pending']
