@@ -1,5 +1,7 @@
 # Founder B — Phase 0 handoff
 
+2026-10-26 follow-up: the design-only statements below describe the original Phase 0 handoff. The [implemented contract](../coordination/implemented-contract.md) now supplies schema/auth/RLS/Storage/transaction decisions and MVP traceability; [Overseer response](../coordination/overseer-response.md) records current checks. Joint acceptance and external competition facts remain pending.
+
 Status: **Review**, not approved. Based on the supplied LostLink master plan; the referenced 56-task workbook was not included. Competition guidelines were supplied subsequently and are mapped below. No task IDs or acceptance criteria from that unavailable workbook have been invented.
 
 ## Deliverables

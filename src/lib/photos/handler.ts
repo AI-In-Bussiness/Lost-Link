@@ -14,6 +14,7 @@ type PhotoAction = "upload" | "list" | "publish" | "staff_content" | "public_con
 const paging = z.strictObject({
   limit: z.preprocess((value) => typeof value === "string" && /^[1-9]\d*$/.test(value) ? Number(value) : value, z.number().int().min(1).max(50)).default(20),
   cursor: z.string().max(100).optional(),
+  itemId: uuid.optional(),
 });
 const emptyQuery = z.strictObject({});
 const reviewBody = z.strictObject({ reviewed: z.literal(true) });
@@ -81,6 +82,13 @@ export async function handlePhoto(request: NextRequest, action: PhotoAction, par
       const page = paging.parse(query);
       let cursor: string | undefined;
       if (page.cursor) { try { cursor = decodeCursor(page.cursor); } catch { throw new PhotoError(400, "VALIDATION_ERROR", "Invalid cursor."); } }
+      if (page.itemId) {
+        const { data, error } = await client.rpc("staff_item_activity", {p_org_slug: orgSlug, p_item_id: page.itemId, p_after: cursor ?? null, p_limit: page.limit});
+        if (error) throw databasePhotoError(error);
+        if (!Array.isArray(data?.data) || !data.page) throw new PhotoError(503, "UNAVAILABLE", "Activity is temporarily unavailable.");
+        if (data.page.nextCursor) data.page.nextCursor = encodeCursor(data.page.nextCursor);
+        return json(data);
+      }
       let lookup = client.from("audit_events").select("id,actor_id,action,entity_type,entity_id,occurred_at,request_id,previous_status,new_status")
         .eq("organization_id", staff!.organizationId).order("id", { ascending: true }).limit(page.limit + 1);
       if (cursor) lookup = lookup.gt("id", cursor);

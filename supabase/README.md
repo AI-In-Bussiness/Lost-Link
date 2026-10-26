@@ -1,5 +1,7 @@
 # Supabase foundation (Founder B, Phase 1)
 
+Current behavior: [implemented contract](../docs/coordination/implemented-contract.md). The foundation descriptions below are historical; later migrations implement transactional inventory/claims and secure photo processing, deny client staging uploads, and cap photos at 4 MiB. Apply all migrations in order with `supabase migration up --local` on an existing local stack. The new fourth migration adds date filters, separate claimant-safe rejection text and item activity. Do not reset an existing stack to apply it.
+
 Run from the repository root with Docker and the Supabase CLI installed:
 
 ```sh

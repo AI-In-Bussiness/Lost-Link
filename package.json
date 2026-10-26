@@ -24,7 +24,8 @@
     "test:backend": "node scripts/smoke-backend.mjs",
     "test:mocks": "node --experimental-strip-types --test src/mocks/client.test.ts",
     "env:photos": "node scripts/configure-photo-worker.mjs",
-    "test:photos": "node scripts/smoke-photos.mjs"
+    "test:photos": "node scripts/smoke-photos.mjs",
+    "test:browser": "node scripts/test-browser.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "0.12.7",

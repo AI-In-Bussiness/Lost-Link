@@ -1,5 +1,7 @@
 # Phase 3 validation evidence
 
+2026-10-26 remediation: [current combined evidence](../coordination/overseer-response.md) supersedes the original runs’ missing photo/UI/browser statements. Original evidence below remains attributed to its own run.
+
 The records below preserve both original branch reports. They describe their own
 executions and limits. See the [current integration snapshot](../coordination/current-state.md)
 for combined-tree validation and outstanding work.
