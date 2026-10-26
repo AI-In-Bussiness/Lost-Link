@@ -1,6 +1,6 @@
 # Founder B — Phase 5 quality and security
 
-First implementation checkpoint; full Phase 5 remains in progress. Source: plan.pdf, Phase 5 / LL-038–LL-045: permissions, upload security, private claim data, reliability and malicious input. Independent Overseer acceptance and Founder A's browser/accessibility work are separate.
+Founder B engineering scope complete and ready for review. Source: plan.pdf, Phase 5 / LL-038–LL-045: permissions, upload security, private claim data, reliability and malicious input. Independent Overseer acceptance and Founder A's browser/accessibility work are separate. Final code `10061df` passed the [Foundation security and end-to-end checks](https://github.com/AI-In-Bussiness/Lost-Link/actions/runs/40402040638). See [backend review and findings](backend-review.md).
 
 ## Baseline and delivery
 
@@ -18,16 +18,16 @@ The ten-second deadline applies to reading the request body, not the whole route
 
 | Area | Current coverage / evidence to run | Phase 5 state |
 | --- | --- | --- |
-| Anonymous, owner and other-school permissions | supabase/tests/foundation.sql and backend.sql; scripts/smoke-auth.mjs and smoke-backend.mjs | Existing suites retained; fresh CI required |
-| Membership revocation / role escalation | Foundation SQL revocation, policy and direct mutation denials | Existing coverage retained |
-| Private claim proof / staff notes | Foundation/backend/overseer SQL projection checks; HTTP claim tests | Existing coverage retained; no new public fields |
-| Upload decoding / metadata / pixel caps | tests/photo-image.test.ts; photos SQL and smoke-photos.mjs | Unit suite passes; fresh database/HTTP CI required |
-| Stream abuse and malformed multipart | tests/body-streams.test.ts | Seven new tests pass, including public timeout mappings |
+| Anonymous, owner and other-school permissions | supabase/tests/foundation.sql and backend.sql; scripts/smoke-auth.mjs and smoke-backend.mjs | Verified in final Foundation run |
+| Membership revocation / role escalation | Foundation SQL revocation, policy and direct mutation denials | Verified in final Foundation run |
+| Private claim proof / staff notes | Foundation/backend/overseer SQL projection checks; HTTP claim tests | Verified in final Foundation run; no new public fields |
+| Upload decoding / metadata / pixel caps | tests/photo-image.test.ts; photos SQL and smoke-photos.mjs | Unit, SQL and real photo HTTP suites passed |
+| Stream abuse and malformed multipart | tests/body-streams.test.ts | Eight new tests pass, including timeout mappings and fragmentation |
 | CSRF / redirects / unknown fields | Existing auth-security and api-contracts tests | Unit suite passes |
-| Cross-layer persistent journey | test:live and test:browser | CI retained; no local stack reset/start performed |
+| Cross-layer persistent journey | test:live and test:browser | Passed against disposable real Auth/Postgres/Storage in CI |
 | Deployment and real-user operations | Retention/cleanup scheduling, shared deployment throttling, operator configuration and hosted smoke checks | Still open; not approved by this checkpoint |
 | Phase 4 integration | PR12's model, private-input isolation and additional relevance findings | PR12 merged during publication; combined checks rerun |
 
 Validation: npm run lint, npm run typecheck, npm test, npm run build, npm run test:mocks, and git diff --check. The existing Foundation workflow also runs SQL, real Auth/backend/photo HTTP and persisted browser tests. Check the PR for actual remote results; a workflow definition is not passing evidence.
 
-See the [phase report](../../agent-logs/codex-founder-b-phase5__founder-vb__phase-05-security/codex-founder-b-phase5__founder-vb__phase-05-security.md). This checkpoint does not establish the phase exit gate (all essential checks green, no critical security/demo blockers, and independent acceptance).
+See the [phase report](../../agent-logs/codex-founder-b-phase5__founder-vb__phase-05-security/codex-founder-b-phase5__founder-vb__phase-05-security.md). Founder B has completed the implementation, permission/upload/private-data review and essential backend verification. No known critical security or demo-blocking backend defect remains in the reviewed fictional-demo scope. This is not an independent Overseer sign-off, a hosted release approval, or completion of Founder A's separately owned work.

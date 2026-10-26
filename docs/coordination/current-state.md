@@ -2,7 +2,7 @@
 
 ## Founder B Phase 5 started — 2026-10-26 UTC
 
-A focused branch `codex/founder-b-phase-5` starts from current main `b70777e`. It adds bounded request-stream deadlines and a backend security coverage matrix. See [Phase 5](../phase-5/README.md). Main advanced to f18076d during publication and merged Phase 4 PR12. That update is preserved in this branch; full Phase 5 acceptance remains pending.
+A focused branch `codex/founder-b-phase-5` starts from current main `b70777e`. It adds bounded request-stream deadlines and a backend security coverage matrix. See [Phase 5](../phase-5/README.md). Main advanced to f18076d during publication and merged Phase 4 PR12. That update is preserved in this branch; Founder B engineering is complete at 10061df with Foundation run 40402040638 passing backend/security and persisted-browser checks; independent phase acceptance remains separate.
 
 ## Founder B Phase 4 checkpoint — 2026-10-26 UTC
 
