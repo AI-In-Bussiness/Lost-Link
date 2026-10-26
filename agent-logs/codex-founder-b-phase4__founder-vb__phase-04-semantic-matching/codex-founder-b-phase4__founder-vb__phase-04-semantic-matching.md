@@ -41,3 +41,9 @@
 - **Remaining work:** Real-provider evaluation, relevance calibration/distractors, independent review and hosted validation. Local/remote database checks tracked below.
 - **Recommended next steps:** Apply the additive migration to the local disposable stack, securely bind OPENAI_API_KEY, enable the flag locally, run npm run eval:search, review recorded metrics, and keep the draft PR open until the quality gate is satisfied. Do not interpret this checkpoint as completion of the whole team phase.
 - **Relevant references:** docs/phase-4/README.md; docs/phase-0/product-scope.md; docs/phase-0/architecture-contract.md; docs/coordination/implemented-contract.md; upstream Phase 3 reports.
+
+## Validation addendum — 2026-10-26 UTC
+
+- Final local unit run: 38 passed, 0 failed; lint and typecheck passed again after adding the evaluator and twelve-case fallback check.
+- `npm run db:start` began fresh Docker image downloads. This local attempt was explicitly interrupted before startup completed; it is not a SQL validation result. No data reset or hosted mutation was performed. SQL/live/browser checks remain pending in [Foundation CI](https://github.com/AI-In-Bussiness/Lost-Link/actions/runs/40376805286); the [interface workflow](https://github.com/AI-In-Bussiness/Lost-Link/actions/runs/40376805145) also started. At this checkpoint Foundation CI was installing browser dependencies, not yet executing SQL tests.
+- Delivered checkpoint `5cc9c7531e47888cef68c45dc8f0d8c97d2a1391` in draft [PR #12](https://github.com/AI-In-Bussiness/Lost-Link/pull/12). This addendum records handoff evidence; no merge or hosted deployment occurred.
