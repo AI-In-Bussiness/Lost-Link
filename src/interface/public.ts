@@ -38,24 +38,24 @@ function dateControl(value: string): "date" | "text" {
 
 function homeArt(): string {
   return `<figure class="hero-art" aria-label="Illustration of belongings waiting at a school lost-and-found">
-    <div class="art-heading"><span>THE LOST &amp; FOUND</span><span aria-hidden="true">NO. 01</span></div>
+    <div class="art-heading"><span>a few familiar things…</span><span aria-hidden="true">sketch no. 01</span></div>
     <svg viewBox="0 0 480 370" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <path d="M28 308H452M28 322H452" stroke="#beb5a5"/>
       <ellipse cx="246" cy="307" rx="174" ry="13" fill="#d8cfbd"/>
       <g transform="rotate(-7 220 200)">
-        <path d="M160 126v-19a45 45 0 0 1 90 0v19" stroke="#303e3a" stroke-width="12"/>
-        <path d="M150 128c-22 0-35 22-35 48v116c0 13 10 20 23 20h143c13 0 23-7 23-20V176c0-26-13-48-35-48Z" fill="#b96543" stroke="#303e3a" stroke-width="3"/>
-        <path d="M135 173c26-12 121-12 150 0M151 132l-7 166M267 132l7 166" stroke="#85452e" stroke-width="3"/>
-        <rect x="146" y="217" width="125" height="72" rx="13" fill="#cb7952" stroke="#303e3a" stroke-width="3"/>
-        <path d="M155 232h107m-13 0v14" stroke="#303e3a" stroke-width="3"/>
+        <path d="M160 126v-19a45 45 0 0 1 90 0v19" stroke="#293b43" stroke-width="12"/>
+        <path d="M150 128c-22 0-35 22-35 48v116c0 13 10 20 23 20h143c13 0 23-7 23-20V176c0-26-13-48-35-48Z" fill="#e8d9b8" stroke="#293b43" stroke-width="3"/>
+        <path d="M135 173c26-12 121-12 150 0M151 132l-7 166M267 132l7 166" stroke="#71654e" stroke-width="3"/>
+        <rect x="146" y="217" width="125" height="72" rx="13" fill="#eee4cd" stroke="#293b43" stroke-width="3"/>
+        <path d="M155 232h107m-13 0v14" stroke="#293b43" stroke-width="3"/>
         <rect x="186" y="174" width="43" height="22" rx="2" fill="#f8edcf"/>
-        <path d="m217 137 47 33" stroke="#303e3a" stroke-width="2"/>
-        <path d="m260 155 43 15-18 53-43-15Z" fill="#fffaf0" stroke="#303e3a" stroke-width="2"/>
+        <path d="m217 137 47 33" stroke="#293b43" stroke-width="2"/>
+        <path d="m260 155 43 15-18 53-43-15Z" fill="#fffaf0" stroke="#293b43" stroke-width="2"/>
         <circle cx="267" cy="171" r="3" fill="#303e3a"/>
         <path d="m258 186 27 9m-30 1 19 6" stroke="#a49a87" stroke-width="2"/>
       </g>
-      <g transform="rotate(8 354 250)"><rect x="326" y="176" width="59" height="130" rx="19" fill="#7c958a" stroke="#303e3a" stroke-width="3"/><rect x="339" y="158" width="33" height="23" rx="5" fill="#303e3a"/><path d="M337 205v66" stroke="#c4d0be" stroke-width="5" stroke-linecap="round"/></g>
-      <g transform="rotate(-12 87 287)"><path d="M40 285h62l25 19H40Z" fill="#e5c66e" stroke="#303e3a" stroke-width="3"/><path d="M45 304h84v9H45Z" fill="#fffaf0" stroke="#303e3a" stroke-width="3"/><path d="m79 282 7 10m4-10 7 10" stroke="#303e3a" stroke-width="3"/></g>
+      <g transform="rotate(8 354 250)"><rect x="326" y="176" width="59" height="130" rx="19" fill="#d8dfd0" stroke="#293b43" stroke-width="3"/><rect x="339" y="158" width="33" height="23" rx="5" fill="#303e3a"/><path d="M337 205v66" stroke="#c4d0be" stroke-width="5" stroke-linecap="round"/></g>
+      <g transform="rotate(-12 87 287)"><path d="M40 285h62l25 19H40Z" fill="#e5c66e" stroke="#293b43" stroke-width="3"/><path d="M45 304h84v9H45Z" fill="#fffaf0" stroke="#293b43" stroke-width="3"/><path d="m79 282 7 10m4-10 7 10" stroke="#293b43" stroke-width="3"/></g>
       <path d="m371 87 6-13m4 22 14-4M96 149l-15-5" stroke="#a35b3d" stroke-width="2" stroke-linecap="round"/>
     </svg>
     <figcaption><span class="art-note">Left behind.<br><em>Not forgotten.</em></span><span class="art-caption">Your next stop:<br>the school office.</span></figcaption>
@@ -70,7 +70,7 @@ async function home(ctx: ViewContext): Promise<View> {
     organizations.find((org) => org.slug === ctx.orgSlug) ?? organizations[0];
   return {
     title: "Find what you lost",
-    html: `<section class="hero"><div class="hero-copy"><p class="eyebrow">School lost &amp; found</p><h1>Somewhere here,<br><em>it’s still yours.</em></h1><p class="hero-description">The bag from practice. The bottle from lunch. Search what’s been handed in at your school and take the first step to getting it back.</p>${first ? `<form id="home-search" class="hero-search stack" method="get" action="${schoolPath(first.slug)}/search"><div class="field"><label for="home-school">Your school</label><select id="home-school" name="school" required>${organizations.map((org) => option(org.slug, first.slug, org.name)).join("")}</select></div><div class="field"><label for="home-query">What are you looking for?</label><input id="home-query" name="q" type="search" maxlength="300" placeholder="Try “black sports bag”" autocomplete="off"></div><button class="button" type="submit">Find my item <span aria-hidden="true"><svg class="arrow-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button><p class="muted">Browsing is open to everyone. Sign in when you're ready to claim.</p></form>` : '<div class="notice"><p>No schools are currently listing items. Contact your school office for help.</p></div>'}</div>${homeArt()}</section><section class="how-section stack" aria-labelledby="how-it-works"><div class="page-heading"><p class="eyebrow">From found to returned</p><h2 id="how-it-works">Back in your hands, in four steps.</h2><p class="muted">A possible match starts the conversation. School staff verify ownership before collection.</p></div><div class="steps">${[
+    html: `<section class="hero"><div class="hero-copy"><p class="eyebrow">School lost &amp; found</p><h1>Lost something?<br><em>Let’s find it.</em></h1><p class="hero-description">The bag from practice. The bottle from lunch. Search what’s been handed in at your school and take the first step to getting it back.</p>${first ? `<form id="home-search" class="hero-search stack" method="get" action="${schoolPath(first.slug)}/search"><div class="field"><label for="home-school">Your school</label><select id="home-school" name="school" required>${organizations.map((org) => option(org.slug, first.slug, org.name)).join("")}</select></div><div class="field"><label for="home-query">What are you looking for?</label><input id="home-query" name="q" type="search" maxlength="300" placeholder="Try “black sports bag”" autocomplete="off"></div><button class="button" type="submit">Find my item <span aria-hidden="true"><svg class="arrow-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button><p class="muted">Browsing is open to everyone. Sign in when you're ready to claim.</p></form>` : '<div class="notice"><p>No schools are currently listing items. Contact your school office for help.</p></div>'}</div>${homeArt()}</section><section class="how-section stack" aria-labelledby="how-it-works"><div class="page-heading"><p class="eyebrow">From found to returned</p><h2 id="how-it-works">Back in your hands, in four steps.</h2><p class="muted">A possible match starts the conversation. School staff verify ownership before collection.</p></div><div class="steps">${[
       [
         "01",
         "Describe",

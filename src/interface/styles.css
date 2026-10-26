@@ -1,27 +1,38 @@
-/* Founder A Phase 2. Original interface; no external fonts or asset requests. */
+/* Founder A Phase 2. Local OFL fonts and original paper texture; see DESIGN.md. */
+@font-face {
+  font-family: "Caveat";
+  src: url("/design/caveat.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Patrick Hand";
+  src: url("/design/patrick-hand.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
 :root {
-  --ink: #263c36;
-  --muted: #62675d;
+  --ink: #293b43;
+  --muted: #555c59;
   --teal: #28594b;
   --teal-dark: #0e4238;
-  --paper: #faf8f1;
-  --line: #d9d7cb;
+  --paper: #f4efdf;
+  --line: #c8bfa7;
   --soft: #efeee4;
   --lime: #dcefa8;
   --white: #fff;
   --error: #9a2d26;
   --radius: 6px;
-  font-family:
-    Inter,
-    ui-sans-serif,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+  --hand: "Caveat", cursive;
+  --writing: "Patrick Hand", "Segoe Print", cursive;
+  --paper-texture: url("/design/paper.svg");
+  font-family: var(--writing);
   color: var(--ink);
   background: var(--paper);
-  font-size: 16px;
-  line-height: 1.6;
+  font-size: 18px;
+  line-height: 1.5;
   font-synthesis: none;
 }
 * {
@@ -29,6 +40,11 @@
 }
 body {
   margin: 0;
+  color: var(--ink);
+  font-family: var(--writing);
+  background-color: var(--paper);
+  background-image: var(--paper-texture);
+  line-height: 1.5;
 }
 a {
   color: var(--teal);
@@ -654,7 +670,7 @@ td a {
   padding-block: 8px 72px;
 }
 .hero h1 {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--hand);
   font-weight: 400;
   font-size: clamp(2.8rem, 4.8vw, 4.5rem);
   line-height: 1.08;
@@ -718,7 +734,7 @@ td a {
   padding-top: 24px;
 }
 .art-note {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--hand);
   font-size: 2rem;
   line-height: 1.15;
   letter-spacing: -0.04em;
@@ -738,7 +754,7 @@ td a {
   margin: 0;
 }
 .how-section h2 {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--hand);
   font-weight: 400;
   font-size: 2.2rem;
 }
@@ -1158,6 +1174,260 @@ blockquote {
 .table-wrap {
   position: relative;
 }
+/* Paper and pen system. Texture is part of surfaces, never a layer over controls. */
+h1,
+h2,
+h3,
+.brand,
+.art-note,
+.step-number {
+  font-family: var(--hand);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+h1 {
+  font-size: clamp(2.6rem, 5vw, 3.6rem);
+}
+h2 {
+  font-size: 2.1rem;
+}
+h3 {
+  font-size: 1.5rem;
+}
+.site-header,
+.site-footer,
+.school-strip {
+  background: transparent;
+}
+.site-header {
+  border-bottom: 2px solid var(--ink);
+}
+.header-inner {
+  min-height: 84px;
+}
+.brand {
+  font-size: 2.1rem;
+}
+.brand-mark {
+  background: transparent;
+  border: 2px solid var(--ink);
+  color: var(--ink);
+  border-radius: 45% 55% 40% 50%;
+  transform: rotate(-7deg);
+}
+.main-nav a,
+.account-name {
+  font-size: 1rem;
+}
+.main-nav a[aria-current] {
+  text-decoration-style: wavy;
+  text-underline-offset: 8px;
+}
+.school-strip {
+  border-bottom-style: dashed;
+  font-size: 0.9rem;
+}
+.main-content {
+  padding-block: 46px 64px;
+}
+.eyebrow {
+  font-family: var(--writing);
+  font-size: 0.82rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+}
+.hero {
+  gap: 64px;
+  align-items: start;
+  padding-bottom: 56px;
+}
+.hero h1 {
+  font-size: clamp(3.6rem, 6vw, 5.1rem);
+  line-height: 0.98;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+}
+.hero h1 em {
+  font-style: normal;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 12px;
+}
+.hero h1 em::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 96%;
+  height: 8px;
+  border-bottom: 3px solid var(--teal);
+  border-radius: 50%;
+  transform: rotate(-2deg);
+}
+.hero-copy > .hero-description {
+  font-size: 1.12rem;
+  line-height: 1.5;
+  max-width: 440px;
+}
+.hero-search {
+  border-left: 2px solid #b66e5b;
+  padding: 8px 0 8px 24px;
+  max-width: 450px;
+}
+.hero-search label {
+  font-size: 1rem;
+}
+.hero-search > p {
+  font-size: 0.88rem;
+}
+.field input,
+.field select,
+.field textarea,
+input:not([type="checkbox"]):not([type="radio"]),
+select,
+textarea {
+  background: #fffdf580;
+  border: 1px solid #8c9285;
+  border-bottom: 2px solid var(--ink);
+  border-radius: 3px 7px 3px 5px;
+  font-size: 1rem;
+}
+button,
+.button {
+  font-size: 1.05rem;
+  font-weight: 400;
+  border-radius: 4px 8px 3px 6px;
+}
+.secondary {
+  border-color: var(--ink);
+  background: transparent;
+}
+.hero-art {
+  background: #fcf7e8;
+  background-image: var(--paper-texture);
+  border: 1px solid #bdb298;
+  padding: 28px;
+  margin-top: 48px;
+  transform: rotate(2deg);
+  box-shadow: 3px 6px 0 #293b4310;
+}
+.hero-art::before {
+  content: "";
+  position: absolute;
+  width: 122px;
+  height: 32px;
+  left: calc(50% - 61px);
+  top: -17px;
+  background: #d8c99db3;
+  border-inline: 2px dotted #bcb08a80;
+  transform: rotate(-5deg);
+}
+.art-heading {
+  font-family: var(--hand);
+  font-size: 1.2rem;
+  letter-spacing: 0;
+  border-bottom-style: dashed;
+}
+.hero-art figcaption {
+  border-top-style: dashed;
+  padding-top: 18px;
+}
+.art-note {
+  font-size: 2.3rem;
+}
+.art-caption {
+  font-size: 0.95rem;
+}
+.how-section {
+  border-top: 2px solid var(--ink);
+  padding-block: 32px 48px;
+}
+.how-section h2 {
+  font-size: 2.8rem;
+}
+.steps {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 0;
+  padding-block: 0;
+  gap: 28px 64px;
+}
+.step {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  column-gap: 18px;
+  align-content: start;
+}
+.step > .step-number {
+  grid-row: 1 / 3;
+  width: 44px;
+  height: 44px;
+  border: 2px solid var(--ink);
+  border-radius: 48% 42% 51% 44%;
+  font-size: 1.4rem;
+  transform: rotate(-6deg);
+  margin: 0;
+}
+.step h3 {
+  font-family: var(--hand);
+  font-size: 1.6rem;
+  margin: 0 0 6px;
+}
+.step p {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.staff-callout {
+  background: transparent;
+  border: 1px dashed var(--ink);
+  border-left: 3px solid var(--ink);
+}
+.card,
+.filter-panel,
+.table-wrap,
+.stat,
+.item-card {
+  background-color: #fffdf580;
+  border-radius: 3px 8px 4px 6px;
+}
+.card h2 {
+  font-size: 1.7rem;
+}
+.item-card h3 {
+  font-size: 1.4rem;
+}
+.item-card-body .eyebrow {
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+}
+.item-card-body p,
+.filter-panel .field label {
+  font-size: 0.95rem;
+}
+.filter-panel h2 {
+  font-size: 1.6rem;
+}
+.badge {
+  font-size: 0.85rem;
+  border-radius: 4px;
+}
+.stat strong {
+  font-family: var(--hand);
+  font-weight: 600;
+}
+th {
+  background: #eae3d0;
+}
+.footer-inner {
+  font-size: 0.95rem;
+}
+@media (max-width: 1000px) {
+  .hero {
+    gap: 32px;
+  }
+  .hero h1 {
+    font-size: 3.7rem;
+  }
+}
 @media (min-width: 1300px) {
   .main-content {
     padding-top: 68px;
@@ -1423,5 +1693,41 @@ blockquote {
   }
   .spinner {
     border-color: var(--teal);
+  }
+}
+
+@media (max-width: 700px) {
+  .hero h1 {
+    font-size: clamp(3.1rem, 13vw, 4.5rem);
+  }
+  .hero-art {
+    width: calc(100% - 12px);
+    margin: 16px 6px 8px;
+    padding: 20px;
+  }
+  .hero-copy > .hero-description {
+    font-size: 1.08rem;
+  }
+  .hero-search {
+    padding-left: 16px;
+  }
+  .steps {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .how-section h2 {
+    font-size: 2.3rem;
+  }
+  .art-note {
+    font-size: 2rem;
+  }
+  .art-caption {
+    font-size: 0.85rem;
+  }
+  .main-nav a {
+    font-size: 0.95rem;
+  }
+  .header-inner .brand {
+    font-size: 1.8rem;
   }
 }

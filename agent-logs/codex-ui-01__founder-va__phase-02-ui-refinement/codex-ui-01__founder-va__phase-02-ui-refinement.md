@@ -43,3 +43,30 @@
 - **Remaining work:** Independent design/PR review; no phase-gate approval claimed.
 - **Recommended next steps:** Review desktop and phone homepage plus the search/claim/staff workflow, then merge through the repository's PR process.
 - **Relevant references:** docs/phase-2/ui-design-notes.md; docs/coordination/task-board.csv; original Phase 2 handoff.
+
+## Dated addendum — 2026-10-26: paper and pen
+
+- **Trigger:** User rejected the first pass as too similar, provided the Agent's
+  Design guide and explicitly requested paper background and pen-stroke lettering.
+- **Work:** Read the supplied article and original Founder A homepage at dc58f92;
+  created DESIGN.md, original grain SVG and licensed local Caveat/Patrick Hand
+  font assets. Reworked shared lettering, controls and surfaces; taped illustration,
+  notebook-margin search and a two-column written checklist replace the first pass.
+- **Files:** public/design/, DESIGN.md, src/interface/public.ts and styles.css,
+  tools/phase2-preview.mjs, existing research notes and coordination board.
+- **Implementation boundary:** Three explicit local asset paths added to preview;
+  TTF buffers served as binary font/ttf. No broader directory exposure, API changes
+  or external runtime requests. Both fonts ship with their OFL license files.
+- **Reflection:** The first version changed colors and serif type but retained too
+  much of the original visual grammar. The second version makes the requested
+  material and handwriting visible. Handwritten fonts are an intentional readability
+  trade-off; input text remains upright and at least 18px with standard semantics.
+- **Validation:** Lint, root/scoped TypeScript and production build passed.
+  Desktop and mobile screenshots inspected with document.fonts.ready. Full browser
+  and accessibility results recorded below after completion.
+- **Handoff:** Same PR #10; independent design review still required. SQL/live DB
+  suites not rerun because the revision changes only presentation and preview assets.
+- **Completed verification:** All 14 browser cases passed with axe enabled, including
+  twelve routes at 320/768/1440px. Three new asset responses matched source bytes
+  and correct MIME types; four unlisted/private paths returned 404. Formatting and
+  git diff --check passed. No independent phase acceptance or deployment claimed.

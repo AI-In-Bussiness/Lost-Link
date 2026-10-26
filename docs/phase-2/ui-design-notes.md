@@ -48,3 +48,26 @@ run axe case also passed across twelve route/persona combinations.
 No hosted deployment or independent phase approval is implied. The live adapter's
 existing placeholder-photo limitation remains separate integration work. Real
 inventory photography should replace placeholders when that work is completed.
+
+## Paper-and-pen revision — October 26, 2026
+
+The task owner found the first pass too similar to the original and supplied
+[How to Stop AI-Generated UI Looking Templated](https://agent-design.com/blog/stop-ai-ui-looking-templated).
+Its useful recommendations here are explicit typography/material constraints and
+a short persistent design specification, rather than another palette-only pass.
+See the new root DESIGN.md for the implemented system.
+
+Revisited the original Founder A homepage at dc58f92. Its school selector, search,
+claim guidance and staff entry remain. The revised design uses a tiled original
+paper-grain SVG, locally hosted Caveat and Patrick Hand (SIL OFL licenses included),
+ink rules, a notebook margin, a taped sketch and a two-column written checklist.
+Body writing and form inputs remain upright; only decorative art is rotated.
+Paper is a background, never an overlay that could obscure text or pointer targets.
+
+Fonts come from google/fonts: ofl/caveat/Caveat[wght].ttf and
+ofl/patrickhand/PatrickHand-Regular.ttf, downloaded October 26, 2026. Runtime assets
+are same-origin. The local preview allowlists exactly the three design assets and
+serves font bytes with font/ttf MIME; its private-file boundary stays intact.
+
+This supersedes the first pass's Georgia/no-added-assets choices. Existing backend
+contracts and real-photo integration boundaries are unchanged.
