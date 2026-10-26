@@ -73,8 +73,12 @@ Local lint, both TypeScript checks, formatting, unit/mock/search-tooling checks,
 the two failure-before/fix-after regressions and the doubled-text phone check
 passed. The application compiled with `node_modules/.bin/next build`.
 All 17 standalone browser cases passed with axe enabled and no skips.
-Expanded local persisted checks and new-code CI remain pending; the phase
-report records their final outcomes.
+The expanded persisted suite and all Foundation checks passed remotely on
+code commit `83cd353`: [Foundation run](https://github.com/AI-In-Bussiness/Lost-Link/actions/runs/40403763199)
+and [interface run](https://github.com/AI-In-Bussiness/Lost-Link/actions/runs/40403763155).
+The phase report records exact evidence. Local Docker could not unpack the
+Postgres layer because its storage ran out of space; no local persisted pass
+is claimed.
 
 The first shell attempts lacked network/socket access. Explicit network access
 restored Git and registry access; the full shared branch is now checked out
