@@ -41,3 +41,9 @@ These are pinned to inspected commits because their files are not yet in main.
 
 The PDF and deck have been located, but were not re-extracted in this
 organization pass. Their interpretation remains in the existing phase documents.
+
+## Phase 2 interface and review evidence
+
+- [Runnable interface guide](phase-2/interface-guide.md)
+- [Overseer response and route/state evidence](phase-2/review-response.md)
+- [Founder A Phase 2 handoff](phase-2/founder-a-handoff.md)

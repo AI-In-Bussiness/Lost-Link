@@ -47,3 +47,7 @@ handoffs. Do not copy reports into main as if their implementation were merged.
 
 Add links for future reports when useful. A report records scoped completion;
 shared phase acceptance still requires its review evidence.
+
+## Founder A Phase 2 delivery
+
+- [Implementation and merge-readiness addendum](codex-founder-a-02__founder-va__phase-02-website-interface/codex-founder-a-02__founder-va__phase-02-website-interface.md)

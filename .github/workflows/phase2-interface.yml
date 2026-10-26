@@ -1,0 +1,68 @@
+name: Phase 2 interface
+
+on:
+  pull_request:
+    paths:
+      - 'src/interface/**'
+      - 'src/mocks/**'
+      - 'public/mock-assets/**'
+      - 'tools/phase2*'
+      - 'tools/phase2/**'
+      - '.github/workflows/phase2-interface.yml'
+  push:
+    branches: [main, codex/founder-a-phase-2]
+    paths:
+      - 'src/interface/**'
+      - 'src/mocks/**'
+      - 'public/mock-assets/**'
+      - 'tools/phase2*'
+      - 'tools/phase2/**'
+      - '.github/workflows/phase2-interface.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  interface:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: tools/phase2/package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: tools/phase2/requirements.txt
+      - run: npm ci --prefix tools/phase2
+      - run: python -m pip install -r tools/phase2/requirements.txt
+      - run: python -m playwright install --with-deps chromium
+      - run: npm --prefix tools/phase2 run typecheck
+      - run: npm --prefix tools/phase2 run format:check
+      - run: npm --prefix tools/phase2 run test:mocks
+      - name: Start local preview
+        run: |
+          node tools/phase2-preview.mjs > /tmp/lostlink-preview.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/lostlink-preview.log
+          exit 1
+      - name: Browser journeys and accessibility
+        env:
+          AXE_SCRIPT: ${{ github.workspace }}/tools/phase2/node_modules/axe-core/axe.min.js
+        run: python tools/phase2-browser-test.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: phase2-review-evidence
+          path: |
+            /tmp/lostlink-*.png
+            /tmp/lostlink-preview.log
+          if-no-files-found: ignore

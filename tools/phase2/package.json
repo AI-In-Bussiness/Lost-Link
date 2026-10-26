@@ -1,0 +1,17 @@
+{
+  "name": "lostlink-phase2-checks",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Isolated verification tools for the Phase 2 mock interface",
+  "scripts": {
+    "typecheck": "tsc --project tsconfig.json",
+    "test:mocks": "node --experimental-strip-types ../../src/mocks/client.test.ts",
+    "test:browser": "python ../phase2-browser-test.py",
+    "format:check": "prettier --check ../../src/interface ../phase2-preview.mjs ../phase2-preview.html"
+  },
+  "devDependencies": {
+    "axe-core": "4.14.0",
+    "prettier": "3.8.1",
+    "typescript": "6.0.2"
+  }
+}

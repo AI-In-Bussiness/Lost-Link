@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>LostLink · School lost &amp; found</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="/src/interface/styles.css" />
+  </head>
+  <body>
+    <div class="prototype-notice">
+      INTERACTIVE PROTOTYPE
+      <span>Fictional data · changes reset on refresh · no real accounts</span>
+    </div>
+    <div id="app"></div>
+    <aside class="demo-panel" aria-label="Prototype review controls">
+      <details>
+        <summary>Demo controls</summary>
+        <div class="demo-controls">
+          <label
+            >View as<select id="demo-persona">
+              <option value="anonymous">Visitor</option>
+              <option value="student">Avery · student</option>
+              <option value="otherStudent">Jordan · student</option>
+              <option value="staff">Cedar Grove · staff</option>
+              <option value="otherStaff">Maple Hill · staff</option>
+            </select></label
+          ><label
+            >Scenario<select id="demo-scenario">
+              <option value="normal">Normal</option>
+              <option value="slow">Slow loading</option>
+              <option value="empty">Empty inventory</option>
+              <option value="network">Request failure</option>
+              <option value="rateLimit">Rate limited</option>
+              <option value="aiUnavailable">Smart matching unavailable</option>
+            </select></label
+          ><button id="demo-reset" type="button" class="secondary">
+            Reset demo data
+          </button>
+          <p>
+            Review tools only. Mock personas do not provide authentication. Use
+            invented details.
+          </p>
+        </div>
+      </details>
+    </aside>
+    <script type="module" src="/src/interface/demo.ts"></script>
+  </body>
+</html>
