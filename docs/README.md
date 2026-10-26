@@ -52,3 +52,6 @@ organization pass. Their interpretation remains in the existing phase documents.
 - [Founder B Phase 4 semantic matching checkpoint](phase-4/README.md) — free local CPU inference with synthetic evaluation; independent acceptance pending.
 - [Founder A Phase 4 cases and explanations](phase-4/founder-a-handoff.md) — frozen additional relevance set and reproducible diagnostics.
 - [Founder A Phase 5 browser quality](phase-5/founder-a-handoff.md) — focus recovery, phone text reflow and expanded live accessibility/error checks.
+
+
+- [Founder B Phase 6 demo reliability](phase-6/README.md) — repeatable seed/accounts, honest matching evidence, rehearsal and recovery.

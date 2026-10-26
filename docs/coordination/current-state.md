@@ -4,6 +4,11 @@
 
 A focused branch `codex/founder-b-phase-5` starts from current main `b70777e`. It adds bounded request-stream deadlines and a backend security coverage matrix. See [Phase 5](../phase-5/README.md). Main advanced to f18076d during publication and merged Phase 4 PR12. That update is preserved in this branch; Founder B engineering is complete at 10061df with Foundation run 40402040638 passing backend/security and persisted-browser checks; independent phase acceptance remains separate.
 
+## Founder B Phase 6 completed — 2026-10-26 UTC
+
+PR15 provides repeatable seed/account checks, operational preflight and the demo/evidence/recovery runbook. Final code f7b6c75 includes main e913f89 and passes Foundation run 40405351921 and Windows/Linux helper run 40405351767. See [Phase 6](../phase-6/README.md). Founder A presentation and independent judging remain separate; Phase5 PR14 integration and hosted Phase7 verification are still release dependencies.
+
+
 ## Founder B Phase 4 checkpoint — 2026-10-26 UTC
 
 Based on integrated main `b70777e`, draft PR #12 (`codex/founder-b-phase-4`) now runs local CPU MiniLM embeddings with no paid inference API/key. Public-only scoped retrieval, hybrid ranking and keyword fallback remain. The unmerged paid-provider quota migration was removed. Pinned model assets download during build; inference disables network access. Real local-model evaluation on twelve fixed synthetic queries with ten inventory items found 8/8 positive queries in top three versus 5/8 for the keyword counterpart, zero false positives on four negative/trap cases and zero school leaks. These are calibration results, not held-out accuracy. See [Phase 4](../phase-4/README.md); hosted verification and independent acceptance remain open.

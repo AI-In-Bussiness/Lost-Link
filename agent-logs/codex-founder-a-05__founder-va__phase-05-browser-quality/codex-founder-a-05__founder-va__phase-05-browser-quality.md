@@ -74,3 +74,21 @@ with the native subprocess permissions required by the fixture passed.
 No application behavior was edited during resolution;
 full integration checks rerun in CI on the merge commit. The PR itself remains
 open for the task owner to merge after its checks.
+
+## Second conflict-resolution addendum — 2026-10-26 UTC
+
+Main advanced again to `617bdf0` after PR #15 integrated Founder B Phase 6.
+The task owner requested the resulting PR #14 conflicts be resolved. Preserved
+both versions' report links, documentation links, Phase 5/6 state summaries and
+all task-board entries in the four conflicted documentation files. The Phase 6
+preflight/repeatability scripts, package commands and Foundation workflow are
+retained exactly as delivered on main. Existing Phase 5 interface/security code
+and evidence remain intact.
+
+Validation: checked exact parent-row preservation and unique CSV IDs, every
+nonempty parent line in the four resolved files, file-path preservation and
+byte equality for all automatically merged main-side files. New demo scripts
+pass Node syntax checks; lint and TypeScript checks pass on the combined tree.
+Full database/model/live/browser validation reruns in CI; it was not repeated
+locally for this documentation-only resolution. The PR remains open for the
+task owner to merge after checks.
