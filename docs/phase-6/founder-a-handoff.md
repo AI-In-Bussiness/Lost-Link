@@ -1,6 +1,6 @@
 # Founder A — Phase 6 competition polish
 
-Prepared 2026-10-26 by `codex-founder-a-06`, Founder A. Status: **Review**. This is the Founder A contribution to shared [PR #15](https://github.com/AI-In-Bussiness/Lost-Link/pull/15), not independent phase acceptance.
+Prepared 2026-10-26 by `codex-founder-a-06`, Founder A. Status: **Review**. This is the Founder A follow-up after [Founder B PR #15](https://github.com/AI-In-Bussiness/Lost-Link/pull/15) merged during implementation. Delivery branch: `codex/founder-a-phase-6`. It is not independent phase acceptance.
 
 ## Delivered
 
@@ -26,6 +26,6 @@ These browser checks use the existing explicitly labeled local mock harness. The
 
 Founder A's scoped code and presentation drafts are ready for independent review. The full phase gate still needs a timed real-app recording/rehearsal, the final combined release, and the Overseer's skeptical review. Suggested challenge areas are unvalidated demand, the broader relevance set's five false positives/failed proposed gate, and final hosted/release acceptance. These suggestions are not an independent review result.
 
-Team facts, costs/credits, sourced research, contributions, organizer dates/destination and final submission approval remain unconfirmed. Do not replace them with synthetic statistics or infer zero spend from local inference. Do not present mock preview screenshots as the required working website. Phase 7 owns final approved presentation materials and hosted smoke verification. Follow the existing shared PR workflow; no merge or deployment is performed here.
+Team facts, costs/credits, sourced research, contributions, organizer dates/destination and final submission approval remain unconfirmed. Do not replace them with synthetic statistics or infer zero spend from local inference. Do not present mock preview screenshots as the required working website. Phase 7 owns final approved presentation materials and hosted smoke verification. Follow the existing PR workflow; no pull request is merged and no deployment is performed here.
 
 Full actions, reflections and cross-phase notes: [required agent report](../../agent-logs/codex-founder-a-06__founder-va__phase-06-competition-polish/codex-founder-a-06__founder-va__phase-06-competition-polish.md).

@@ -30,7 +30,7 @@
 - **Extra visual probe:** `/tmp/lostlink-phase6-visual.py` passed home/staff at four widths (320/390/768/1440), normal/200% text, no horizontal page overflow, correct pending-first order and approved-claim navigation, with zero uncaught errors. Inspected `/tmp/lostlink-phase6-staff-1440.png` and `/tmp/lostlink-phase6-home-320.png` directly. The original doubled-text failure preceded the carried-forward Phase 5 CSS fixes.
 - **Document checks:** Original source extraction, rubric/Q&A mapping, relative Markdown links, CSV shape/status and `git diff --check`; exact final results recorded in the publication addendum.
 - **Tests not run:** Production build, actual local-model evaluation, SQL/HTTP/photo/demo repeatability/persisted-browser suites and hosted smoke tests were not rerun for presentation-only changes. Normal root `npm ci` failed during Supabase CLI postinstall DNS resolution; `npm ci --ignore-scripts` installed check tooling. Scoped tools installed normally. No claim that ignored postinstall constitutes production setup. No timed human rehearsal, recording or manual screen-reader audit.
-- **Deliverables:** [Founder A handoff](../../docs/phase-6/founder-a-handoff.md), [presentation](../../docs/phase-6/presentation.md), [evidence register](../../docs/phase-6/submission-evidence.csv), shared [PR #15](https://github.com/AI-In-Bussiness/Lost-Link/pull/15). Local screenshots are clearly labeled mock-interface evidence.
+- **Deliverables:** [Founder A handoff](../../docs/phase-6/founder-a-handoff.md), [presentation](../../docs/phase-6/presentation.md), [evidence register](../../docs/phase-6/submission-evidence.csv), Founder A follow-up branch `codex/founder-a-phase-6` after [Founder B PR #15](https://github.com/AI-In-Bussiness/Lost-Link/pull/15) merged. Local screenshots are clearly labeled mock-interface evidence.
 
 ## Thoughts and reflections
 - **What worked well:** Existing shared components and school-notebook styling let a small presentation change clarify the important distinction between reservation and completed return. The operational runbook already supplied safe demo setup/recovery.
@@ -58,3 +58,16 @@ whitespace checks passed. Verified the excluded summary file does not exist.
 No secrets, external messages, hosted writes, database resets or production
 deployments were performed. Shared PR publication preserves Founder B's work;
 runtime CI status and independent acceptance remain separately observable.
+
+## Concurrent integration addendum — 2026-10-26
+
+Before publication, the shared remote advanced to `b6585e1` with Founder B's
+completed handoff. Merged that update and resolved the two coordination-document
+conflicts by preserving both checkpoint sections and B6's updated Review row
+alongside A6. Founder B's runbook and report were retained verbatim. PR15 then
+merged as main `617bdf0` before Founder A's push. Created the focused follow-up
+branch `codex/founder-a-phase-6`, merged current main and retained both ancestries.
+Founder A implementation is `cc9495c`; integration is `66a776e`. No runtime
+files changed during these documentation merges, so the already-executed
+presentation/unit/browser checks still cover the final runtime tree. A focused
+follow-up PR delivers Founder A work; the old PR is an integrated dependency.

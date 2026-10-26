@@ -2,7 +2,7 @@
 
 ## Founder A Phase 6 presentation checkpoint — 2026-10-26 UTC
 
-Delivered for review on shared PR #15: homepage privacy copy, pending-first
+Delivered for review on `codex/founder-a-phase-6` after PR15 merged: homepage privacy copy, pending-first
 staff dashboard with collection guidance, responsive wrapping from Phase 5,
 and brand/demo/pitch drafts. See [Founder A handoff](../phase-6/founder-a-handoff.md).
 Local lint/type/format checks, 38 unit tests, 14 mocks and 14 browser scenarios
