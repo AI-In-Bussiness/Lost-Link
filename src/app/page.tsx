@@ -1,4 +1,3 @@
-import Link from 'next/link';
-export default function Home() {
- return <main id="main" className="mx-auto max-w-5xl px-6 py-16"><p className="mb-4 text-sm font-bold uppercase tracking-widest text-emerald-800">A safer way back</p><h1 className="max-w-3xl text-5xl font-bold tracking-tight sm:text-6xl">Lost something?<br/>Let’s make the connection.</h1><p className="mt-6 max-w-xl text-lg text-slate-700">Describe your belongings, discover a possible match, and let staff verify ownership before returning it.</p><ol className="my-12 grid gap-6 sm:grid-cols-3">{[['Search','Look within your school’s found items.'],['Claim','Keep your ownership evidence private.'],['Return','Staff verify before handing an item over.']].map(([title,text],i)=><li key={title} className="rounded-xl border border-emerald-900/15 bg-white p-6"><p className="text-sm text-emerald-800">0{i+1}</p><h2 className="mt-2 text-xl font-bold">{title}</h2><p className="mt-2 text-slate-700">{text}</p></li>)}</ol><section aria-labelledby="foundation" className="rounded-xl bg-emerald-950 p-8 text-white"><h2 id="foundation" className="text-xl font-bold">Development foundation</h2><p className="my-3 max-w-2xl">Account access is being prepared. Inventory, search, and claim workflows are planned for the next phases.</p><Link href="/sign-in" className="font-bold underline">Go to account sign in</Link></section></main>;
-}
+import LivePage from "@/interface/live-page";
+export const dynamic = "force-dynamic";
+export default function Home() { return <LivePage />; }

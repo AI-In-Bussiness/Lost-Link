@@ -25,7 +25,7 @@ Lost-and-found searches can take time for both the person looking and the staff 
 
 ## Development and Founder B handoff
 
-Lost-and-found for a fictional school competition demo. Founder B's Phase 1 foundation uses Next.js App Router, TypeScript, Tailwind and Supabase Auth/PostgreSQL/Storage. Founder B’s Phase 2 backend now supports structured search, inventory mutations and private claim review/return APIs. The interface and photo pipeline are not connected yet; semantic AI remains later work. See the [Phase 2 API handoff](docs/phase-2/README.md).
+Lost-and-found for a fictional school competition demo. Founder B's Phase 1 foundation uses Next.js App Router, TypeScript, Tailwind and Supabase Auth/PostgreSQL/Storage. Founder B’s Phase 2 backend now supports structured search, inventory mutations and private claim review/return APIs. Founder A’s Phase 3 branch connects the interface to these APIs; the photo pipeline remains unavailable; semantic AI remains later work. See the [Phase 2 API handoff](docs/phase-2/README.md) and [Phase 3 integration handoff](docs/phase-3/founder-a-handoff.md).
 
 ## Local development
 
@@ -86,3 +86,9 @@ GitHub Actions runs the same checks against disposable local services. A workflo
 See [Phase 1 handoff](docs/phase-1/README.md) for hosted prerequisites, configuration and readiness evidence. No Supabase or Vercel project is created by cloning this repository.
 
 Architecture and security decisions: [Phase 0 handoff](docs/phase-0/README.md). License: [Apache 2.0](LICENSE).
+
+### Phase 3 interface checks
+
+The homepage, `/o/:slug/search`, item/claim screens, `/my/claims` and staff workspace now use the real cookie-authenticated API. `LOSTLINK_ORGANIZATION_SLUGS` optionally sets the school selector’s comma-separated public slugs (defaults to the two fictional seed schools). Direct organization URLs are also resolved by the API. Sign in with an operator-provisioned account; the real application has no demo persona controls.
+
+For repeatable browser checks, start `npm start` and, separately, `node tools/phase2-preview.mjs`, then run `python tools/phase3-browser-test.py` with Python Playwright and Chromium installed. This suite checks production routes and exercises authenticated interactions in an isolated HTTP-fixture harness. It does **not** prove Supabase persistence. See the Phase 3 handoff for the blocked live check and missing photo support.

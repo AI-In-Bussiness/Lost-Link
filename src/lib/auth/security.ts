@@ -21,10 +21,10 @@ export function isSameOrigin(origin: string | null, expected: string): boolean {
   }
 }
 
-export function safeReturnPath(value: unknown): "/account" {
-  // One allowed destination until more protected screens exist.
-  void value;
-  return "/account";
+export function safeReturnPath(value: unknown): string {
+  if (typeof value !== "string" || value.length > 500 || /[\\\x00-\x20]/.test(value)) return "/account";
+  // Exact application paths only. No query, fragment, escaping or arbitrary origin.
+  return /^(?:\/account|\/my\/claims(?:\/[a-zA-Z0-9-]+)?|\/o\/[a-z0-9]+(?:-[a-z0-9]+)*\/(?:search|items\/[a-zA-Z0-9-]+(?:\/claim)?|staff(?:\/(?:items(?:\/[a-zA-Z0-9-]+)?|claims\/[a-zA-Z0-9-]+))?))$/.test(value) ? value : "/account";
 }
 
 export function credentialsFromForm(form: URLSearchParams): { email: string; password: string } | null {

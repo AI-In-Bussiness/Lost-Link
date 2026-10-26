@@ -1,0 +1,99 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { createHttpApi } from "../src/interface/http";
+import { safeReturnPath } from "../src/lib/auth/security";
+
+const dto = { id: "claim-1", itemId: "item-1", organizationSlug: "maple-school", itemTitle: "Black bag", status: "submitted", evidenceText: "Fictional private evidence", submittedAt: "2026-10-25T12:00:00Z", reviewedAt: null, decisionReason: null, version: 7 };
+const response = (data: unknown, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } });
+
+test("claim submission sends only ownership evidence, with same-origin cookies and no cache", async () => {
+  const api = createHttpApi([], async (url, init) => {
+    assert.equal(url, "/api/v1/organizations/maple-school/items/item-1/claims");
+    assert.equal(init?.credentials, "same-origin");
+    assert.equal(init?.cache, "no-store");
+    assert.equal(init?.method, "POST");
+    assert.deepEqual(JSON.parse(String(init?.body)), { evidenceText: "Fictional private evidence" });
+    return response({ data: dto }, 201);
+  });
+  const saved = await api.submitClaim({ orgSlug: "maple-school", itemId: "item-1", ownershipEvidence: dto.evidenceText, contactEmail: "ignored@example.test" });
+  assert.ok(saved.ok);
+  assert.equal(saved.data.status, "pending");
+  assert.equal(saved.data.version, 7);
+  assert.equal(saved.data.itemTitle, "Black bag");
+  assert.equal(saved.data.item, undefined, "do not invent a public item snapshot");
+  assert.equal(saved.data.contactEmail, "", "do not invent contact details");
+});
+
+test("review and return send the rendered version and private notes without retrying conflicts", async () => {
+  const calls: { url: string; body: unknown }[] = [];
+  const api = createHttpApi([], async (url, init) => {
+    calls.push({ url: String(url), body: JSON.parse(String(init?.body)) });
+    return response({ error: { code: "CONFLICT", message: "Internal SQL must not be shown" } }, 409);
+  });
+  const result = await api.decideClaim({ orgSlug: "maple-school", claimId: dto.id, decision: "reject", reason: "Private note", expectedVersion: 7 });
+  assert.equal(result.ok, false);
+  assert.equal(calls.length, 1);
+  assert.deepEqual(calls[0].body, { expectedVersion: 7, decision: "reject", privateNote: "Private note" });
+  await api.recordReturn({ orgSlug: "maple-school", itemId: dto.itemId, approvedClaimId: dto.id, expectedVersion: 8 });
+  assert.deepEqual(calls[1].body, { expectedVersion: 8, ownershipVerified: true });
+  assert.equal((await api.decideClaim({ orgSlug: "maple-school", claimId: dto.id, decision: "approve" })).ok, false);
+  assert.equal(calls.length, 2, "missing version must not cause a write");
+});
+
+test("cursor pages retain filters and versions; withdrawn/cancelled claims remain distinct", async () => {
+  const paths: string[] = [];
+  const api = createHttpApi([], async url => {
+    paths.push(String(url));
+    return paths.length === 1 ? response({ data: [{ ...dto, status: "withdrawn" }], page: { nextCursor: "opaque-cursor" } }) :
+      response({ data: [{ ...dto, id: "claim-2", status: "cancelled" }], page: { nextCursor: null } });
+  });
+  const result = await api.listStaffClaims({ orgSlug: "maple-school", status: "pending", pageSize: 1, page: 2 });
+  assert.ok(result.ok);
+  assert.equal(result.data.total, 2);
+  assert.equal(result.data.items[0].status, "cancelled");
+  assert.match(paths[1], /status=submitted/);
+  assert.match(paths[1], /cursor=opaque-cursor/);
+  assert.equal(result.data.items[0].version, 7);
+});
+
+test("cursor loops fail visibly instead of presenting truncated totals", async () => {
+  let count = 0;
+  const api = createHttpApi([], async () => { count++; return response({ data: [], page: { nextCursor: "same" } }); });
+  assert.equal((await api.listMyClaims()).ok, false);
+  assert.equal(count, 2);
+});
+
+test("search uses ranked endpoint, exposes a bounded result set, and rejects unsupported filters", async () => {
+  let count = 0;
+  const api = createHttpApi([], async (url, init) => {
+    count++;
+    assert.equal(url, "/api/v1/organizations/maple-school/search");
+    assert.deepEqual(JSON.parse(String(init?.body)), { query: "black bag", category: "bag", limit: 50 });
+    return response({ data: [{ item: { id: "item-1", organizationSlug: "maple-school", title: "Bag", publicDescription: "Public facts", category: "bag", color: "black", publicLocation: "Gym", foundDate: "2026-10-24" }, reasons: ["Matching public item details"] }] });
+  });
+  const result = await api.searchItems({ orgSlug: "maple-school", query: "black bag", category: "bag" });
+  assert.ok(result.ok);
+  assert.equal(result.data.limited, true);
+  assert.deepEqual(result.data.items[0].matchReasons, ["Matching public item details"]);
+  assert.equal((await api.searchItems({ orgSlug: "maple-school", from: "2026-01-01" })).ok, false);
+  assert.equal(count, 1);
+});
+
+test("safe failures map validation fields, authentication, throttling and malformed responses", async () => {
+  for (const [code, expected] of [["UNAUTHORIZED", "UNAUTHENTICATED"], ["RATE_LIMITED", "RATE_LIMITED"], ["UNAVAILABLE", "INTERNAL_ERROR"], ["VALIDATION_ERROR", "VALIDATION_ERROR"]]) {
+    const api = createHttpApi([], async () => response({ error: { code, message: "private diagnostic", fields: { evidenceText: "private diagnostic" } } }, 400));
+    const result = await api.getPublicItem("maple-school", "item-1");
+    assert.ok(!result.ok);
+    assert.equal(result.error.code, expected);
+    assert.equal(result.error.fieldErrors?.ownershipEvidence, "Check this value.");
+    assert.ok(!JSON.stringify(result).includes("private diagnostic"));
+  }
+  const api = createHttpApi([], async () => new Response("bad gateway", { status: 502 }));
+  assert.equal((await api.listOrganizations()).ok, true, "no configured slugs needs no requests");
+  assert.equal((await api.getPublicItem("maple-school", "item-1")).ok, false);
+});
+
+test("sign-in continuation permits product routes while rejecting disguised external paths", () => {
+  for (const path of ["/my/claims", "/my/claims/claim-1", "/o/maple-school/items/item-1/claim", "/o/maple-school/staff/items/new", "/o/maple-school/staff"]) assert.equal(safeReturnPath(path), path);
+  for (const path of ["//evil.test", "/\\evil.test", "/%2f%2fevil.test", "/sign-in", "/api/auth/sign-out", "/o/maple-school/search?next=//evil.test", "/my/claims\n"]) assert.equal(safeReturnPath(path), "/account");
+});

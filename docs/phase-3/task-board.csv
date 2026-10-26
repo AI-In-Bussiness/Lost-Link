@@ -1,0 +1,7 @@
+id,roadmap_range,owner,task,status,evidence,reviewer,blocker
+A3-01,LL-022–LL-030,Founder A,Mount finished screens in Next.js with real session display,Review,src/interface/live-page.tsx;src/interface/live-client.tsx,Overseer,Independent review pending
+A3-02,LL-022–LL-030,Founder A,Connect public search and private claim forms/history,Review,src/interface/http.ts;tests/interface-http.test.ts,Overseer,Live Supabase persistence unverified
+A3-03,LL-022–LL-030,Founder A,Connect staff intake and versioned approval/rejection/return,Review,src/interface/staff.ts;tools/phase3-browser-test.py,Overseer,Live Supabase persistence unverified
+A3-04,LL-022–LL-030,Founder B,Provide secure photo upload and delivery contract,Blocked,docs/phase-2/README.md,Overseer,Current endpoints return empty photos arrays
+A3-05,LL-022–LL-030,Overseer,Run fresh-account real workflow with refresh persistence,Blocked,docs/phase-3/validation.md,Independent reviewer,Supabase startup denied at public.ecr.aws image registry
+A3-06,LL-022–LL-030,Both founders,Resolve generic rejection and missing date/activity contract differences,Review,docs/phase-3/founder-a-handoff.md,Overseer,Final MVP contract decisions pending

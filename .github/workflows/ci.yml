@@ -5,6 +5,10 @@ permissions:
 jobs:
   check:
     runs-on: ubuntu-latest
+    env:
+      # The default public ECR endpoint rate-limits fresh hosted runners.
+      # Use Supabase's public GHCR mirror with the same CLI-pinned image tags.
+      SUPABASE_INTERNAL_IMAGE_REGISTRY: ghcr.io
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

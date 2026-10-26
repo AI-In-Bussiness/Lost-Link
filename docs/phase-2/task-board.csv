@@ -1,0 +1,8 @@
+Task ID,Task,Owner,Status,Evidence,Reviewer,Open issue
+A2-001,Brand and reusable interface components,Founder A,Review,src/interface/styles.css;src/interface/shared.ts;src/interface/app.ts,Overseer,Visual and accessibility acceptance required
+A2-002,Homepage and school navigation,Founder A,Review,src/interface/public.ts,Overseer,Uses fictional schools
+A2-003,Student search results and item details,Founder A,Review,src/interface/public.ts,Overseer,Keyword mock matching only
+A2-004,Private claim screens and statuses,Founder A,Review,src/interface/claims.ts,Overseer,Real authentication and persistence await Founder B
+A2-005,Staff dashboard intake review and handover,Founder A,Review,src/interface/staff.ts,Overseer,Placeholder illustration only; real uploads await backend
+A2-006,Responsive mock preview and validation,Founder A,Review,tools/phase2-preview.mjs;tools/phase2-browser-test.py,Overseer,Next.js integration and independent acceptance remain
+A2-007,Phase documentation and integration handoff,Founder A,Review,docs/phase-2/interface-guide.md;agent-logs,Founder B and Overseer,Original LL-015 through LL-021 task mapping unavailable
