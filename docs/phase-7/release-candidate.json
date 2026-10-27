@@ -1,7 +1,7 @@
 {
   "status": "blocked",
-  "sourceRevision": "77e46af122db4b566113345c167cca3b9bff5f39",
-  "sourceMeaning": "Integrated application baseline; Phase 7 PR adds release verification and operations. Replace with accepted merge SHA before locking.",
+  "sourceRevision": "567ad420f62f6b7c8e6c0580dc9994dc8a89928e",
+  "sourceMeaning": "Merged Phase 7 candidate; production alias identity and authenticated/rollback acceptance still require provider inspection before locking.",
   "productionOrigin": "https://lost-link-beta.vercel.app",
   "vercelProject": "ddar2425s-projects/lost-link",
   "supabaseProjectRefToConfirm": "ldhwtrxhmaanfcgmtsbp",
@@ -49,12 +49,12 @@
   "baselineChecks": [
     {
       "name": "Foundation",
-      "runId": 40444642079,
+      "runId": 40558339465,
       "conclusion": "success"
     },
     {
       "name": "Linux and Windows helpers",
-      "runId": 40444642093,
+      "runId": 40558339463,
       "conclusion": "success"
     }
   ],
@@ -69,5 +69,27 @@
     "fresh hosted photo-claim-return journey",
     "compatible verified rollback deployment and rehearsal",
     "independent release acceptance"
-  ]
+  ],
+  "publicSmoke": {
+    "path": "docs/phase-7/public-smoke-after-setup.json",
+    "observedAt": "2026-10-27T19:25:48.183Z",
+    "passed": true,
+    "checks": 17,
+    "search": {
+      "maple-school": {
+        "mode": "hybrid",
+        "semanticStatus": "available"
+      },
+      "cedar-school": {
+        "mode": "hybrid",
+        "semanticStatus": "available"
+      }
+    }
+  },
+  "reportedVercelCommitStatus": {
+    "sha": "567ad420f62f6b7c8e6c0580dc9994dc8a89928e",
+    "state": "success",
+    "inspectorUrl": "https://vercel.com/ddar2425s-projects/lost-link/3U89roLdWYWdGUtEvcnStnPNgSkv",
+    "scope": "GitHub commit status only; production alias/deployment identity not yet inspected"
+  }
 }

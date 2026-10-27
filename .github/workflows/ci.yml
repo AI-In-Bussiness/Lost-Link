@@ -7,9 +7,9 @@ jobs:
   check:
     runs-on: ubuntu-latest
     env:
-      # The default public ECR endpoint rate-limits fresh hosted runners.
-      # Use Supabase's public GHCR mirror with the same CLI-pinned image tags.
-      SUPABASE_INTERNAL_IMAGE_REGISTRY: ghcr.io
+      # Use the CLI's original upstream images; both mirror registries can throttle.
+      # The CLI preserves its pinned versions and upstream repository names.
+      SUPABASE_INTERNAL_IMAGE_REGISTRY: docker.io
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -33,17 +33,19 @@ jobs:
       - name: Start Supabase with official-registry rate-limit recovery
         shell: bash
         run: |
-          if npm run db:start 2> /tmp/lostlink-db-start.log; then
-            cat /tmp/lostlink-db-start.log
-          else
+          for registry in docker.io ghcr.io public.ecr.aws; do
+            if SUPABASE_INTERNAL_IMAGE_REGISTRY="$registry" npm run db:start 2> /tmp/lostlink-db-start.log; then
+              cat /tmp/lostlink-db-start.log
+              exit 0
+            fi
             cat /tmp/lostlink-db-start.log >&2
             if ! grep -Eqi 'toomanyrequests|too many requests|429 Too Many Requests' /tmp/lostlink-db-start.log; then
               exit 1
             fi
-            # Same CLI-pinned Supabase versions from its original official registry.
+            # Retry only registry throttling, keeping all pinned versions.
             # SQL/startup/assertion failures still fail; no database is reset.
-            SUPABASE_INTERNAL_IMAGE_REGISTRY=public.ecr.aws npm run db:start
-          fi
+          done
+          exit 1
       - run: npm run env:local
       - run: npm run env:photos
       - run: npm run model:download
