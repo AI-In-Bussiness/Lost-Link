@@ -59,3 +59,5 @@ organization pass. Their interpretation remains in the existing phase documents.
 - [Founder B Phase 6 demo reliability](phase-6/README.md) — repeatable seed/accounts, honest matching evidence, rehearsal and recovery.
 
 - [Founder B Phase 7 deployment and release](phase-7/README.md) — executed public smoke, production configuration, candidate pins and rollback; hosted gate blocked in issue #20.
+
+- [Founder A Phase 7 final UX and Overseer review](phase-7/founder-a-review.md) — fresh 17-scenario browser and 98-link evidence, Phase 0–6 gate matrix, urgent issues and submission limits.

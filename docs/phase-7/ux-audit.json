@@ -1,0 +1,959 @@
+{
+  "scope": "Loopback fixtures; no hosted or persistence claim",
+  "routes": [
+    {
+      "path": "/",
+      "persona": "anonymous",
+      "links": [
+        {
+          "href": "#main",
+          "destination": "/",
+          "heading": "Lost something?\nLet\u2019s find it."
+        },
+        {
+          "href": "/",
+          "destination": "/",
+          "heading": "Lost something?\nLet\u2019s find it."
+        },
+        {
+          "href": "/o/cedar-grove/search",
+          "destination": "/o/cedar-grove/search",
+          "heading": "Let's find your item."
+        },
+        {
+          "href": "/my/claims",
+          "destination": "/my/claims",
+          "heading": "Sign in to continue"
+        },
+        {
+          "href": "/sign-in",
+          "destination": "/sign-in",
+          "heading": "Pick up where you left off."
+        }
+      ],
+      "controls": [
+        {
+          "tag": "SELECT",
+          "id": "home-school",
+          "type": "select-one",
+          "text": "Cedar Grove School\nMaple Hill School",
+          "labels": [
+            "Your school"
+          ]
+        },
+        {
+          "tag": "INPUT",
+          "id": "home-query",
+          "type": "search",
+          "text": "",
+          "labels": [
+            "What are you looking for?"
+          ]
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "type": "submit",
+          "text": "Find my item",
+          "labels": []
+        }
+      ]
+    },
+    {
+      "path": "/o/cedar-grove/search",
+      "persona": "anonymous",
+      "links": [
+        {
+          "href": "#main",
+          "destination": "/o/cedar-grove/search",
+          "heading": "Let's find your item."
+        },
+        {
+          "href": "/",
+          "destination": "/",
+          "heading": "Lost something?\nLet\u2019s find it."
+        },
+        {
+          "href": "/o/cedar-grove/search",
+          "destination": "/o/cedar-grove/search",
+          "heading": "Let's find your item."
+        },
+        {
+          "href": "/my/claims",
+          "destination": "/my/claims",
+          "heading": "Sign in to continue"
+        },
+        {
+          "href": "/sign-in",
+          "destination": "/sign-in",
+          "heading": "Pick up where you left off."
+        },
+        {
+          "href": "/o/cedar-grove/items/item-bottle",
+          "destination": "/o/cedar-grove/items/item-bottle",
+          "heading": "Blue reusable water bottle"
+        },
+        {
+          "href": "/o/cedar-grove/items/item-keys",
+          "destination": "/o/cedar-grove/items/item-keys",
+          "heading": "Keys on a red loop"
+        },
+        {
+          "href": "/o/cedar-grove/items/item-duffel",
+          "destination": "/o/cedar-grove/items/item-duffel",
+          "heading": "Black Nike duffel bag"
+        },
+        {
+          "href": "/o/cedar-grove/items/item-lunchbag",
+          "destination": "/o/cedar-grove/items/item-lunchbag",
+          "heading": "Green insulated lunch bag"
+        },
+        {
+          "href": "/o/cedar-grove/items/item-backpack",
+          "destination": "/o/cedar-grove/items/item-backpack",
+          "heading": "Black athletic backpack"
+        },
+        {
+          "href": "/o/cedar-grove/items/item-hoodie",
+          "destination": "/o/cedar-grove/items/item-hoodie",
+          "heading": "Grey zip hoodie"
+        },
+        {
+          "href": "/o/cedar-grove/search?page=2",
+          "destination": "/o/cedar-grove/search?page=2",
+          "heading": "Let's find your item."
+        }
+      ],
+      "controls": [
+        {
+          "tag": "INPUT",
+          "id": "q",
+          "type": "search",
+          "text": "",
+          "labels": [
+            "Describe your item"
+          ]
+        },
+        {
+          "tag": "SELECT",
+          "id": "category",
+          "type": "select-one",
+          "text": "All categories\nBag\nClothing\nElectronics\nBottle\nKeys\nAccessory\nOther",
+          "labels": [
+            "Category"
+          ]
+        },
+        {
+          "tag": "SELECT",
+          "id": "color",
+          "type": "select-one",
+          "text": "All colors\nBlack\nBlue\nGreen\nGrey\nNavy\nPurple\nRed\nWhite\nYellow",
+          "labels": [
+            "Color"
+          ]
+        },
+        {
+          "tag": "INPUT",
+          "id": "from",
+          "type": "date",
+          "text": "",
+          "labels": [
+            "Found on or after"
+          ]
+        },
+        {
+          "tag": "INPUT",
+          "id": "to",
+          "type": "date",
+          "text": "",
+          "labels": [
+            "Found on or before"
+          ]
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "type": "submit",
+          "text": "Search items",
+          "labels": []
+        }
+      ]
+    },
+    {
+      "path": "/o/cedar-grove/items/item-duffel",
+      "persona": "anonymous",
+      "links": [
+        {
+          "href": "#main",
+          "destination": "/o/cedar-grove/items/item-duffel",
+          "heading": "Black Nike duffel bag"
+        },
+        {
+          "href": "/",
+          "destination": "/",
+          "heading": "Lost something?\nLet\u2019s find it."
+        },
+        {
+          "href": "/o/cedar-grove/search",
+          "destination": "/o/cedar-grove/search",
+          "heading": "Let's find your item."
+        },
+        {
+          "href": "/my/claims",
+          "destination": "/my/claims",
+          "heading": "Sign in to continue"
+        },
+        {
+          "href": "/sign-in",
+          "destination": "/sign-in",
+          "heading": "Pick up where you left off."
+        },
+        {
+          "href": "/sign-in?returnTo=%2Fo%2Fcedar-grove%2Fitems%2Fitem-duffel%2Fclaim",
+          "destination": "/sign-in?returnTo=%2Fo%2Fcedar-grove%2Fitems%2Fitem-duffel%2Fclaim",
+          "heading": "Pick up where you left off."
+        }
+      ],
+      "controls": []
+    },
+    {
+      "path": "/sign-in",
+      "persona": "anonymous",
+      "links": [
+        {
+          "href": "#main",
+          "destination": "/sign-in",
+          "heading": "Pick up where you left off."
+        },
+        {
+          "href": "/",
+          "destination": "/",
+          "heading": "Lost something?\nLet\u2019s find it."
+        },
+        {
+          "href": "/o/cedar-grove/search",
+          "destination": "/o/cedar-grove/search",
+          "heading": "Let's find your item."
+        },
+        {
+          "href": "/my/claims",
+          "destination": "/my/claims",
+          "heading": "Sign in to continue"
+        },
+        {
+          "href": "/sign-in",
+          "destination": "/sign-in",
+          "heading": "Pick up where you left off."
+        }
+      ],
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "id": "demo-student",
+          "type": "button",
+          "text": "Continue as demo student",
+          "labels": []
+        },
+        {
+          "tag": "BUTTON",
+          "id": "demo-staff",
+          "type": "button",
+          "text": "Continue as demo staff",
+          "labels": []
+        }
+      ]
+    },
+    {
+      "path": "/o/cedar-grove/items/item-duffel/claim",
+      "persona": "student",
+      "links": [
+        {
+          "href": "#main",
+          "destination": "/o/cedar-grove/items/item-duffel/claim",
+          "heading": "Tell us what makes it yours."
+        },
+        {
+          "href": "/",
+          "destination": "/",
+          "heading": "Lost something?\nLet\u2019s find it."
+        },
+        {
+          "href": "/o/cedar-grove/search",
+          "destination": "/o/cedar-grove/search",
+          "heading": "Let's find your item."
+        },
+        {
+          "href": "/my/claims",
+          "destination": "/my/claims",
+          "heading": "My claims"
+        },
+        {
+          "href": "/o/cedar-grove/items/item-duffel",
+          "destination": "/o/cedar-grove/items/item-duffel",
+          "heading": "Black Nike duffel bag"
+        }
+      ],
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "id": "sign-out",
+          "type": "button",
+          "text": "Sign out",
+          "labels": []
+        },
+        {
+          "tag": "INPUT",
+          "id": "contactEmail",
+          "type": "email",
+          "text": "",
+          "labels": [
+            "Contact email"
+          ]
+        },
+        {
+          "tag": "TEXTAREA",
+          "id": "ownershipEvidence",
+          "type": "textarea",
+          "text": "",
+          "labels": [
+            "How can staff tell this belongs to you?"
+          ]
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "type": "submit",
+          "text": "Send private claim",
+          "labels": []
+        }
+      ]
+    },
+    {
+      "path": "/my/claims",
+      "persona": "student",
+      "links": [
+        {
+          "href": "#main",
+          "destination": "/my/claims",
+          "heading": "My claims"
+        },
+        {
+          "href": "/",
+          "destination": "/",
+          "heading": "Lost something?\nLet\u2019s find it."
+        },
+        {
+          "href": "/o/cedar-grove/search",
+          "destination": "/o/cedar-grove/search",
+          "heading": "Let's find your item."
+        },
+        {
+          "href": "/my/claims",
+          "destination": "/my/claims",
+          "heading": "My claims"
+        },
+        {
+          "href": "/my/claims/claim-pending",
+          "destination": "/my/claims/claim-pending",
+          "heading": "Your claim is with staff."
+        },
+        {
+          "href": "/my/claims/claim-approved",
+          "destination": "/my/claims/claim-approved",
+          "heading": "Ready for collection."
+        },
+        {
+          "href": "/my/claims/claim-rejected",
+          "destination": "/my/claims/claim-rejected",
+          "heading": "This claim wasn\u2019t approved."
+        }
+      ],
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "id": "sign-out",
+          "type": "button",
+          "text": "Sign out",
+          "labels": []
+        }
+      ]
+    },
+    {
+      "path": "/my/claims/claim-approved",
+      "persona": "student",
+      "links": [
+        {
+          "href": "#main",
+          "destination": "/my/claims/claim-approved",
+          "heading": "Ready for collection."
+        },
+        {
+          "href": "/",
+          "destination": "/",
+          "heading": "Lost something?\nLet\u2019s find it."
+        },
+        {
+          "href": "/o/cedar-grove/search",
+          "destination": "/o/cedar-grove/search",
+          "heading": "Let's find your item."
+        },
+        {
+          "href": "/my/claims",
+          "destination": "/my/claims",
+          "heading": "My claims"
+        }
+      ],
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "id": "sign-out",
+          "type": "button",
+          "text": "Sign out",
+          "labels": []
+        }
+      ]
+    },
+    {
+      "path": "/o/cedar-grove/staff",
+      "persona": "staff",
+      "links": [
+        {
+          "href": "#main",
+          "destination": "/o/cedar-grove/staff",
+          "heading": "A little care. A happy return."
+        },
+        {
+          "href": "/",
+          "destination": "/",
+          "heading": "Lost something?\nLet\u2019s find it."
+        },
+        {
+          "href": "/o/cedar-grove/search",
+          "destination": "/o/cedar-grove/search",
+          "heading": "Let's find your item."
+        },
+        {
+          "href": "/my/claims",
+          "destination": "/my/claims",
+          "heading": "My claims"
+        },
+        {
+          "href": "/o/cedar-grove/staff",
+          "destination": "/o/cedar-grove/staff",
+          "heading": "A little care. A happy return."
+        },
+        {
+          "href": "/o/cedar-grove/staff/items",
+          "destination": "/o/cedar-grove/staff/items",
+          "heading": "Found items"
+        },
+        {
+          "href": "/o/cedar-grove/staff/items/new",
+          "destination": "/o/cedar-grove/staff/items/new",
+          "heading": "Give a found item a way home."
+        },
+        {
+          "href": "/o/cedar-grove/staff/items?status=available",
+          "destination": "/o/cedar-grove/staff/items?status=available",
+          "heading": "Found items"
+        },
+        {
+          "href": "/o/cedar-grove/staff/items?status=reserved",
+          "destination": "/o/cedar-grove/staff/items?status=reserved",
+          "heading": "Found items"
+        },
+        {
+          "href": "/o/cedar-grove/staff/items?status=returned",
+          "destination": "/o/cedar-grove/staff/items?status=returned",
+          "heading": "Found items"
+        },
+        {
+          "href": "/o/cedar-grove/staff?status=approved",
+          "destination": "/o/cedar-grove/staff?status=approved",
+          "heading": "A little care. A happy return."
+        },
+        {
+          "href": "/o/cedar-grove/staff/claims/claim-pending",
+          "destination": "/o/cedar-grove/staff/claims/claim-pending",
+          "heading": "Review this claim"
+        },
+        {
+          "href": "/o/cedar-grove/staff/claims/claim-competing",
+          "destination": "/o/cedar-grove/staff/claims/claim-competing",
+          "heading": "Review this claim"
+        }
+      ],
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "id": "sign-out",
+          "type": "button",
+          "text": "Sign out",
+          "labels": []
+        },
+        {
+          "tag": "SELECT",
+          "id": "status",
+          "type": "select-one",
+          "text": "Pending\nApproved\nRejected\nFulfilled\nAll claims",
+          "labels": [
+            "Claim status"
+          ]
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "type": "submit",
+          "text": "Apply filter",
+          "labels": []
+        }
+      ]
+    },
+    {
+      "path": "/o/cedar-grove/staff/items",
+      "persona": "staff",
+      "links": [
+        {
+          "href": "#main",
+          "destination": "/o/cedar-grove/staff/items",
+          "heading": "Found items"
+        },
+        {
+          "href": "/",
+          "destination": "/",
+          "heading": "Lost something?\nLet\u2019s find it."
+        },
+        {
+          "href": "/o/cedar-grove/search",
+          "destination": "/o/cedar-grove/search",
+          "heading": "Let's find your item."
+        },
+        {
+          "href": "/my/claims",
+          "destination": "/my/claims",
+          "heading": "My claims"
+        },
+        {
+          "href": "/o/cedar-grove/staff",
+          "destination": "/o/cedar-grove/staff",
+          "heading": "A little care. A happy return."
+        },
+        {
+          "href": "/o/cedar-grove/staff/items",
+          "destination": "/o/cedar-grove/staff/items",
+          "heading": "Found items"
+        },
+        {
+          "href": "/o/cedar-grove/staff/items/new",
+          "destination": "/o/cedar-grove/staff/items/new",
+          "heading": "Give a found item a way home."
+        },
+        {
+          "href": "/o/cedar-grove/staff/items/item-duffel",
+          "destination": "/o/cedar-grove/staff/items/item-duffel",
+          "heading": "Black Nike duffel bag"
+        },
+        {
+          "href": "/o/cedar-grove/staff/items/item-backpack",
+          "destination": "/o/cedar-grove/staff/items/item-backpack",
+          "heading": "Black athletic backpack"
+        },
+        {
+          "href": "/o/cedar-grove/staff/items/item-bottle",
+          "destination": "/o/cedar-grove/staff/items/item-bottle",
+          "heading": "Blue reusable water bottle"
+        },
+        {
+          "href": "/o/cedar-grove/staff/items/item-hoodie",
+          "destination": "/o/cedar-grove/staff/items/item-hoodie",
+          "heading": "Grey zip hoodie"
+        },
+        {
+          "href": "/o/cedar-grove/staff/items/item-calculator",
+          "destination": "/o/cedar-grove/staff/items/item-calculator",
+          "heading": "Scientific calculator"
+        },
+        {
+          "href": "/o/cedar-grove/staff/items/item-keys",
+          "destination": "/o/cedar-grove/staff/items/item-keys",
+          "heading": "Keys on a red loop"
+        },
+        {
+          "href": "/o/cedar-grove/staff/items/item-cap",
+          "destination": "/o/cedar-grove/staff/items/item-cap",
+          "heading": "Navy baseball cap"
+        },
+        {
+          "href": "/o/cedar-grove/staff/items/item-umbrella",
+          "destination": "/o/cedar-grove/staff/items/item-umbrella",
+          "heading": "Yellow folding umbrella"
+        },
+        {
+          "href": "/o/cedar-grove/staff/items/item-lunchbag",
+          "destination": "/o/cedar-grove/staff/items/item-lunchbag",
+          "heading": "Green insulated lunch bag"
+        },
+        {
+          "href": "/o/cedar-grove/staff/items/item-jacket",
+          "destination": "/o/cedar-grove/staff/items/item-jacket",
+          "heading": "Red rain jacket"
+        },
+        {
+          "href": "/o/cedar-grove/staff/items?page=2",
+          "destination": "/o/cedar-grove/staff/items?page=2",
+          "heading": "Found items"
+        }
+      ],
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "id": "sign-out",
+          "type": "button",
+          "text": "Sign out",
+          "labels": []
+        },
+        {
+          "tag": "SELECT",
+          "id": "status",
+          "type": "select-one",
+          "text": "All items\nAvailable\nReserved\nReturned",
+          "labels": [
+            "Item status"
+          ]
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "type": "submit",
+          "text": "Apply filter",
+          "labels": []
+        }
+      ]
+    },
+    {
+      "path": "/o/cedar-grove/staff/items/new",
+      "persona": "staff",
+      "links": [
+        {
+          "href": "#main",
+          "destination": "/o/cedar-grove/staff/items/new",
+          "heading": "Give a found item a way home."
+        },
+        {
+          "href": "/",
+          "destination": "/",
+          "heading": "Lost something?\nLet\u2019s find it."
+        },
+        {
+          "href": "/o/cedar-grove/search",
+          "destination": "/o/cedar-grove/search",
+          "heading": "Let's find your item."
+        },
+        {
+          "href": "/my/claims",
+          "destination": "/my/claims",
+          "heading": "My claims"
+        },
+        {
+          "href": "/o/cedar-grove/staff",
+          "destination": "/o/cedar-grove/staff",
+          "heading": "A little care. A happy return."
+        },
+        {
+          "href": "/o/cedar-grove/staff/items",
+          "destination": "/o/cedar-grove/staff/items",
+          "heading": "Found items"
+        },
+        {
+          "href": "/o/cedar-grove/staff/items/new",
+          "destination": "/o/cedar-grove/staff/items/new",
+          "heading": "Give a found item a way home."
+        }
+      ],
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "id": "sign-out",
+          "type": "button",
+          "text": "Sign out",
+          "labels": []
+        },
+        {
+          "tag": "INPUT",
+          "id": "title",
+          "type": "text",
+          "text": "",
+          "labels": [
+            "Item title"
+          ]
+        },
+        {
+          "tag": "TEXTAREA",
+          "id": "publicDescription",
+          "type": "textarea",
+          "text": "",
+          "labels": [
+            "Public description"
+          ]
+        },
+        {
+          "tag": "SELECT",
+          "id": "category",
+          "type": "select-one",
+          "text": "Bag\nClothing\nElectronics\nBottle\nKeys\nAccessory\nOther",
+          "labels": [
+            "Category"
+          ]
+        },
+        {
+          "tag": "INPUT",
+          "id": "color",
+          "type": "text",
+          "text": "",
+          "labels": [
+            "Color"
+          ]
+        },
+        {
+          "tag": "INPUT",
+          "id": "foundLocation",
+          "type": "text",
+          "text": "",
+          "labels": [
+            "Broad found location"
+          ]
+        },
+        {
+          "tag": "INPUT",
+          "id": "foundDate",
+          "type": "date",
+          "text": "",
+          "labels": [
+            "Date found"
+          ]
+        },
+        {
+          "tag": "INPUT",
+          "id": "photo",
+          "type": "file",
+          "text": "",
+          "labels": [
+            "Choose or replace photo"
+          ]
+        },
+        {
+          "tag": "BUTTON",
+          "id": "photo-remove",
+          "type": "button",
+          "text": "Remove photo",
+          "labels": []
+        },
+        {
+          "tag": "BUTTON",
+          "id": "photo-demo",
+          "type": "button",
+          "text": "Use demo illustration",
+          "labels": []
+        },
+        {
+          "tag": "INPUT",
+          "id": "photo.alt",
+          "type": "text",
+          "text": "",
+          "labels": [
+            "Image description"
+          ]
+        },
+        {
+          "tag": "TEXTAREA",
+          "id": "verificationNotes",
+          "type": "textarea",
+          "text": "",
+          "labels": [
+            "Identifying notes (optional)"
+          ]
+        },
+        {
+          "tag": "INPUT",
+          "id": "storageLocation",
+          "type": "text",
+          "text": "",
+          "labels": [
+            "Staff storage location"
+          ]
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "type": "submit",
+          "text": "Preview public listing >",
+          "labels": []
+        }
+      ]
+    },
+    {
+      "path": "/o/cedar-grove/staff/items/item-jacket",
+      "persona": "staff",
+      "links": [
+        {
+          "href": "#main",
+          "destination": "/o/cedar-grove/staff/items/item-jacket",
+          "heading": "Red rain jacket"
+        },
+        {
+          "href": "/",
+          "destination": "/",
+          "heading": "Lost something?\nLet\u2019s find it."
+        },
+        {
+          "href": "/o/cedar-grove/search",
+          "destination": "/o/cedar-grove/search",
+          "heading": "Let's find your item."
+        },
+        {
+          "href": "/my/claims",
+          "destination": "/my/claims",
+          "heading": "My claims"
+        },
+        {
+          "href": "/o/cedar-grove/staff",
+          "destination": "/o/cedar-grove/staff",
+          "heading": "A little care. A happy return."
+        },
+        {
+          "href": "/o/cedar-grove/staff/items",
+          "destination": "/o/cedar-grove/staff/items",
+          "heading": "Found items"
+        },
+        {
+          "href": "/o/cedar-grove/staff/items/new",
+          "destination": "/o/cedar-grove/staff/items/new",
+          "heading": "Give a found item a way home."
+        },
+        {
+          "href": "/o/cedar-grove/staff/claims/claim-approved",
+          "destination": "/o/cedar-grove/staff/claims/claim-approved",
+          "heading": "Review this claim"
+        }
+      ],
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "id": "sign-out",
+          "type": "button",
+          "text": "Sign out",
+          "labels": []
+        },
+        {
+          "tag": "INPUT",
+          "id": "handover",
+          "type": "checkbox",
+          "text": "",
+          "labels": [
+            " I confirm Red rain jacket has been handed to avery@example.invalid for claim claim-approved."
+          ]
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "type": "submit",
+          "text": "Mark item returned",
+          "labels": []
+        }
+      ]
+    },
+    {
+      "path": "/o/cedar-grove/staff/claims/claim-pending",
+      "persona": "staff",
+      "links": [
+        {
+          "href": "#main",
+          "destination": "/o/cedar-grove/staff/claims/claim-pending",
+          "heading": "Review this claim"
+        },
+        {
+          "href": "/",
+          "destination": "/",
+          "heading": "Lost something?\nLet\u2019s find it."
+        },
+        {
+          "href": "/o/cedar-grove/search",
+          "destination": "/o/cedar-grove/search",
+          "heading": "Let's find your item."
+        },
+        {
+          "href": "/my/claims",
+          "destination": "/my/claims",
+          "heading": "My claims"
+        },
+        {
+          "href": "/o/cedar-grove/staff",
+          "destination": "/o/cedar-grove/staff",
+          "heading": "A little care. A happy return."
+        },
+        {
+          "href": "/o/cedar-grove/staff/items",
+          "destination": "/o/cedar-grove/staff/items",
+          "heading": "Found items"
+        },
+        {
+          "href": "/o/cedar-grove/staff/items/new",
+          "destination": "/o/cedar-grove/staff/items/new",
+          "heading": "Give a found item a way home."
+        },
+        {
+          "href": "/o/cedar-grove/staff/items/item-bottle",
+          "destination": "/o/cedar-grove/staff/items/item-bottle",
+          "heading": "Blue reusable water bottle"
+        }
+      ],
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "id": "sign-out",
+          "type": "button",
+          "text": "Sign out",
+          "labels": []
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "type": "submit",
+          "text": "Approve for collection",
+          "labels": []
+        },
+        {
+          "tag": "TEXTAREA",
+          "id": "reason",
+          "type": "textarea",
+          "text": "",
+          "labels": [
+            "Reason for rejection"
+          ]
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "type": "submit",
+          "text": "Reject claim",
+          "labels": []
+        }
+      ]
+    }
+  ],
+  "findings": [
+    "A7-UX-01: anonymous live-mode navigation hardcodes maple-school before a school route is visited"
+  ],
+  "linkChecks": 98,
+  "pagination": {
+    "passed": true,
+    "firstPageItems": 6,
+    "secondPageItems": 6
+  },
+  "singleSchoolNavigation": {
+    "configuredSchool": "cedar-school",
+    "href": "/o/maple-school/search",
+    "headingAfterClick": "This page is unavailable",
+    "passed": false
+  }
+}

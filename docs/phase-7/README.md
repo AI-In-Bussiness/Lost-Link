@@ -5,6 +5,12 @@ locked demo release, and an audit of automated checks. Founder A owns final UX
 and the requested Phase 0–6 review; the independent Overseer owns final
 production smoke and rubric acceptance.
 
+Founder A's [final UX and Phase 0–6 Overseer review](founder-a-review.md) joins
+the same PR. It records fresh browser/link evidence, the supported-school
+navigation defect (#24), missing submission evidence (#25), and the existing
+production, relevance and final-head CI blockers. The review does not approve
+the production release or submission.
+
 **Status: blocked for production acceptance.** On 2026-10-27 the public pages
 load, but both schools' organization/inventory/search APIs return 503. See
 [release blocker #20](https://github.com/AI-In-Bussiness/Lost-Link/issues/20)
