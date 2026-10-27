@@ -26,7 +26,10 @@ export function mountLostLink(root: HTMLElement, host: InterfaceHost) {
   const navigate = (path: string) => {
     const next = new URL(path, location.origin);
     if (next.origin !== location.origin) return;
-    if (host.live && ["/sign-in", "/sign-up", "/account"].includes(next.pathname)) {
+    if (
+      host.live &&
+      ["/sign-in", "/sign-up", "/account"].includes(next.pathname)
+    ) {
       location.assign(next.pathname + next.search);
       return;
     }

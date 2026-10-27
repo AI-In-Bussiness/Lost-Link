@@ -36,6 +36,12 @@ recovery, external redirect sanitization, missing/duplicate callback-code
 recovery and the corrected callback no-referrer response. The second direct
 Next production build also passed after the header fix.
 
+CI review addendum: the first Phase 2 interface job rejected the modified
+navigation line's formatting. Applied the pinned Prettier formatter to that
+file and ran the interface formatting/type checks locally. Final review also
+restricted the sign-up error-message lookup to own keys so arbitrary URL
+parameters cannot select Object.prototype properties.
+
 ## Thoughts and reflections
 - **What worked well:** Reusing the existing SSR and security utilities kept the new route consistent with sign-in without adding privileged server capabilities.
 - **What was difficult or surprising:** A production HTTP probe found next.config.ts's global Referrer-Policy overrides the route header. Added the more specific callback rule and required a repeat HTTP probe.
