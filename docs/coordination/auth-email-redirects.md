@@ -1,5 +1,10 @@
 # Repair email confirmation redirects
 
+Resolved on 2026-10-27 after the task owner saved the dashboard settings below.
+A fresh `auth:check` passes all three redirect cases on the public origin,
+including the return-destination query. The instructions remain for future URL
+changes; real-account/email sign-in is separate from this redirect diagnostic.
+
 The deployed application origin is `https://lost-link-beta.vercel.app` and its
 Supabase project is `ldhwtrxhmaanfcgmtsbp`. On 2026-10-27, public invalid-token
 probes for `/auth/callback` and `/auth/callback?next=%2Faccount` both returned

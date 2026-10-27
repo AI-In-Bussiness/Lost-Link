@@ -4,7 +4,7 @@
 - **Agent:** codex-auth-redirect (Codex)
 - **Founder version:** unassigned
 - **Phase:** 01 — Auth redirect repair
-- **Status:** Blocked
+- **Status:** Completed (hosted redirect fixed and checked; actual-account/iPhone confirmation remains separately unverified)
 - **Date (UTC):** 2026-10-27
 - **Task / issue:** Fix iPhone email confirmation redirect to localhost reported by task owner.
 - **Branch / commit:** work checkout; delivery through existing codex/founder-b-phase-7; main baseline 476232fba87127b7b9a5ee6c3e11ffbf498e6255.
@@ -58,3 +58,22 @@ The PR explicitly records that merging source does not update hosted Auth URL
 configuration. No merge, production repair or real-account confirmation is
 claimed. Provider access/dashboard update remains the only blocker to applying
 and checking the live URL fix; independent PR/CI review remains separate.
+
+## Dashboard repair verification addendum — 2026-10-27 UTC
+
+The task owner chose dashboard configuration and reported the changes saved.
+Rechecked runtime/network readiness and ran
+`npm run auth:check -- https://lost-link-beta.vercel.app ldhwtrxhmaanfcgmtsbp`.
+It exits 0: all three HTTP 303 redirects now target the public application,
+with `/` for the Site URL fallback and `/auth/callback` for both callback
+variants. The query-bearing variant retains `next=/my/claims`. This resolves
+the observed localhost redirect and supersedes the earlier access blocker.
+The owner made the provider change; no management credentials were supplied,
+and the agent did not change account data or redeploy the app.
+
+Updated the coordination state, board and repair guide to reflect the verified
+result. The board is Review pending independent source acceptance and an actual
+iPhone email/PKCE sign-in. No real confirmation token was consumed, account
+status inspected or session established by this public diagnostic. Recommended
+owner follow-up: try signing in to the original account, or use a fresh
+confirmation email in the same Safari browser used for registration.

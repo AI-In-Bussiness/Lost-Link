@@ -1,17 +1,21 @@
 # Email confirmation localhost redirect — 2026-10-27 UTC
 
-Live invalid-token probes confirm that hosted Supabase project
-`ldhwtrxhmaanfcgmtsbp` redirects the Site URL fallback and both callback variants
-to `http://localhost:3000/`. The deployed application's same-origin sign-in
-redirect uses `https://lost-link-beta.vercel.app` correctly. Prepared
+The task owner saved the hosted Supabase URL configuration fix. A fresh
+`npm run auth:check -- https://lost-link-beta.vercel.app ldhwtrxhmaanfcgmtsbp`
+passes all three cases: the Site URL fallback and both callback variants now
+redirect to `https://lost-link-beta.vercel.app` with the correct paths and
+preserved return destination. The previous localhost redirect is resolved.
+The deployed application's same-origin sign-in origin was already correct. Prepared
 `auth:configure` to repair only the hosted Site URL and callback allowlist,
 preserving other Auth settings, plus credential-free `auth:check` to detect this
 regression. See [the repair guide](auth-email-redirects.md) for exact dashboard
 values, commands and recovery. Eight new regression tests pass in the existing
 release suite (14 total); lint, typecheck and 47 application unit tests pass.
-Hosted repair remains blocked by absent Supabase management access; source
-changes and local config do not update that project's settings. Delivery reuses
-`codex/founder-b-phase-7` from main `476232f`.
+The owner applied the fix through the provider dashboard; no management token,
+app redeployment or database change was required. A real fresh-email/iPhone
+PKCE sign-in remains to be checked by the owner; invalid-token probes do not
+verify a user's account or session. Source delivery is [PR #29](https://github.com/AI-In-Bussiness/Lost-Link/pull/29)
+on reused `codex/founder-b-phase-7` from main `476232f`.
 
 # Issue #27 — website registration — 2026-10-27 UTC
 
