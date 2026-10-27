@@ -48,3 +48,13 @@
 - **Remaining work:** Apply the hosted URL settings; rerun auth:check until all three cases pass; test a fresh iPhone email confirmation and account/claim destination.
 - **Recommended next steps:** Follow docs/coordination/auth-email-redirects.md. Try signing in to the previously used account first; request a fresh link only if needed. Keep provider credentials in secure environment settings.
 - **Relevant references:** README.md signup setup; docs/phase-7/hosted-access.md; existing issue-27 signup implementation report; docs/coordination/auth-email-redirects.md.
+
+## Publication addendum — 2026-10-27 UTC
+
+Published implementation commit `a7174082cfe3e944b87f930b7d208c6cd8555996`
+by fast-forward push to the existing `codex/founder-b-phase-7` branch and opened
+[draft PR #29](https://github.com/AI-In-Bussiness/Lost-Link/pull/29) against main.
+The PR explicitly records that merging source does not update hosted Auth URL
+configuration. No merge, production repair or real-account confirmation is
+claimed. Provider access/dashboard update remains the only blocker to applying
+and checking the live URL fix; independent PR/CI review remains separate.
