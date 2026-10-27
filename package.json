@@ -28,6 +28,7 @@
     "test:browser": "node scripts/test-browser.mjs",
     "eval:search": "tsx scripts/evaluate-search-offline.ts",
     "model:download": "node --use-env-proxy scripts/download-search-model.mjs",
+    "test:model-download": "node --test tests/model-download.test.mjs",
     "eval:search:live": "tsx --env-file=.env.local scripts/evaluate-search.ts",
     "prebuild": "npm run model:download",
     "check:search:bundle": "node scripts/check-search-bundle.mjs",

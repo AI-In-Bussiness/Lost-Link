@@ -4,7 +4,7 @@
 - **Agent:** codex-auth-redirect (Codex)
 - **Founder version:** unassigned
 - **Phase:** 02 — Registration recovery
-- **Status:** Completed (implementation and local Auth verification; CI/deployment pending)
+- **Status:** Completed (implementation merged and full CI passed; production build repair handed to Phase 03)
 - **Date (UTC):** 2026-10-27
 - **Task / issue:** Registration still fails for the original email; add a confirmation resend button.
 - **Branch / commit:** work checkout; existing codex/founder-b-phase-7 and PR #29; baseline fb4eb186c79366f9fbee4c55d5aaee02387826f3, containing current main 476232f.
@@ -49,3 +49,42 @@
 - **Remaining work:** Review exact-head CI, deploy through the PR/main workflow, and check production recovery rendering and an actual same-browser email sign-in.
 - **Recommended next steps:** Use the original password to sign in now if the first email already confirmed the account. After deployment, use Resend confirmation email for a fresh confirmation/sign-in link; never reuse a consumed old link.
 - **Relevant references:** PR #29; docs/coordination/auth-email-redirects.md; Phase 01 redirect report; upstream Supabase Auth v2.186.0 internal/api/resend.go, otp.go and magic_link.go.
+
+## CI, merge and production deployment addendum — 2026-10-27 UTC
+
+Published implementation `67c92035a1aaa01946499a7963a8b0e7f5e75f70` on the
+existing source branch and marked PR #29 ready. Both exact-head Foundation
+runs [40581456336](https://github.com/AI-In-Bussiness/Lost-Link/actions/runs/40581456336)
+and [40581467873](https://github.com/AI-In-Bussiness/Lost-Link/actions/runs/40581467873)
+passed the complete database, real Auth/email recovery, photo/API, production
+build, model/bundle and persisted responsive/browser accessibility suites.
+Both Linux/Windows helper runs passed, as did the Vercel preview build.
+After reviewing the implementation and passing checks, merged PR #29 with
+its expected head SHA using a merge commit, `d82c1adc6d21cb224739425c2e2603a4d41b683a`.
+Fast-forwarded the checkout to main; its app/test/config sources match the
+tested source commit exactly.
+
+The subsequent production deployment
+[FkgHkFSosqAzRKZXXz6cq7jARRh4](https://vercel.com/ddar2425s-projects/lost-link/FkgHkFSosqAzRKZXXz6cq7jARRh4)
+failed. GitHub's Vercel status provides no build error, only an instruction to
+inspect the deployment logs. Production HTTP still returns 404 for the new
+recovery page and renders the previous signup/sign-in pages. The button is
+not live; no successful production email/session verification is claimed.
+Vercel management credentials/browser access are unavailable, so requested
+the first build-log error from the owner while attempting ordinary CLI
+inspection. The exact deployment failure must be diagnosed rather than
+assuming the source or provider settings are at fault.
+
+CLI inspection (`npx --yes vercel@latest inspect ... --logs --scope
+ddar2425s-projects`) confirmed the access blocker: "No existing credentials
+found." No interactive sign-in was started and no credential values were
+requested in chat. The production availability poll also failed as expected
+while the failed deployment left the old application serving. Updated local
+coordination state/board with the release blocker; these documentation updates
+remain in the workspace for the next deployment-fix handoff.
+
+The owner subsequently supplied the production build log. It identifies a
+single failed ONNX model asset download in npm prebuild, before Next compiles
+the new application. The HTTP failure status was not logged. The deployment
+repair continues in Phase 03; no further provider access or owner input is
+required to implement and publish a resilient downloader.

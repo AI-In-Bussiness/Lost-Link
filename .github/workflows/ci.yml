@@ -48,6 +48,7 @@ jobs:
           exit 1
       - run: npm run env:local
       - run: npm run env:photos
+      - run: npm run test:model-download
       - run: npm run model:download
       - run: npm run test:search:model
       - run: npm run eval:search
