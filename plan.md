@@ -192,7 +192,7 @@ Days 9–10
 Tasks LL-052 through LL-056
 
 - **Founder A:** Perform final UX checks, test all UI links, buttons, and components. Then, perform the overseer role for phases 0-6. While acting as overseer if you find anything major, open it as an issue on the repo marked with its urgency. Otherwise just create a normal report
-- **Founder B:** Validate the live deployment, production environment, rollback plan and locked demo release.
+- **Founder B:** Validate the live deployment, production environment, rollback plan and locked demo release. Then, ensure all automated checks and tests have passed, otherwise open an issue on the repo.
 - **Overseer:** Complete a final production smoke test and verify submission requirements against the actual rubric.
 
 Exit gate: Live URL works, demo is reliable, all required materials are submitted.
