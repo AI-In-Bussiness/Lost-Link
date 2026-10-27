@@ -1,4 +1,24 @@
+# Confirmation resend visibility — 2026-10-27 UTC
+
+The owner requests resend only after submitting signup. Removed initial
+sign-in/signup recovery links; the Check your email state retains its form and
+remembered email. Updated error guidance and existing browser acceptance.
+Lint, full build and six local rendered-page checks pass. PR checks and
+production deployment are pending. Provider/account behavior is unchanged.
+
 # Production model download repair — 2026-10-27 UTC
+
+Released and publicly verified at main
+`7001b395eee48ac32d879f4359465d9af8c121aa` via merged PR #30. Both exact-head
+Foundation runs (40593399104 and 40593461319), helper checks and the preview
+build passed. Production Vercel deployment `68HSvBNpsbmwEvKopRk2XWbPu9sS`
+succeeded. Both recovery/waiting pages now return 200 with the actual resend
+button; unconfirmed sign-in guidance, invalid-email rejection, CSRF rejection,
+no-store and safe return paths pass against production without sending email.
+Public release smoke passes 17/17 and both schools report hybrid search with
+semantic inference available. The previous production deployment blocker is
+resolved. Actual user email/session completion remains for the owner to try
+with a fresh link in the same Safari browser used to request it.
 
 The owner supplied the failed production log: npm prebuild downloaded the three
 JSON assets, then `download-search-model.mjs` aborted on the quantized ONNX
@@ -12,8 +32,8 @@ No model/version, search behavior, signup logic or provider settings changed.
 Eleven downloader regressions, lint, a real pinned model download, actual model
 inference, the complete npm build and traced offline inference bundle all pass.
 The repair reuses the existing source branch for a follow-up PR from main
-`d82c1ad`; exact-head CI and the subsequent production deployment remain to be
-verified. The earlier lack of build-log access is resolved by the owner's log;
+`d82c1ad`; its exact-head CI and production verification passed as recorded
+above. The earlier lack of build-log access is resolved by the owner's log;
 no further user information is needed to publish this repair.
 
 # Registration recovery and confirmation resend — 2026-10-27 UTC

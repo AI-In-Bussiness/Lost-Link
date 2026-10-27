@@ -1,5 +1,7 @@
 # Overseer review: phases 0–2
 
+Latest UI follow-up: [confirmation resend visibility](codex-auth-redirect__founder-vunassigned__phase-04-resend-visibility/codex-auth-redirect__founder-vunassigned__phase-04-resend-visibility.md) — initial auth forms hide resend; registration waiting screen retains the button.
+
 Current authentication follow-up: [email confirmation redirect diagnosis and repair](codex-auth-redirect__founder-vunassigned__phase-01-auth-redirect-repair/codex-auth-redirect__founder-vunassigned__phase-01-auth-redirect-repair.md). Hosted URL repair is verified after the owner's dashboard update.
 
 The owner saved the hosted URL fix and public redirects now pass. The subsequent

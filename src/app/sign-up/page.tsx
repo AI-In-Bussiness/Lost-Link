@@ -38,6 +38,5 @@ export default async function SignUpPage({ searchParams }: { searchParams: Promi
       <button className="rounded bg-slate-900 px-4 py-3 text-white" type="submit">Create account</button>
     </form>}
     <p className="mt-6">Already have an account? <Link href={signIn} className="underline">Sign in</Link></p>
-    {status !== "sent" && <p className="mt-3"><Link href={`/resend-confirmation?next=${encodeURIComponent(destination)}`} className="underline">Resend confirmation email</Link></p>}
   </main>;
 }

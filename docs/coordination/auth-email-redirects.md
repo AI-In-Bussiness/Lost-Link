@@ -76,7 +76,7 @@ in the same Safari browser used to register so its PKCE verifier cookie is
 available. Confirm that the callback reaches the account or intended claim page.
 For the previous account, try signing in first: Supabase may have confirmed it
 before the bad redirect. If still unconfirmed or the old link is expired/used,
-use **Resend confirmation email** from the check-email or sign-in screen and
+use **Resend confirmation email** from the Check your email screen after signup and
 use its newest link. The resend action sends confirmation for pending accounts
 and an email sign-in link for confirmed accounts; it never creates an unknown
 account or resets an existing password. With the original password, a
