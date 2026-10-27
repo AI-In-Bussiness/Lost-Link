@@ -23,6 +23,8 @@ Submit the missing evidence for independent re-review before marking a phase gat
 
 # Agent reports
 
+- [Founder A Phase 7 final UX / Overseer review](codex-founder-a-07__founder-va__phase-07-final-ux-review/codex-founder-a-07__founder-va__phase-07-final-ux-review.md) — review delivered; release/submission blocked; issues #24 and #25.
+
 Every agent creates its own folder and Markdown report after each phase.
 Use the exact format and complete template in [AGENTS.md](../AGENTS.md).
 
@@ -71,3 +73,5 @@ shared phase acceptance still requires its review evidence.
 - [Founder B Phase 6 demo reliability](codex-founder-b-phase6__founder-vb__phase-06-demo-reliability/codex-founder-b-phase6__founder-vb__phase-06-demo-reliability.md).
 
 - [Founder A Phase 6 competition polish](codex-founder-a-06__founder-va__phase-06-competition-polish/codex-founder-a-06__founder-va__phase-06-competition-polish.md) — presentation changes and pitch draft; summary excluded by task owner.
+
+- [Founder B Phase 7 deployment release](codex-founder-b-phase7__founder-vb__phase-07-deployment-release/codex-founder-b-phase7__founder-vb__phase-07-deployment-release.md) — release checks/pins/rollback package; hosted acceptance blocked in #20 and relevance review in #21.

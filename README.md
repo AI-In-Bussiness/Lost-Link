@@ -158,3 +158,10 @@ through pull requests targeting `main`. Do not create new branches; reuse a
 suitable existing PR source branch, following the workflow in AGENTS.md.
 Read the [delivery snapshot](docs/coordination/current-state.md) and
 track file ownership in the [coordination board](docs/coordination/task-board.csv).
+
+## Deployment release checks
+
+Run `npm run release:check -- https://lost-link-beta.vercel.app` to check public
+HTTP behavior without credentials. See the [Phase 7 release runbook](docs/phase-7/README.md)
+for secure hosted setup, authenticated demo checks, release pins and rollback.
+A loading homepage alone does not establish a working demo.

@@ -13,8 +13,8 @@ try{
   await setTimeout(500);
  }
  if(!ready)throw new Error('Application failed readiness check.');
- for(const script of ['scripts/smoke-auth.mjs','scripts/smoke-backend.mjs','scripts/smoke-photos.mjs']){
-  const smoke=spawn(process.execPath,[script],{stdio:'inherit'});
+ for(const args of [['scripts/smoke-auth.mjs'],['scripts/smoke-backend.mjs'],['scripts/smoke-photos.mjs'],['scripts/release-smoke.mjs','http://localhost:3000']]){
+  const smoke=spawn(process.execPath,args,{stdio:'inherit'});
   code=await new Promise(resolve=>{smoke.on('error',()=>resolve(1));smoke.on('exit',c=>resolve(c??1));});
   if(code!==0)break;
  }

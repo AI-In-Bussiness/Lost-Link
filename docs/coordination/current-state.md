@@ -1,4 +1,30 @@
+# Founder B Phase 7 release checkpoint — 2026-10-27 UTC
+
+Started from current main `77e46af122db4b566113345c167cca3b9bff5f39`, whose
+Foundation and Linux/Windows helper workflows pass. The public production pages
+load but school APIs return 503; [issue #20](https://github.com/AI-In-Bussiness/Lost-Link/issues/20)
+blocks hosted acceptance. [Phase 7](../phase-7/README.md) adds a credential-free
+public smoke check, observed evidence, candidate dependency/model/migration pins
+and a rollback runbook. No verified deployment/rollback ID or release tag is
+claimed. The existing failed proposed relevance gate is recorded in
+[issue #21](https://github.com/AI-In-Bussiness/Lost-Link/issues/21). Hosted access,
+account/photo workflow, rollback rehearsal and independent acceptance remain
+open; source preparation does not complete the production gate.
+
 # Repository state snapshot
+
+## Founder A Phase 7 review — 2026-10-27 UTC
+
+Review of current-main application `77e46af` joins Founder B's existing PR #22
+on `codex/founder-b-phase-7`; no new branch was created. Fresh checks passed:
+46 unit, 14 mock, eight relevance-tooling and 17 browser/axe scenarios, plus
+98 link activations across twelve screens and Next/Previous pagination. The
+additional single-school live-mode navigation probe fails; [#24](https://github.com/AI-In-Bussiness/Lost-Link/issues/24)
+records that P2 defect. [#25](https://github.com/AI-In-Bussiness/Lost-Link/issues/25)
+records P1 missing submission evidence. Existing production #20, relevance #21
+and final-head CI #23 remain separately owned. See [the full review](../phase-7/founder-a-review.md)
+for all seven phase verdicts, actual evidence and limits. This is delivered
+review work, not approval of the hosted release, external facts or submission.
 
 ## Issue #17 branch integration audit — 2026-10-26 UTC
 

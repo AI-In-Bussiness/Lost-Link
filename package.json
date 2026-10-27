@@ -33,7 +33,9 @@
     "check:search:bundle": "node scripts/check-search-bundle.mjs",
     "test:search:model": "tsx --test tests/local-model.integration.ts",
     "demo:check": "node scripts/verify-demo.mjs",
-    "test:demo": "node scripts/test-demo-repeatability.mjs"
+    "test:demo": "node scripts/test-demo-repeatability.mjs",
+    "release:check": "node --use-env-proxy scripts/release-smoke.mjs",
+    "test:release": "node --test tests/release-smoke.test.mjs"
   },
   "dependencies": {
     "@huggingface/transformers": "4.3.1",

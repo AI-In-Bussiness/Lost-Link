@@ -1,0 +1,73 @@
+{
+  "status": "blocked",
+  "sourceRevision": "77e46af122db4b566113345c167cca3b9bff5f39",
+  "sourceMeaning": "Integrated application baseline; Phase 7 PR adds release verification and operations. Replace with accepted merge SHA before locking.",
+  "productionOrigin": "https://lost-link-beta.vercel.app",
+  "vercelProject": "ddar2425s-projects/lost-link",
+  "supabaseProjectRefToConfirm": "ldhwtrxhmaanfcgmtsbp",
+  "deploymentId": null,
+  "verifiedRollbackDeploymentId": null,
+  "releaseTag": null,
+  "node": "24",
+  "npm": "11.9.0",
+  "lockfile": {
+    "path": "package-lock.json",
+    "sha256": "4af558029d6cca76f07f18d5123b4035de82445a0cd5d2d0d8e2657fd8be0c18"
+  },
+  "model": {
+    "path": "src/lib/search/model-manifest.json",
+    "sha256": "a0862027a55f53b6a4ada32e03cde83906c742612477af8227145f17269f8513",
+    "repository": "Xenova/all-MiniLM-L6-v2",
+    "revision": "751bff37182d3f1213fa05d7196b954e230abad9"
+  },
+  "migrations": [
+    {
+      "path": "supabase/migrations/202610250001_foundation.sql",
+      "sha256": "81a9bb7aa40cfa663f393976611dec302d3691d0a975bec15d415ef067881cf3"
+    },
+    {
+      "path": "supabase/migrations/202610250002_backend.sql",
+      "sha256": "71e541285aaab908613f556ec0b15218605302dae38ac66a9456b287e7ba5901"
+    },
+    {
+      "path": "supabase/migrations/202610250003_photos.sql",
+      "sha256": "14882dea2051d75ca2dfabd442668a1bf80f2e09f9b3e9ba3715a3a9dc19b42a"
+    },
+    {
+      "path": "supabase/migrations/202610260004_overseer_fixes.sql",
+      "sha256": "7c346105d9e52f58e03dc390343893cfe8fc606552e37e6f5bd86b70c3166f16"
+    }
+  ],
+  "environmentNames": [
+    "NEXT_PUBLIC_SUPABASE_URL",
+    "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
+    "NEXT_PUBLIC_SITE_URL",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "LOSTLINK_ORGANIZATION_SLUGS",
+    "LOSTLINK_SEMANTIC_SEARCH"
+  ],
+  "baselineChecks": [
+    {
+      "name": "Foundation",
+      "runId": 40444642079,
+      "conclusion": "success"
+    },
+    {
+      "name": "Linux and Windows helpers",
+      "runId": 40444642093,
+      "conclusion": "success"
+    }
+  ],
+  "blockers": [
+    "https://github.com/AI-In-Bussiness/Lost-Link/issues/20",
+    "https://github.com/AI-In-Bussiness/Lost-Link/issues/21"
+  ],
+  "requiredBeforeLock": [
+    "passing checks on final SHA",
+    "production environment/schema inspection",
+    "public and authenticated hosted smoke",
+    "fresh hosted photo-claim-return journey",
+    "compatible verified rollback deployment and rehearsal",
+    "independent release acceptance"
+  ]
+}
