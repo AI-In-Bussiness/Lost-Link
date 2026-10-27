@@ -125,7 +125,10 @@ Phase 7 checks. Initial Foundation attempts stopped before tests because GHCR
 rate-limited the pinned Supabase image pull; retrying did not resolve it.
 [Issue #23](https://github.com/AI-In-Bussiness/Lost-Link/issues/23) records that
 CI blocker. Foundation now authenticates GHCR using the built-in job token with
-read-only packages permission; no personal registry token is needed. Full
+read-only packages permission; no personal registry token is needed. Since
+authenticated GHCR can also throttle, startup falls back once to Supabase's
+original official public ECR registry only on a rate-limit error. CLI-pinned
+versions remain the same; other startup errors and all test failures still fail. Full
 post-mitigation results are recorded in PR #22; no database check is skipped.
 
 The frozen additional relevance evaluator still exits 1: 16/16 core positives,

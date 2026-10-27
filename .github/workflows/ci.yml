@@ -30,7 +30,20 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - run: npm run db:start
+      - name: Start Supabase with official-registry rate-limit recovery
+        shell: bash
+        run: |
+          if npm run db:start 2> /tmp/lostlink-db-start.log; then
+            cat /tmp/lostlink-db-start.log
+          else
+            cat /tmp/lostlink-db-start.log >&2
+            if ! rg -qi 'toomanyrequests|too many requests|429 Too Many Requests' /tmp/lostlink-db-start.log; then
+              exit 1
+            fi
+            # Same CLI-pinned Supabase versions from its original official registry.
+            # SQL/startup/assertion failures still fail; no database is reset.
+            SUPABASE_INTERNAL_IMAGE_REGISTRY=public.ecr.aws npm run db:start
+          fi
       - run: npm run env:local
       - run: npm run env:photos
       - run: npm run model:download

@@ -63,3 +63,10 @@ PR #22 and issue #23 rather than inferred from these failed attempts.
 
 Also reran all eight native Phase 4 tooling regression tests successfully.
 Production acceptance remains blocked regardless of CI outcome.
+
+Authenticated GHCR pulls also hit the registry limit. Added a single conditional
+startup fallback to Supabase's original official public ECR registry using the
+same CLI-pinned versions. It triggers only on a rate-limit diagnostic; unrelated
+startup/SQL errors and every test still fail normally. No reset is performed.
+A local database startup attempt was stopped during image download; no local
+integration success is claimed.
