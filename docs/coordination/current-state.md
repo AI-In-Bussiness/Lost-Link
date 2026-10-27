@@ -1,4 +1,31 @@
+# Production model download repair — 2026-10-27 UTC
+
+The owner supplied the failed production log: npm prebuild downloaded the three
+JSON assets, then `download-search-model.mjs` aborted on the quantized ONNX
+asset's single failed response. The original log did not include its HTTP status.
+The same pinned binary is currently reachable and downloaded successfully here.
+Added three-attempt download recovery with fresh redirect requests, atomic
+size/SHA-verified publication, safe status/file diagnostics and verified reuse
+from Vercel's persisted `.next/cache`. Integrity failures still stop the build.
+No model/version, search behavior, signup logic or provider settings changed.
+
+Eleven downloader regressions, lint, a real pinned model download, actual model
+inference, the complete npm build and traced offline inference bundle all pass.
+The repair reuses the existing source branch for a follow-up PR from main
+`d82c1ad`; exact-head CI and the subsequent production deployment remain to be
+verified. The earlier lack of build-log access is resolved by the owner's log;
+no further user information is needed to publish this repair.
+
 # Registration recovery and confirmation resend — 2026-10-27 UTC
+
+PR #29 is merged at `d82c1adc6d21cb224739425c2e2603a4d41b683a` after both
+exact-head Foundation runs (40581456336 and 40581467873), including real
+Auth/database/photo/browser checks, passed. Linux/Windows helper checks and
+the Vercel preview build passed too. Production Vercel deployment
+`dpl_FkgHkFSosqAzRKZXXz6cq7jARRh4` then failed; the public recovery page remains
+404 and the new button is not live. The build log is not accessible without
+Vercel credentials; the owner was asked for its first error. No production
+failure cause is inferred from the successful preview/source checks.
 
 The owner's remaining failure is repeated registration with the original email
 after its first link reached Auth but redirected to localhost. That account may
@@ -21,6 +48,7 @@ establish application database/RLS or browser acceptance; the existing CI
 Auth/browser suites have new scenarios. The public allowlist also accepts the
 flow-aware callback. Source is delivered through the same PR #29/source branch;
 production deployment and real-user testing are not inferred from local checks.
+The deployment failure above supersedes the earlier pending-release status.
 
 # Email confirmation localhost redirect — 2026-10-27 UTC
 

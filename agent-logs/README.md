@@ -7,6 +7,9 @@ The owner saved the hosted URL fix and public redirects now pass. The subsequent
 handles the original email's potentially confirmed account and adds fresh
 confirmation/sign-in email recovery, verified against real local Auth.
 
+[Model download deployment repair](codex-auth-redirect__founder-vunassigned__phase-03-model-download-repair/codex-auth-redirect__founder-vunassigned__phase-03-model-download-repair.md)
+addresses the production prebuild failure that blocked releasing that recovery UI.
+
 Reviewed main commit: `412010ccaf6a2af77cf3abc6ed260676d557b86e` on October 25, 2026.
 Reviewer: `codex-overseer-01`. Founder version is `unassigned` pending task-owner confirmation.
 
