@@ -6,7 +6,7 @@
 - **Phase:** 06 — competition-polish
 - **Status:** Completed (Founder A scoped implementation and drafts); overall phase gate awaits independent review
 - **Date (UTC):** 2026-10-26
-- **Task / issue:** User: “you are founder A phase 6”; plan.pdf Phase 6 / LL-046–LL-051. Later user instruction explicitly excludes the competition summary.
+- **Task / issue:** User: “you are founder A phase 6”; plan.md Phase 6 / LL-046–LL-051. Later user instruction explicitly excludes the competition summary.
 - **Branch / commit:** Shared `codex/founder-b-phase-6`, PR #15; starting local shared head `f7b6c75`, containing current main `e913f89`. This report travels with the implementation commit.
 
 ## Objective and scope
@@ -47,7 +47,7 @@
 ## Follow-up and handoff
 - **Remaining work:** Independent review; final timed real-app recording/rehearsal and approved submission materials; real demand/competitor evidence, disclosure and contribution inputs; final combined/hosted release validation.
 - **Recommended next steps:** Review shared PR15, integrate Phase5 through normal review, rerun final combined release checks and follow Phase7 ownership. Keep Founder A board status Review until an independent review reference exists.
-- **Relevant references:** `plan.pdf` Phase6; `competition_rules.pptx` slides3/8/16–19; `DESIGN.md`; Phase0 competition evidence; Phase4 matching reports; Phase5 PR14; Founder B Phase6 runbook and report.
+- **Relevant references:** `plan.md` Phase6; `competition_rules.pptx` slides3/8/16–19; `DESIGN.md`; Phase0 competition evidence; Phase4 matching reports; Phase5 PR14; Founder B Phase6 runbook and report.
 
 ## Publication validation — 2026-10-26
 

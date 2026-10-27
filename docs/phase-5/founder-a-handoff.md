@@ -1,6 +1,6 @@
 # Founder A — Phase 5 browser and usability quality
 
-Source: `plan.pdf`, Phase 5, LL-038–LL-045. Founder A owns automated
+Source: `plan.md`, Phase 5, LL-038–LL-045. Founder A owns automated
 browser checks, mobile layouts, accessibility, errors and usability. The
 individual task workbook remains unavailable, so this handoff does not invent
 individual LL task assignments. Work shares [PR #14](https://github.com/AI-In-Bussiness/Lost-Link/pull/14)

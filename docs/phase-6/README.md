@@ -1,6 +1,6 @@
 # Founder B Phase 6 — reproducible demo
 
-Founder B owns repeatable demo data, stable accounts, matching evidence and operational reliability (plan.pdf Phase 6 / LL-046–LL-051). Founder A owns presentation/pitch; Overseer owns skeptical judging. This package prepares the existing fictional demo without resetting a database or creating real-user data.
+Founder B owns repeatable demo data, stable accounts, matching evidence and operational reliability (plan.md Phase 6 / LL-046–LL-051). Founder A owns presentation/pitch; Overseer owns skeptical judging. This package prepares the existing fictional demo without resetting a database or creating real-user data.
 
 ## Reproducible setup
 

@@ -6,7 +6,7 @@
 - **Phase:** 06 — demo-reliability
 - **Status:** Completed (engineering package; independent judging remains separate)
 - **Date (UTC):** 2026-10-26
-- **Task / issue:** Fully do Phase 6 Founder B; plan.pdf LL-046–LL-051
+- **Task / issue:** Fully do Phase 6 Founder B; plan.md LL-046–LL-051
 - **Branch / commit:** codex/founder-b-phase-6; baseline main f18076d
 
 ## Objective and scope
@@ -41,7 +41,7 @@
 ## Follow-up and handoff
 - **Remaining work:** Independent judging/presentation acceptance and hosted Phase7 verification.
 - **Recommended next steps:** Review PR, integrate with Phase5, run preflight and matching evidence on the intended rehearsal machine, then follow the fresh-intake journey.
-- **Relevant references:** plan.pdf Phase6; docs/phase-6/README.md; docs/phase-4/evaluation-results.json; PR14; Foundation workflow.
+- **Relevant references:** plan.md Phase6; docs/phase-6/README.md; docs/phase-4/evaluation-results.json; PR14; Foundation workflow.
 
 ## Final evidence and handoff
 

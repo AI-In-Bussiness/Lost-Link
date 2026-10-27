@@ -1,6 +1,6 @@
 # LostLink — competition presentation draft
 
-Founder A, Phase 6; 2026-10-26. Source: `plan.pdf` Phase 6 and `competition_rules.pptx` slides 3, 8, 16–19. Ready for review, not submission approval. Pair with [Founder B's operational runbook](README.md) and [evidence register](submission-evidence.csv). The task owner explicitly excluded the competition summary; none is delivered here.
+Founder A, Phase 6; 2026-10-26. Source: `plan.md` Phase 6 and `competition_rules.pptx` slides 3, 8, 16–19. Ready for review, not submission approval. Pair with [Founder B's operational runbook](README.md) and [evidence register](submission-evidence.csv). The task owner explicitly excluded the competition summary; none is delivered here.
 
 ## Brand and visual direction
 

@@ -1,6 +1,6 @@
 # Founder A — Phase 4 cases and explanations
 
-Source: plan.pdf, Phase 4 “Smart AI matching” (LL-031–LL-037).
+Source: plan.md, Phase 4 “Smart AI matching” (LL-031–LL-037).
 Founder A owns realistic search cases and match-card explanations; Founder B
 owns retrieval, vectors, ranking and fallback. Delivered for review on the
 existing shared PR #12, based on main plus Founder B's local-model revision
