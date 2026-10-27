@@ -1,3 +1,16 @@
+# Issue #27 — website registration — 2026-10-27 UTC
+
+Claimant registration is prepared on the reused `codex/convert-plan-markdown`
+branch from main `567ad42`. `/sign-up` submits a same-origin bounded form to
+Supabase Auth; email confirmation returns through a PKCE callback and the
+existing application-path allowlist. New accounts receive no staff memberships.
+The sign-in page links registration and preserves claim destinations. Local
+Auth signup is enabled with confirmation and a 12-character minimum; hosted
+Auth settings and email delivery must be configured separately as described in
+README. No database migration or hosted configuration change is included.
+See the [implementation report](../../agent-logs/codex-issue-27__founder-vunassigned__phase-01-signup/codex-issue-27__founder-vunassigned__phase-01-signup.md)
+for checks and delivery evidence. Existing release issues remain separately owned.
+
 # Founder B Phase 7 release checkpoint — 2026-10-27 UTC
 
 Started from current main `77e46af122db4b566113345c167cca3b9bff5f39`, whose

@@ -100,7 +100,9 @@ This operator script uses local CLI credentials for the local stack; for a hoste
 
 This cloud instance has a generated local demo password in ignored `.env.demo.local` (owner-readable only). To reuse it for provisioning locally, run `node --env-file=.env.demo.local scripts/provision-demo.mjs`. Do not copy its value into Git or chat.
 
-There are no committed passwords and no public signup. Use the sign-in page and account page to verify access. An organization admin cannot yet manage memberships in the application; provisioning remains an operator action in this phase.
+There are no committed passwords. New claimants can choose **Create an account** on the sign-in page, enter an email and a 12+ character password, and open the confirmation email in the same browser. Confirmation signs them in and returns them to their intended claim or account page. Existing users can sign in normally. Self-registration grants no staff or admin memberships; those still require operator provisioning. An organization admin cannot yet manage memberships in the application.
+
+For local sign-up emails, open the mail inbox at http://localhost:54324. On an already running local stack, stop and restart it after changing `supabase/config.toml` so the signup setting takes effect; do not reset its database. Hosted Supabase has separate Auth settings: enable new-user/email signup, keep email confirmation enabled, set the 12+ character password minimum and exact deployed Site URL, and allow the `/auth/callback` URL on that origin. Configure Auth email delivery and rate limits for the hosted project. The local config does not update hosted settings. Expired links or links opened in another browser return a safe recovery message; sign in if already confirmed, or sign up again to request a fresh link.
 
 ### Validation
 

@@ -23,6 +23,8 @@ Submit the missing evidence for independent re-review before marking a phase gat
 
 # Agent reports
 
+- [Issue #27 registration plan](codex-issue-27__founder-vunassigned__phase-00-signup-plan/codex-issue-27__founder-vunassigned__phase-00-signup-plan.md) and [implementation](codex-issue-27__founder-vunassigned__phase-01-signup/codex-issue-27__founder-vunassigned__phase-01-signup.md).
+
 - [Founder A Phase 7 final UX / Overseer review](codex-founder-a-07__founder-va__phase-07-final-ux-review/codex-founder-a-07__founder-va__phase-07-final-ux-review.md) — review delivered; release/submission blocked; issues #24 and #25.
 
 Every agent creates its own folder and Markdown report after each phase.
