@@ -6,7 +6,7 @@
 - **Phase:** 05 — browser-quality
 - **Status:** Completed (Founder A engineering scope; independent acceptance pending)
 - **Date (UTC):** 2026-10-26
-- **Task / issue:** Task owner: “you are founder A phase 5”; plan.pdf Phase 5 / LL-038–LL-045
+- **Task / issue:** Task owner: “you are founder A phase 5”; plan.md Phase 5 / LL-038–LL-045
 - **Branch / commit:** codex/founder-b-phase-5; main baseline f18076d; shared Founder B checkpoint 5d3bf6d; verified code 83cd353; PR #14
 
 ## Objective and scope
@@ -15,7 +15,7 @@
 - **Out of scope:** Founder B's backend/security ownership, ranking retuning, deployment, Phase 6 polish and independent Overseer approval.
 
 ## Work performed
-- Read AGENTS.md, the shared hub/state/integration guide, upstream handoffs, UX/design specifications, CI and existing browser suites. Extracted plan.pdf to confirm actual Phase 5 ownership rather than infer it from the phase number.
+- Read AGENTS.md, the shared hub/state/integration guide, upstream handoffs, UX/design specifications, CI and existing browser suites. Extracted plan.md to confirm actual Phase 5 ownership rather than infer it from the phase number.
 - Found existing related PR #14, attached it to the task and recorded Founder A ownership on its shared board. Retained all Founder B implementation and reports; fetched the later 5d3bf6d evidence update without overwriting it.
 - Reproduced two keyboard focus failures before changing the code: retry after a failed school read, and staff approval after a view refresh. Both new tests failed on unfocused headings. User-action refreshes now focus the updated heading while preserving validation-summary focus and generation guards.
 - Reproduced horizontal overflow at 320px with doubled computed root text size. Allowed heading/caption/reference wrapping and shrinkable stack/hero grid tracks. Added eleven-route phone reflow/control-bound checks.
@@ -46,7 +46,7 @@
 ## Follow-up and handoff
 - **Remaining work:** Independent Overseer P0/phase acceptance and hosted verification. Keep the board at Review until independent review; do not merge or approve the phase gate by inference.
 - **Recommended next steps:** Overseer should inspect the linked CI evidence and synthetic screenshots, independently verify P0 behavior, and perform assistive-technology/device review before broader release. Founder B retains ownership of the separate Phase 4 relevance findings.
-- **Relevant references:** plan.pdf Phase 5; docs/phase-0/ux-spec.md; DESIGN.md; docs/phase-5/README.md and backend-review.md; upstream Founder A Phase 3/4 handoffs; AGENTS.md.
+- **Relevant references:** plan.md Phase 5; docs/phase-0/ux-spec.md; DESIGN.md; docs/phase-5/README.md and backend-review.md; upstream Founder A Phase 3/4 handoffs; AGENTS.md.
 
 ## Final verification — 2026-10-26 UTC
 

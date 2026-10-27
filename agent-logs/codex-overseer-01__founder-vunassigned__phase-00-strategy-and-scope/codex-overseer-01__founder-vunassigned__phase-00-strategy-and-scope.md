@@ -11,11 +11,11 @@
 
 ## Objective and scope
 - **Goal:** Verify founder agreement on MVP scope, page names, data fields, expected behavior and competition priorities.
-- **In scope:** Independent review of AGENTS.md, README.md, plan.pdf and all docs/phase-0 files at the reviewed commit.
+- **In scope:** Independent review of AGENTS.md, README.md, plan.md and all docs/phase-0 files at the reviewed commit.
 - **Out of scope:** Inventing founder approval, rewriting builder deliverables, implementing missing architecture or contacting organizers.
 
 ## Work performed
-- Read current source through the connected GitHub plugin. Extracted plan.pdf with pdftotext; verified the three assigned role descriptions and gate definitions.
+- Read current source through the connected GitHub plugin. Extracted plan.md with pdftotext; verified the three assigned role descriptions and gate definitions.
 - Compared the ten MVP criteria, twelve routes, proposed DTOs, privacy boundaries and approval/return semantics across the Phase 0 documents.
 - **Files created or modified:** This report only.
 - **Decisions made:** Gate NOT ACCEPTED. Founder A's drafts are reviewable and internally coherent on the core workflow; joint decisions are still explicitly pending. Do not mark LL-003, LL-005, LL-006 or the phase gate Done.
@@ -29,7 +29,7 @@
 | Low: README allows a search photo while MVP excludes image recognition | README step 1 versus product-scope.md scope exclusions | Founders clarify whether this is future product copy or a current input; do not add an upload flow implicitly |
 
 ## Validation and results
-- **Commands / checks run:** GitHub recursive tree read (not truncated); pinned file reads; pdftotext -layout /tmp/lostlink-plan.pdf /tmp/lostlink-plan.txt succeeded. Manual comparison of scope, routes and contract completed.
+- **Commands / checks run:** GitHub recursive tree read (not truncated); pinned file reads; pdftotext -layout /tmp/lostlink-plan.md /tmp/lostlink-plan.txt succeeded. Manual comparison of scope, routes and contract completed.
 - Local git status was clean before reports. git fetch origin failed: proxy port 8080 could not be reached. Continued reads through GitHub; did not reset or overwrite the stale checkout.
 - **Tests not run:** No app/build/security tests in this phase. Competition deck source was not independently re-extracted; the rubric mapping is reviewed documentation, not independently verified slide evidence.
 - **Deliverables:** This gate decision and actionable owner table.
@@ -49,4 +49,4 @@
 ## Follow-up and handoff
 - **Remaining work:** Joint scope approval, final architecture/security contract, original-agent reporting and missing external facts.
 - **Recommended next steps:** Founder B completes the contract; both founders reconcile it against the twelve routes and ten criteria; Overseer rechecks before accepting the gate. Proceed to Phase 1 review with Phase 0 explicitly open.
-- **Relevant references:** [Repository instructions](https://github.com/AI-In-Bussiness/Lost-Link/blob/412010ccaf6a2af77cf3abc6ed260676d557b86e/AGENTS.md); docs/phase-0/founder-a-handoff.md; product-scope.md; shared-contract-proposal.md; task-board.csv; plan.pdf.
+- **Relevant references:** [Repository instructions](https://github.com/AI-In-Bussiness/Lost-Link/blob/412010ccaf6a2af77cf3abc6ed260676d557b86e/AGENTS.md); docs/phase-0/founder-a-handoff.md; product-scope.md; shared-contract-proposal.md; task-board.csv; plan.md.

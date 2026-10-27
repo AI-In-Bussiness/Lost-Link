@@ -35,7 +35,7 @@ These pinned snapshots preserve their original deliveries; the implementations a
 
 ## Original references and reports
 
-- [Original plan PDF](../plan.pdf)
+- [Project plan (Markdown)](../plan.md)
 - [Original competition deck](../competition_rules.pptx)
 - [Agent report index and naming rules](../agent-logs/README.md)
 

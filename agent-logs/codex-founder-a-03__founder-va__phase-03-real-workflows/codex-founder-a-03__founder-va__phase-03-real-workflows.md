@@ -6,7 +6,7 @@
 - **Phase:** 03 — real-workflows
 - **Status:** Blocked (frontend implementation ready for review; overall live/photo gate remains blocked)
 - **Date (UTC):** 2026-10-25
-- **Task / issue:** User assignment: Founder A phase 3; plan.pdf Phase 3, LL-022–LL-030 range. Individual task workbook unavailable.
+- **Task / issue:** User assignment: Founder A phase 3; plan.md Phase 3, LL-022–LL-030 range. Individual task workbook unavailable.
 - **Branch / commit:** codex/founder-a-phase-3; baseline Founder B `5be324e`; imported Founder A Phase 2 as `c09662d`. This report is included with the integration commit.
 
 ## Objective and scope
@@ -15,7 +15,7 @@
 - **Out of scope:** Database/RLS/lifecycle changes, secure photo processing owned by Founder B, semantic matching, hosted deployment, competition submission and independent acceptance.
 
 ## Work performed
-- Read README, AGENTS.md, plan.pdf, upstream Founder A reports and Founder B architecture/API/integration documents. Used GitHub connector because the initial local checkout was stale. Selected explicit Founder A identity/phase metadata.
+- Read README, AGENTS.md, plan.md, upstream Founder A reports and Founder B architecture/API/integration documents. Used GitHub connector because the initial local checkout was stale. Selected explicit Founder A identity/phase metadata.
 - Created an integration branch from the existing backend and preserved the additive Phase 2 interface commit. Kept upstream mocks, historical reports, reference documents and database migrations intact.
 - Mounted the interface in Next.js Server/Client Components, retaining the existing DOM views. Added real HTTP transport with cookie credentials/no-store, safe error mapping and bounded cursor traversal. Reconciled field names/statuses explicitly.
 - Connected create/search/submit/history/review/return. Sent rendered claim versions; retained failed forms and conflict recovery. Kept account email read-only. Represented unavailable photo/activity/receipt fields honestly. Kept private review notes out of claimant views.
@@ -44,7 +44,7 @@
 ## Follow-up and handoff
 - **Remaining work:** Live database-backed browser/refresh acceptance; secure photo integration after Founder B exposes endpoints; independent review and joint gate decision.
 - **Recommended next steps:** Follow the handoff's fresh-account sequence, run existing SQL/live HTTP suites, inspect privacy and version conflicts, then accept/reopen tasks. Merge/retarget dependency branches through normal project review. Keep task statuses Review/Blocked until verified.
-- **Relevant references:** `plan.pdf` Phase 3; `AGENTS.md`; `docs/phase-2/{README.md,integration-notes.md,founder-a-handoff.md}`; `docs/phase-3/founder-a-handoff.md`. No next phase started.
+- **Relevant references:** `plan.md` Phase 3; `AGENTS.md`; `docs/phase-2/{README.md,integration-notes.md,founder-a-handoff.md}`; `docs/phase-3/founder-a-handoff.md`. No next phase started.
 
 ## Final verification addendum — 2026-10-25 UTC
 

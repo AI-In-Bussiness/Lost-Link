@@ -16,7 +16,7 @@ Existing file paths are preserved on the integrated main baseline. Read
 | supabase/ | Migrations, seed and SQL permission/state tests | Founder B |
 | scripts/, tests/, .github/workflows/ | Runtime helpers, unit/integration checks and CI | Founder B / integrator |
 | agent-logs/ | Per-agent, per-phase reports | Each agent owns its own reports |
-| plan.pdf, competition_rules.pptx | Original project references | Preserve; cite original and derived interpretation |
+| plan.md, competition_rules.pptx | Original project references | Preserve; cite original and derived interpretation |
 
 Role labels describe existing handoffs and suggested review routing, not exclusive
 write permissions or new assignments. Coordinate overlap through the shared board.

@@ -1,6 +1,6 @@
 # Founder B — Phase 5 quality and security
 
-Founder B engineering scope complete and ready for review. Source: plan.pdf, Phase 5 / LL-038–LL-045: permissions, upload security, private claim data, reliability and malicious input. Independent Overseer acceptance and Founder A's browser/accessibility work are separate. Final code `10061df` passed the [Foundation security and end-to-end checks](https://github.com/AI-In-Bussiness/Lost-Link/actions/runs/40402040638). See [backend review and findings](backend-review.md).
+Founder B engineering scope complete and ready for review. Source: plan.md, Phase 5 / LL-038–LL-045: permissions, upload security, private claim data, reliability and malicious input. Independent Overseer acceptance and Founder A's browser/accessibility work are separate. Final code `10061df` passed the [Foundation security and end-to-end checks](https://github.com/AI-In-Bussiness/Lost-Link/actions/runs/40402040638). See [backend review and findings](backend-review.md).
 
 ## Baseline and delivery
 

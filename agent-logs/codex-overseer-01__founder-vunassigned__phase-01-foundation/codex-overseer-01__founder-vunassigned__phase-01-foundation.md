@@ -53,4 +53,4 @@
 ## Follow-up and handoff
 - **Remaining work:** App scaffold, test database, auth/RLS/storage foundations, real seed ingestion, contract agreement and green application build.
 - **Recommended next steps:** Founder B provides foundation evidence; Overseer reruns the build and two-organization private-data tests. Phase 2 can be reviewed provisionally, with Phase 0 and 1 gates still open.
-- **Relevant references:** Previous report: ../codex-overseer-01__founder-vunassigned__phase-00-strategy-and-scope/codex-overseer-01__founder-vunassigned__phase-00-strategy-and-scope.md; docs/phase-1/frontend-mock-guide.md; docs/phase-1/founder-a-handoff.md; plan.pdf.
+- **Relevant references:** Previous report: ../codex-overseer-01__founder-vunassigned__phase-00-strategy-and-scope/codex-overseer-01__founder-vunassigned__phase-00-strategy-and-scope.md; docs/phase-1/frontend-mock-guide.md; docs/phase-1/founder-a-handoff.md; plan.md.

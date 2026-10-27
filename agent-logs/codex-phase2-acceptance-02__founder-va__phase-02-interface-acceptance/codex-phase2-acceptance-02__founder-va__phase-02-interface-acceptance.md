@@ -24,7 +24,7 @@
 - **Decisions made:** Do not accept the scoped interface yet; re-review the primary agent's fixes and final validation before recording a final decision. Original historical Overseer reports remain intact.
 
 ## Validation and results
-- **Commands / checks run:** `git status --short`, `git branch --show-current`, `git rev-parse HEAD`; repository/source reads; `pdftotext -layout plan.pdf /tmp/phase2-independent-plan.txt`; Python/Playwright Chromium navigation probe against `http://127.0.0.1:4173`.
+- **Commands / checks run:** `git status --short`, `git branch --show-current`, `git rev-parse HEAD`; repository/source reads; `pdftotext -layout <original PDF> /tmp/phase2-independent-plan.txt`; Python/Playwright Chromium navigation probe against `http://127.0.0.1:4173`.
 - **Observed results:** Preview responds HTTP 200. Maple navigation defect reproduced exactly; the intended item return path itself remains correct. No uncaught browser errors in the public/Maple sign-in/claim probe. Public Cedar search rendered one H1 and no Maple-only private fixture marker.
 - **Tests not run:** Final corrected-source route/layout/accessibility suite remains pending at initial review. No live backend or production security tests were attempted.
 - **Deliverables:** Findings sent to the primary agent and this report; independent source/screenshot evidence in `/tmp/independent-phase2-search.png`.
@@ -44,4 +44,4 @@
 ## Follow-up and handoff
 - **Remaining work:** Recheck the two substantive findings and the target-size preference; execute final independent browser/source checks and record the scoped acceptance decision.
 - **Recommended next steps:** Primary agent completes focused fixes; reviewer reopens this report with a dated final addendum tied to the final tested source.
-- **Relevant references:** `docs/phase-0/ux-spec.md`, `plan.pdf`, `docs/coordination/integration.md`, `docs/phase-2/interface-guide.md`, and `agent-logs/codex-overseer-01__founder-vunassigned__phase-02-website-interface/codex-overseer-01__founder-vunassigned__phase-02-website-interface.md`.
+- **Relevant references:** `docs/phase-0/ux-spec.md`, `plan.md`, `docs/coordination/integration.md`, `docs/phase-2/interface-guide.md`, and `agent-logs/codex-overseer-01__founder-vunassigned__phase-02-website-interface/codex-overseer-01__founder-vunassigned__phase-02-website-interface.md`.

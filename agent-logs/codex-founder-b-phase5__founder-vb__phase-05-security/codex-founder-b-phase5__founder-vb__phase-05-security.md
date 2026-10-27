@@ -6,7 +6,7 @@
 - **Phase:** 05 — security
 - **Status:** Completed (first implementation checkpoint; full phase remains in progress)
 - **Date (UTC):** 2026-10-26
-- **Task / issue:** “Start Founder B Phase 5”; plan.pdf Phase 5, LL-038–LL-045
+- **Task / issue:** “Start Founder B Phase 5”; plan.md Phase 5, LL-038–LL-045
 - **Branch / commit:** codex/founder-b-phase-5, starting main b70777e; report included with implementation commit.
 
 ## Objective and scope
@@ -42,7 +42,7 @@
 ## Follow-up and handoff
 - **Remaining work:** Fresh CI and integrated permission/upload/private-claim evidence; independent review; operational risks listed in the phase matrix.
 - **Recommended next steps:** Review this PR, check its real SQL/HTTP/browser CI results, then rerun after Phase 4 integration. Keep Phase 5 in progress until its full exit gate is met.
-- **Relevant references:** plan.pdf Phase 5; docs/coordination/implemented-contract.md; docs/phase-3/README.md; PR12; docs/phase-5/README.md.
+- **Relevant references:** plan.md Phase 5; docs/coordination/implemented-contract.md; docs/phase-3/README.md; PR12; docs/phase-5/README.md.
 
 ## Final local validation
 

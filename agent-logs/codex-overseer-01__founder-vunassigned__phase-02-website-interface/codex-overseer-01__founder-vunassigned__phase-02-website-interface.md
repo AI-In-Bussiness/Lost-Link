@@ -11,7 +11,7 @@
 
 ## Objective and scope
 - **Goal:** Independently review visual consistency, mobile responsiveness, accessibility and navigation; require all important pages functional with mock data and loading/empty/error states.
-- **In scope:** Presence of UI deliverables; review criteria derived from docs/phase-0/ux-spec.md and plan.pdf.
+- **In scope:** Presence of UI deliverables; review criteria derived from docs/phase-0/ux-spec.md and plan.md.
 - **Out of scope:** Implementing screens, inventing visual results, accepting backend or AI quality on mock evidence.
 
 ## Work performed
@@ -59,4 +59,4 @@
 ## Follow-up and handoff
 - **Remaining work:** Implement the twelve screens and critical states, then execute the visual/mobile/accessibility/navigation review.
 - **Recommended next steps:** Founder A delivers the interface and preview after coordinating the single foundation with Founder B; Overseer runs this matrix and records reproducible defects before accepting the gate. No Phase 3 acceptance or production release is implied.
-- **Relevant references:** Previous report: ../codex-overseer-01__founder-vunassigned__phase-01-foundation/codex-overseer-01__founder-vunassigned__phase-01-foundation.md; docs/phase-0/ux-spec.md; docs/phase-1/frontend-mock-guide.md; plan.pdf.
+- **Relevant references:** Previous report: ../codex-overseer-01__founder-vunassigned__phase-01-foundation/codex-overseer-01__founder-vunassigned__phase-01-foundation.md; docs/phase-0/ux-spec.md; docs/phase-1/frontend-mock-guide.md; plan.md.

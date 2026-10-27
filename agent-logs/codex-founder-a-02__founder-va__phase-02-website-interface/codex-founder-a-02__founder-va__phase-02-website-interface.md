@@ -42,7 +42,7 @@
 ## Follow-up and handoff
 - **Remaining work:** Independent Phase 2 acceptance; production foundation and later workflows; real photographs/auth/persistence/security; final contract/task mapping.
 - **Recommended next steps:** Run the guide's preview command, rehearse the full mock return journey, inspect mobile evidence, then coordinate frontend adaptation with Founder B before Phase 3 work.
-- **Relevant references:** `AGENTS.md`, `plan.pdf`, `competition_rules.pptx`, all `docs/phase-0` and `docs/phase-1` documents; public/mock, claim and staff subagent reports under `agent-logs/`.
+- **Relevant references:** `AGENTS.md`, `plan.md`, `competition_rules.pptx`, all `docs/phase-0` and `docs/phase-1` documents; public/mock, claim and staff subagent reports under `agent-logs/`.
 
 
 ## Dated addendum — 2026-10-26 UTC: merge-readiness follow-up

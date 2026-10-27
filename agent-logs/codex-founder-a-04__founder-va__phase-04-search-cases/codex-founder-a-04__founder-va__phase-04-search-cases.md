@@ -6,7 +6,7 @@
 - **Phase:** 04 — search-cases
 - **Status:** Blocked (deliverables implemented; full validation/acceptance pending)
 - **Date (UTC):** 2026-10-26
-- **Task / issue:** Task-owner request; plan.pdf Phase 4, LL-031–LL-037; PR #12
+- **Task / issue:** Task-owner request; plan.md Phase 4, LL-031–LL-037; PR #12
 - **Branch / commit:** codex/founder-b-phase-4; Founder B baseline ed570ea
 
 ## Objective and scope
@@ -44,4 +44,4 @@
 ## Follow-up and handoff
 - **Remaining work:** Remote model/fallback checks, full CI, browser layout/accessibility review, independent relevance/phase acceptance and hosted verification.
 - **Recommended next steps:** Run the commands in the handoff; inspect quality-step outcome and JSON artifact; review failures and labels before adjusting ranking.
-- **Relevant references:** plan.pdf Phase 4; docs/phase-4/README.md; docs/phase-4/founder-a-handoff.md; AGENTS.md; docs/coordination/task-board.csv; PR #12.
+- **Relevant references:** plan.md Phase 4; docs/phase-4/README.md; docs/phase-4/founder-a-handoff.md; AGENTS.md; docs/coordination/task-board.csv; PR #12.
