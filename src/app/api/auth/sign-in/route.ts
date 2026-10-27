@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { pendingSignupCookieOptions, pendingSignupEmailCookie } from "@/lib/auth/confirmation";
 import { credentialsFromForm, isSameOrigin, readAuthForm, safeReturnPath, siteOrigin } from "@/lib/auth/security";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -16,6 +18,10 @@ export async function POST(request: NextRequest) {
   if (!client) return NextResponse.redirect(failed("unavailable"), { status: 303, headers: { "Cache-Control": "private, no-store" } });
   try {
     const { error } = await client.auth.signInWithPassword(credentials);
+    if (error?.code === "email_not_confirmed") {
+      (await cookies()).set(pendingSignupEmailCookie, credentials.email, pendingSignupCookieOptions(origin));
+      return NextResponse.redirect(failed("unconfirmed"), { status: 303, headers: { "Cache-Control": "private, no-store" } });
+    }
     if (error) return NextResponse.redirect(failed("invalid"), { status: 303, headers: { "Cache-Control": "private, no-store" } });
     return NextResponse.redirect(new URL(safeReturnPath(form!.get("next")), origin), { status: 303, headers: { "Cache-Control": "private, no-store" } });
   } catch {

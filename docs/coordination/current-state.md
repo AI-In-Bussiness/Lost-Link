@@ -1,3 +1,46 @@
+# Registration recovery and confirmation resend — 2026-10-27 UTC
+
+The owner's remaining failure is repeated registration with the original email
+after its first link reached Auth but redirected to localhost. That account may
+already be confirmed, so another signup need not send mail and the old link may
+be consumed. Added same-password duplicate signup sign-in, explicit unconfirmed
+sign-in recovery, and a **Resend confirmation email** form on the waiting screen
+plus a recovery page linked from sign-in/signup. Recovery sends a PKCE email
+link for an existing account (`shouldCreateUser: false`), confirming pending
+accounts or signing confirmed accounts in without changing their passwords.
+Auth's pinned `/resend` implementation emits implicit links, so it cannot be
+used for the existing server-side code exchange. Flow-specific verifier cookies
+and validated `sb_flow_id` callbacks keep earlier links usable after throttled
+requests; legacy callbacks remain supported.
+
+Lint, 51 unit tests, 14 release tests and a production build pass. An isolated
+real Auth v2.186.0/Postgres 15/Mailpit lab verifies lost-callback recovery,
+duplicate registration, both email-link paths, original-password preservation,
+throttled resend, cookies, safe redirects and request validation. It does not
+establish application database/RLS or browser acceptance; the existing CI
+Auth/browser suites have new scenarios. The public allowlist also accepts the
+flow-aware callback. Source is delivered through the same PR #29/source branch;
+production deployment and real-user testing are not inferred from local checks.
+
+# Email confirmation localhost redirect — 2026-10-27 UTC
+
+The task owner saved the hosted Supabase URL configuration fix. A fresh
+`npm run auth:check -- https://lost-link-beta.vercel.app ldhwtrxhmaanfcgmtsbp`
+passes all three cases: the Site URL fallback and both callback variants now
+redirect to `https://lost-link-beta.vercel.app` with the correct paths and
+preserved return destination. The previous localhost redirect is resolved.
+The deployed application's same-origin sign-in origin was already correct. Prepared
+`auth:configure` to repair only the hosted Site URL and callback allowlist,
+preserving other Auth settings, plus credential-free `auth:check` to detect this
+regression. See [the repair guide](auth-email-redirects.md) for exact dashboard
+values, commands and recovery. Eight new regression tests pass in the existing
+release suite (14 total); lint, typecheck and 47 application unit tests pass.
+The owner applied the fix through the provider dashboard; no management token,
+app redeployment or database change was required. A real fresh-email/iPhone
+PKCE sign-in remains to be checked by the owner; invalid-token probes do not
+verify a user's account or session. Source delivery is [PR #29](https://github.com/AI-In-Bussiness/Lost-Link/pull/29)
+on reused `codex/founder-b-phase-7` from main `476232f`.
+
 # Issue #27 — website registration — 2026-10-27 UTC
 
 Claimant registration is prepared on the reused `codex/convert-plan-markdown`

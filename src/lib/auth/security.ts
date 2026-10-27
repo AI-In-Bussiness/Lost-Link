@@ -42,6 +42,13 @@ export function signupCredentialsFromForm(form: URLSearchParams): { email: strin
   return credentials && credentials.password.length >= 12 ? credentials : null;
 }
 
+export function confirmationEmailFromForm(form: URLSearchParams): string | null {
+  const keys = [...form.keys()];
+  if (keys.some((key) => !["email", "next"].includes(key)) || keys.some((key) => form.getAll(key).length !== 1)) return null;
+  const email = form.get("email")?.trim();
+  return email && email.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? email : null;
+}
+
 export async function readAuthForm(request: Request): Promise<URLSearchParams | null> {
   if (request.headers.get("content-type")?.split(";")[0].trim().toLowerCase() !== "application/x-www-form-urlencoded") return null;
   try {
