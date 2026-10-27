@@ -37,7 +37,7 @@ jobs:
             cat /tmp/lostlink-db-start.log
           else
             cat /tmp/lostlink-db-start.log >&2
-            if ! rg -qi 'toomanyrequests|too many requests|429 Too Many Requests' /tmp/lostlink-db-start.log; then
+            if ! grep -Eqi 'toomanyrequests|too many requests|429 Too Many Requests' /tmp/lostlink-db-start.log; then
               exit 1
             fi
             # Same CLI-pinned Supabase versions from its original official registry.
