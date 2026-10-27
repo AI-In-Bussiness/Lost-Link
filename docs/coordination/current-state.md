@@ -1,3 +1,19 @@
+# Founder B Phase 7 hosted setup update — 2026-10-27 UTC
+
+PR #22 is merged at main `567ad420f62f6b7c8e6c0580dc9994dc8a89928e`.
+Foundation 40558339465 and Linux/Windows helpers 40558339463 pass there.
+The task owner found no application tables/function in hosted Supabase and
+reported installing all four migrations and the synthetic seed. Fresh public
+smoke passes 17/17; both schools report hybrid search with local model available.
+See [hosted evidence](../phase-7/public-smoke-after-setup.json).
+
+The original 503 incident below is historical. Issue #23 is resolved; #20 now
+tracks remaining hosted accounts/photo/return/rollback verification. No provider
+credentials or demo password are configured in this workspace, so those checks
+and deployment identity/rollback lock remain blocked. [Secure access setup](../phase-7/hosted-access.md)
+explains the required operator-only secrets. No hosted authenticated test,
+rollback rehearsal or locked release is inferred from public smoke/CI success.
+
 # Founder B Phase 7 release checkpoint — 2026-10-27 UTC
 
 Started from current main `77e46af122db4b566113345c167cca3b9bff5f39`, whose

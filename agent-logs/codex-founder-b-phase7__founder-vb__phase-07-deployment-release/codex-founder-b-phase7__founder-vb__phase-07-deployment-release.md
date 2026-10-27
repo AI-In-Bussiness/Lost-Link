@@ -70,3 +70,41 @@ same CLI-pinned versions. It triggers only on a rate-limit diagnostic; unrelated
 startup/SQL errors and every test still fail normally. No reset is performed.
 A local database startup attempt was stopped during image download; no local
 integration success is claimed.
+
+## Hosted database setup follow-up — 2026-10-27 UTC
+
+The task owner reported `backend_installed=false` and an empty public base-table
+listing in the intended Supabase project, then reported all four reviewed
+repository migrations plus synthetic seed succeeded via SQL Editor. The photo
+migration's warning was explained by its deliberate constraint/policy changes;
+no migration was rerun to suppress that warning.
+
+Fresh `node --use-env-proxy scripts/release-smoke.mjs https://lost-link-beta.vercel.app`
+now passes 17/17. Both schools report hybrid/available, confirming actual hosted
+local-model inference in these requests. Saved exact redacted output to
+`docs/phase-7/public-smoke-after-setup.json`; preserved the original failure.
+Public data outage is resolved. No authenticated hosted/photo/return check is
+claimed from that result.
+
+PR22 is merged into main 567ad420f62f6b7c8e6c0580dc9994dc8a89928e. Foundation
+40558339465 and helper run 40558339463 pass on that SHA; #23 is closed. GitHub's
+Vercel status reports a Ready deployment inspector link, but this session has
+not inspected the actual production alias or derived an immutable deployment ID.
+Updated candidate source/check/public evidence while keeping status blocked,
+deployment/rollback IDs and tag null. No secret values were inspected or saved.
+
+Current environment readiness again reports no credentials, runtime variables
+or outbound identities. Presence checks confirm VERCEL_TOKEN,
+SUPABASE_ACCESS_TOKEN and LOSTLINK_DEMO_PASSWORD are unconfigured. No browser,
+Vercel or Supabase connector is available. Requested these three operator-only
+secrets through secure workspace settings and added exact sources/purposes in
+`docs/phase-7/hosted-access.md`. Existing setup/provisioning/check commands remain
+the same; no new production route, privilege bypass or test was added.
+
+Remaining work: configure hosted access, inspect existing users/configuration,
+provision or preserve the four confirmed synthetic accounts, verify memberships
+and live photo/claim/approval/return with refresh and isolation, establish and
+rehearse compatible rollback, and independently accept/lock the exact deployed
+release. Issue #20 tracks these requirements; relevance #21 remains separately
+open. Phase status remains Blocked. Founder A's independent review and findings
+are preserved unchanged.
