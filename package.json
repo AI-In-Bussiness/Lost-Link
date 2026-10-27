@@ -35,7 +35,9 @@
     "demo:check": "node scripts/verify-demo.mjs",
     "test:demo": "node scripts/test-demo-repeatability.mjs",
     "release:check": "node --use-env-proxy scripts/release-smoke.mjs",
-    "test:release": "node --test tests/release-smoke.test.mjs"
+    "test:release": "node --test tests/release-smoke.test.mjs tests/auth-redirects.test.mjs",
+    "auth:check": "node --use-env-proxy scripts/auth-redirects.mjs check",
+    "auth:configure": "node --use-env-proxy scripts/auth-redirects.mjs configure"
   },
   "dependencies": {
     "@huggingface/transformers": "4.3.1",

@@ -1,3 +1,18 @@
+# Email confirmation localhost redirect — 2026-10-27 UTC
+
+Live invalid-token probes confirm that hosted Supabase project
+`ldhwtrxhmaanfcgmtsbp` redirects the Site URL fallback and both callback variants
+to `http://localhost:3000/`. The deployed application's same-origin sign-in
+redirect uses `https://lost-link-beta.vercel.app` correctly. Prepared
+`auth:configure` to repair only the hosted Site URL and callback allowlist,
+preserving other Auth settings, plus credential-free `auth:check` to detect this
+regression. See [the repair guide](auth-email-redirects.md) for exact dashboard
+values, commands and recovery. Eight new regression tests pass in the existing
+release suite (14 total); lint, typecheck and 47 application unit tests pass.
+Hosted repair remains blocked by absent Supabase management access; source
+changes and local config do not update that project's settings. Delivery reuses
+`codex/founder-b-phase-7` from main `476232f`.
+
 # Issue #27 — website registration — 2026-10-27 UTC
 
 Claimant registration is prepared on the reused `codex/convert-plan-markdown`

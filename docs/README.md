@@ -9,6 +9,7 @@ remain in place so historical links and active branches stay compatible.
 - [Repository map and areas of responsibility](coordination/repository-map.md)
 - [Frontend/backend integration checklist](coordination/integration.md)
 - [Shared coordination board](coordination/task-board.csv)
+- [Email confirmation redirect repair and verification](coordination/auth-email-redirects.md)
 
 ## Product, research, and UX — Phase 0
 
