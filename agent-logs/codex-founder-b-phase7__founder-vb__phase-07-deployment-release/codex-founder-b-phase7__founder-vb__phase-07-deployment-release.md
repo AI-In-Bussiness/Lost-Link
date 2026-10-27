@@ -50,3 +50,23 @@
 - **Remaining work:** Resolve #20, complete hosted secure account/photo-return/persistence/denial checks, record deployment identity, rehearse rollback, resolve/review #21, independently accept and lock final SHA/tag.
 - **Recommended next steps:** Review/merge the verification package after CI, then follow docs/phase-7/README.md with secure provider access. Rerun smoke after configuration changes; keep phase blocked until actual hosted evidence passes.
 - **Relevant references:** plan.md Phase 7; docs/phase-6/README.md; docs/phase-1/README.md; docs/coordination/task-board.csv; issues #20/#21.
+
+## Publication and CI addendum — 2026-10-27 UTC
+
+Published ready-for-review PR #22. Both Linux/Windows helper workflows on the initial
+push/PR checks passed. Initial Foundation runs 40522623001 and 40522669854,
+including retries, failed before tests because GHCR rate-limited the pinned
+Supabase image download. Opened issue #23 and added read-only built-in token
+authentication via docker/login-action; preserved image pins and every database,
+HTTP and browser assertion. Final post-mitigation run evidence is maintained in
+PR #22 and issue #23 rather than inferred from these failed attempts.
+
+Also reran all eight native Phase 4 tooling regression tests successfully.
+Production acceptance remains blocked regardless of CI outcome.
+
+Authenticated GHCR pulls also hit the registry limit. Added a single conditional
+startup fallback to Supabase's original official public ECR registry using the
+same CLI-pinned versions. It triggers only on a rate-limit diagnostic; unrelated
+startup/SQL errors and every test still fail normally. No reset is performed.
+A local database startup attempt was stopped during image download; no local
+integration success is claimed.
