@@ -58,3 +58,9 @@ parameters cannot select Object.prototype properties.
 - **Remaining work:** Run full CI, review final diff, merge the focused PR and close issue #27 after integration. Hosted provider settings remain an operator setup requirement.
 - **Recommended next steps:** Record exact-head CI and final merge/issue outcome in the delivery discussion; do not infer a hosted signup test from a successful local/CI suite.
 - **Relevant references:** Phase 00 report; AGENTS.md; README setup; issue #27.
+
+## Integration addendum — 2026-10-27 UTC
+
+Full Foundation run [40573310945](https://github.com/AI-In-Bussiness/Lost-Link/actions/runs/40573310945) passed on b1803d0, including website registration, real local email confirmation, session cookies, role isolation, production build and persisted responsive/axe browser checks. Interface, cross-platform helpers, relevance diagnostics and Vercel build also passed. The duplicate PR-triggered Foundation job hit registry rate limits; its retry was started.
+
+Main then advanced to 5bd35b1 via PR26. Merged that ancestry without rewriting either history. Resolved the sole conflict in docs/coordination/current-state.md by preserving both introductory updates; retained all upstream release documents, evidence, report changes and registry-recovery CI changes. No upstream files were deleted. The merged application, database configuration and test sources are byte-identical to tested b1803d0; the additional merge changes are upstream release documentation/CI plus this integration note.

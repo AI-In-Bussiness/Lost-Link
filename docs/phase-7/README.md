@@ -11,15 +11,26 @@ navigation defect (#24), missing submission evidence (#25), and the existing
 production, relevance and final-head CI blockers. The review does not approve
 the production release or submission.
 
-**Status: blocked for production acceptance.** On 2026-10-27 the public pages
-load, but both schools' organization/inventory/search APIs return 503. See
-[release blocker #20](https://github.com/AI-In-Bussiness/Lost-Link/issues/20)
-and the executed [public smoke report](public-smoke.json). Anonymous staff and
-claim requests return 401, cross-origin auth returns 403, and invalid same-origin
-sign-in redirects to the correct site. Those observations do not verify valid
-credentials, hosted migrations, Storage or account memberships. In particular,
-the authenticated-route 401 suggests some Supabase configuration is now present;
-the exact source of the public RPC failure requires operator inspection.
+**Status: public deployment checks pass; authenticated release verification is
+blocked on secure operator access.** The task owner confirmed in Supabase that
+`backend_dispatch` was missing and public application tables were absent, then
+reported successfully running all four repository migrations and the synthetic
+seed. A fresh check at 2026-10-27 19:25 UTC passes **17/17** public contracts;
+both schools report `mode: hybrid`, `semanticStatus: available`.
+See [current hosted evidence](public-smoke-after-setup.json). The
+[original failing smoke](public-smoke.json) is preserved as incident history.
+
+PR #22 is merged into main `567ad420f62f6b7c8e6c0580dc9994dc8a89928e`.
+[Foundation 40558339465](https://github.com/AI-In-Bussiness/Lost-Link/actions/runs/40558339465)
+and [Linux/Windows helpers 40558339463](https://github.com/AI-In-Bussiness/Lost-Link/actions/runs/40558339463)
+pass on that exact SHA. Registry issue #23 is resolved.
+
+[Issue #20](https://github.com/AI-In-Bussiness/Lost-Link/issues/20) now tracks the
+remaining hosted account/photo/rollback verification. Public success does not
+verify demo passwords, memberships, server photo credentials or the returned
+item journey. This workspace still has no Vercel/Supabase management credentials
+or demo password; use the [secure access instructions](hosted-access.md) to allow
+those tasks to proceed. No hosted authenticated write or rollback is claimed.
 
 ## Production setup
 
@@ -49,7 +60,7 @@ operator-only. Copy credentials directly between secure settings; do not put
 them in commits, reports, chat, shell history or screenshots. Never put the
 service-role key in the public key setting.
 
-For the current 503, inspect Vercel server logs for the failing request ID and
+If a 503 recurs, inspect Vercel server logs for the failing request ID and
 Supabase project health, URL/key pairing, migration history and the
 `public.backend_dispatch` RPC. Public errors intentionally hide database detail.
 Do not weaken those errors or policies to diagnose the release.
@@ -116,6 +127,14 @@ IDs/statuses without private proof, passwords, cookies or identifying details.
 Do not run the existing local-only fixture-mutating suites against hosting.
 
 ## Automated-check audit
+
+PR26 follow-up: GHCR and public ECR both throttled a fresh runner, including
+a failed-job retry. Foundation now starts with the pinned CLI's original Docker
+Hub images, then tries GHCR/public ECR only for rate-limit errors. Other startup
+failures and all existing tests remain required; image versions are unchanged.
+See PR26 for post-change evidence.
+
+The merged main checks above supersede the historical pre-merge evidence below.
 
 Baseline `77e46af122db4b566113345c167cca3b9bff5f39` has successful
 [Foundation 40444642079](https://github.com/AI-In-Bussiness/Lost-Link/actions/runs/40444642079)
@@ -195,7 +214,7 @@ Operator sequence for a confirmed regression:
    candidate and repeat the checks. Record both IDs and results. A staging
    rehearsal alone does not verify the production alias switch.
 
-No hosted rollback was executed here: there is no verified healthy hosted target
+No hosted rollback was executed here: there is no verified rollback target
 or provider access. This is an executable operator runbook, not a claim of a
 successful rehearsal. No hosted migrations, accounts, data or aliases were
 modified by this assignment.
