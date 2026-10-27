@@ -108,3 +108,24 @@ rehearse compatible rollback, and independently accept/lock the exact deployed
 release. Issue #20 tracks these requirements; relevance #21 remains separately
 open. Phase status remains Blocked. Founder A's independent review and findings
 are preserved unchanged.
+
+## PR26 registry retry repair — 2026-10-27 UTC
+
+The PR Foundation run 40569552092 failed before tests on head cc709bb, although
+push Foundation 40569514749 passed on that same commit. Retrying failed jobs
+produced another startup failure (job 122426083971): GHCR returned request-rate
+limits, then public ECR returned Data limit exceeded for multiple images.
+
+Changed CI startup to use the pinned CLI's original Docker Hub images first,
+then GHCR/public ECR only when the preceding attempt reports registry throttling.
+Inspected CLI v2.75.0 GetRegistryImageUrl: docker.io retains original upstream
+repository names; mirrors rewrite them under supabase. Verified Docker Hub's
+pinned supabase/postgres:15.8.1.085 manifest responds 200. No image version,
+database reset, application code, test selection or assertion was changed.
+
+Executed the actual workflow shell with a fake npm process: first-source success,
+second-source recovery, third-source recovery, all-registry failure and immediate
+non-registry SQL failure all passed with exact expected attempt order and exit
+status. git diff --check passed. Full post-change Foundation/helper evidence is
+maintained in PR26 after publication; real SQL/HTTP/browser checks remain required.
+Hosted manual account creation and the rest of the Phase 7 gate remain separate.

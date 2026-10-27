@@ -128,6 +128,12 @@ Do not run the existing local-only fixture-mutating suites against hosting.
 
 ## Automated-check audit
 
+PR26 follow-up: GHCR and public ECR both throttled a fresh runner, including
+a failed-job retry. Foundation now starts with the pinned CLI's original Docker
+Hub images, then tries GHCR/public ECR only for rate-limit errors. Other startup
+failures and all existing tests remain required; image versions are unchanged.
+See PR26 for post-change evidence.
+
 The merged main checks above supersede the historical pre-merge evidence below.
 
 Baseline `77e46af122db4b566113345c167cca3b9bff5f39` has successful
