@@ -4,7 +4,7 @@
 - **Agent:** codex-auth-redirect (Codex)
 - **Founder version:** unassigned
 - **Phase:** 03 — Model download repair
-- **Status:** Completed (implementation/local validation; CI and production deployment pending)
+- **Status:** Completed (merged, all exact-head checks passed, production release/public recovery verified)
 - **Date (UTC):** 2026-10-27
 - **Task / issue:** Finish deploying the registration recovery/resend change after the owner supplied Vercel build logs.
 - **Branch / commit:** work checkout; existing codex/founder-b-phase-7 source branch; main baseline d82c1adc6d21cb224739425c2e2603a4d41b683a.
@@ -47,3 +47,34 @@
 - **Remaining work:** Publish the focused follow-up PR, inspect exact-head checks, integrate and verify the new production deployment and resend page.
 - **Recommended next steps:** Require a public 200 with the actual resend form plus bounded/CSRF rejection checks; do not claim a real user's account/email session was verified automatically.
 - **Relevant references:** Phase 02 report; PR #29; owner Vercel build log for d82c1ad; docs/phase-4/README.md; installed Next.js ci-build-caching guide.
+
+## Release verification addendum — 2026-10-27 UTC
+
+Published source `97ce4a67ecf06c7549395771933d25bbebd67c96` on the reused
+source branch through [PR #30](https://github.com/AI-In-Bussiness/Lost-Link/pull/30).
+Both exact-head Foundation runs
+[40593399104](https://github.com/AI-In-Bussiness/Lost-Link/actions/runs/40593399104)
+and [40593461319](https://github.com/AI-In-Bussiness/Lost-Link/actions/runs/40593461319)
+passed, including the new download tests, actual model/inference/build/bundle,
+database/Auth/photo and persisted browser/accessibility suites. Linux/Windows
+helpers and the Vercel preview build passed. After review/checks, merged with
+the expected source SHA into main at `7001b395eee48ac32d879f4359465d9af8c121aa`
+and fast-forwarded this checkout.
+
+Production deployment
+[68HSvBNpsbmwEvKopRk2XWbPu9sS](https://vercel.com/ddar2425s-projects/lost-link/68HSvBNpsbmwEvKopRk2XWbPu9sS)
+succeeded. The first availability probe saw a transient 404 during rollout;
+subsequent canonical and fresh-query requests all returned 200 with no-store
+headers and the actual recovery form. A final production assertion script
+passed both resend/waiting forms, unconfirmed sign-in guidance, invalid-email
+303 recovery, correct return path, no-store and cross-origin 403 rejection.
+No production email was sent and no real account was accessed.
+
+`npm run release:check -- https://lost-link-beta.vercel.app` then passed all
+17 public checks; Maple and Cedar both report hybrid mode with semantic
+inference available. The failed model download no longer blocks the release,
+and the confirmation resend button is live. Updated local coordination/report
+addenda; the merged PR description also records deployment evidence. The owner
+should request a fresh link in Safari and open the newest email in that same
+browser. Actual private-account/email-session verification and independent
+project-wide acceptance are not inferred from these public checks.
