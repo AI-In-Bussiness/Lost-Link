@@ -50,3 +50,15 @@
 - **Remaining work:** #20 production; #21 relevance acceptance; #23 final-head CI; #24 supported-school navigation; #25 submission evidence. Release/submission are not approved by this report.
 - **Recommended next steps:** Address each owned issue, repeat relevant checks on the combined final SHA, independently test the hosted photographed-item/claim/return flow and time the real demonstration, then obtain the team's factual review before locking/submitting.
 - **Relevant references:** [Project plan](../../plan.md), [implemented contract](../../docs/coordination/implemented-contract.md), [Phase 6 evidence register](../../docs/phase-6/submission-evidence.csv), [Founder B Phase 7](../../docs/phase-7/README.md), [Phase 7 public smoke](../../docs/phase-7/public-smoke.json), and the full Founder A review linked above.
+
+## Publication integration addendum — 2026-10-27
+
+Founder A delivery commit `0e1578b` was initially rejected by the normal push
+fast-forward guard because Founder B concurrently advanced the shared PR to
+`84f5c32`. Fetched and merged that complete head as `33a635d`, preserving all
+three CI-recovery/report files and both founders’ reports. The only overlapping
+README edits combined automatically and were inspected. No shared history was
+force-pushed. Final-head Foundation checks must verify the combined result;
+#23 remains tracked rather than claiming baseline checks cover the new head.
+Markdown links, CSV shape/IDs, JSON shape, Python syntax and diff whitespace
+checks passed; root lint and TypeScript passed again on the shared tree.
