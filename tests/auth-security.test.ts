@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { credentialsFromForm, isSameOrigin, readAuthForm, safeReturnPath, siteOrigin } from "../src/lib/auth/security";
+import { credentialsFromForm, isSameOrigin, readAuthForm, safeReturnPath, signupCredentialsFromForm, siteOrigin } from "../src/lib/auth/security";
 
 test("origins reject cross-site, missing, null, and malformed input", () => {
   assert.equal(isSameOrigin("https://lostlink.example", "https://lostlink.example"), true);
@@ -22,6 +22,16 @@ test("redirect allowlist prevents external and protocol-relative destinations", 
 test("credential schema rejects duplicates, unrecognized fields, malformed email and oversized password", () => {
   assert.deepEqual(credentialsFromForm(new URLSearchParams({ email: " test@example.com ", password: " secret " })), {email:"test@example.com", password:" secret "});
   for (const body of ["email=a%40b.com&email=evil%40b.com&password=x", "email=a%40b.com&password=x&role=admin", "email=bad&password=x", "email=a%40b.com&password=", `email=a%40b.com&password=${"x".repeat(257)}`]) assert.equal(credentialsFromForm(new URLSearchParams(body)), null);
+});
+
+test("signup requires a long password and rejects identity or role injection", () => {
+  const valid = { email: " new@example.test ", password: " a long password " };
+  assert.deepEqual(signupCredentialsFromForm(new URLSearchParams(valid)), { email: "new@example.test", password: valid.password });
+  for (const length of [1, 11, 257]) assert.equal(signupCredentialsFromForm(new URLSearchParams({ email: "new@example.test", password: "x".repeat(length) })), null);
+  for (const length of [12, 256]) assert.ok(signupCredentialsFromForm(new URLSearchParams({ email: "new@example.test", password: "x".repeat(length) })));
+  for (const extra of ["role=admin", "organization_id=school", "user_id=someone", "email=other%40example.test", "password=second", "next=%2Faccount&next=%2Fmy%2Fclaims"]) {
+    assert.equal(signupCredentialsFromForm(new URLSearchParams(`email=new%40example.test&password=long-enough-password&${extra}`)), null);
+  }
 });
 
 test("body reader accepts urlencoded forms and bounds bodies independently of length header", async () => {

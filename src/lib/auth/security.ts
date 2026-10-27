@@ -37,6 +37,11 @@ export function credentialsFromForm(form: URLSearchParams): { email: string; pas
   return { email, password };
 }
 
+export function signupCredentialsFromForm(form: URLSearchParams): { email: string; password: string } | null {
+  const credentials = credentialsFromForm(form);
+  return credentials && credentials.password.length >= 12 ? credentials : null;
+}
+
 export async function readAuthForm(request: Request): Promise<URLSearchParams | null> {
   if (request.headers.get("content-type")?.split(";")[0].trim().toLowerCase() !== "application/x-www-form-urlencoded") return null;
   try {
