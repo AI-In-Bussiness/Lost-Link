@@ -1,3 +1,27 @@
+# Registration recovery and confirmation resend — 2026-10-27 UTC
+
+The owner's remaining failure is repeated registration with the original email
+after its first link reached Auth but redirected to localhost. That account may
+already be confirmed, so another signup need not send mail and the old link may
+be consumed. Added same-password duplicate signup sign-in, explicit unconfirmed
+sign-in recovery, and a **Resend confirmation email** form on the waiting screen
+plus a recovery page linked from sign-in/signup. Recovery sends a PKCE email
+link for an existing account (`shouldCreateUser: false`), confirming pending
+accounts or signing confirmed accounts in without changing their passwords.
+Auth's pinned `/resend` implementation emits implicit links, so it cannot be
+used for the existing server-side code exchange. Flow-specific verifier cookies
+and validated `sb_flow_id` callbacks keep earlier links usable after throttled
+requests; legacy callbacks remain supported.
+
+Lint, 51 unit tests, 14 release tests and a production build pass. An isolated
+real Auth v2.186.0/Postgres 15/Mailpit lab verifies lost-callback recovery,
+duplicate registration, both email-link paths, original-password preservation,
+throttled resend, cookies, safe redirects and request validation. It does not
+establish application database/RLS or browser acceptance; the existing CI
+Auth/browser suites have new scenarios. The public allowlist also accepts the
+flow-aware callback. Source is delivered through the same PR #29/source branch;
+production deployment and real-user testing are not inferred from local checks.
+
 # Email confirmation localhost redirect — 2026-10-27 UTC
 
 The task owner saved the hosted Supabase URL configuration fix. A fresh

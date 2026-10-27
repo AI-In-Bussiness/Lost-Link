@@ -1,6 +1,11 @@
 # Overseer review: phases 0–2
 
-Current authentication follow-up: [email confirmation redirect diagnosis and repair](codex-auth-redirect__founder-vunassigned__phase-01-auth-redirect-repair/codex-auth-redirect__founder-vunassigned__phase-01-auth-redirect-repair.md). Hosted URL repair awaits Supabase management access or a dashboard update.
+Current authentication follow-up: [email confirmation redirect diagnosis and repair](codex-auth-redirect__founder-vunassigned__phase-01-auth-redirect-repair/codex-auth-redirect__founder-vunassigned__phase-01-auth-redirect-repair.md). Hosted URL repair is verified after the owner's dashboard update.
+
+The owner saved the hosted URL fix and public redirects now pass. The subsequent
+[registration recovery and resend implementation](codex-auth-redirect__founder-vunassigned__phase-02-registration-recovery/codex-auth-redirect__founder-vunassigned__phase-02-registration-recovery.md)
+handles the original email's potentially confirmed account and adds fresh
+confirmation/sign-in email recovery, verified against real local Auth.
 
 Reviewed main commit: `412010ccaf6a2af77cf3abc6ed260676d557b86e` on October 25, 2026.
 Reviewer: `codex-overseer-01`. Founder version is `unassigned` pending task-owner confirmation.

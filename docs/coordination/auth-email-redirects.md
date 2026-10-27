@@ -30,7 +30,9 @@ https://lost-link-beta.vercel.app/auth/callback?next=**
 ```
 
 The second entry is needed because registration includes a validated `next`
-query parameter in `emailRedirectTo`. Supabase matches the entire URL. An exact
+query parameter in `emailRedirectTo`. Signup and resend also append the SDK's
+`sb_flow_id` so each email uses its own browser verifier; `next=**` covers that
+trailing parameter as well. Supabase matches the entire URL. An exact
 callback entry alone does not cover that query. The wildcard covers the query
 value on this exact callback and origin; it does not allow arbitrary hosts.
 Save the settings. Keep email confirmation enabled. No database reset,
@@ -74,7 +76,11 @@ in the same Safari browser used to register so its PKCE verifier cookie is
 available. Confirm that the callback reaches the account or intended claim page.
 For the previous account, try signing in first: Supabase may have confirmed it
 before the bad redirect. If still unconfirmed or the old link is expired/used,
-request a fresh email through registration and use its newest link.
+use **Resend confirmation email** from the check-email or sign-in screen and
+use its newest link. The resend action sends confirmation for pending accounts
+and an email sign-in link for confirmed accounts; it never creates an unknown
+account or resets an existing password. With the original password, a
+confirmed account can sign in through either sign-in or repeated registration.
 
 The local regression suite is `npm run test:release`; Foundation CI runs it.
 Live configuration repair requires authorized Supabase access. A passing local

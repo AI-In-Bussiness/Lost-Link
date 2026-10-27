@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { confirmationCallback, pendingSignupCookieOptions, pendingSignupEmailCookie, registrationError } from "@/lib/auth/confirmation";
 import { isSameOrigin, readAuthForm, safeReturnPath, signupCredentialsFromForm, siteOrigin } from "@/lib/auth/security";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -15,20 +17,25 @@ export async function POST(request: NextRequest) {
   const failed = (reason: string) => NextResponse.redirect(destination(`error=${reason}`), { status: 303, headers });
   if (!credentials) return failed("invalid");
   try {
+    (await cookies()).set(pendingSignupEmailCookie, credentials.email, pendingSignupCookieOptions(origin));
     const client = await createSupabaseServerClient();
     if (!client) return failed("unavailable");
-    const callback = new URL("/auth/callback", origin);
-    callback.searchParams.set("next", next);
     // No role, membership or privileged key is accepted by this route.
     const { data, error } = await client.auth.signUp({
       ...credentials,
-      options: { emailRedirectTo: callback.toString() },
+      options: { emailRedirectTo: confirmationCallback(origin, next) },
     });
+    // Supabase masks confirmed duplicates with an empty identities list (or
+    // user_already_exists). Authenticate with the supplied password rather than
+    // leaving an existing account waiting for an email that will not be sent.
+    // Failed authentication keeps the same generic response as new registration.
+    if (error?.code === "user_already_exists" || (!error && data.user?.identities?.length === 0)) {
+      const { error: signInError } = await client.auth.signInWithPassword(credentials);
+      if (!signInError) return NextResponse.redirect(new URL(next, origin), { status: 303, headers });
+      return NextResponse.redirect(destination("status=sent"), { status: 303, headers });
+    }
     if (error) {
-      if (error.code === "user_already_exists") {
-        return NextResponse.redirect(destination("status=sent"), { status: 303, headers });
-      }
-      return failed(error.status === 429 ? "rate-limit" : "unavailable");
+      return failed(registrationError(error));
     }
     // Projects that disable confirmation return a session immediately.
     if (data.session) return NextResponse.redirect(new URL(next, origin), { status: 303, headers });

@@ -16,6 +16,9 @@ export async function createSupabaseServerClient() {
   if (!config) return null;
   const cookieStore = await cookies();
   return createServerClient(config.url, config.key, {
+    // Keep each signup/resend verifier separate so a later or throttled request
+    // cannot replace the verifier needed by a link already in the user's inbox.
+    auth: { experimental: { appendPkceFlowIdToRedirects: true } },
     cookies: {
       getAll: () => cookieStore.getAll(),
       setAll: (values) => {
