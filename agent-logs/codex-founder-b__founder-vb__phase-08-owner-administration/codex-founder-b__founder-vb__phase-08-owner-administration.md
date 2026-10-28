@@ -61,3 +61,12 @@ Final combined local checks pass: 70 unit tests, all five database suites, lint,
 root/UI typechecks, formatting, production build and both real owner-browser
 scenarios (including ordinary and school-admin HTTP denial). Existing security/
 policy browser probes also passed before the school-label-only main integration.
+
+## CI focus repair — 2026-10-28 UTC
+
+The first exact-source Foundation pair had one complete pass and one failure in
+the owner's stale-form focus assertion. The error and retained input were correct,
+but the animation-frame focus callback was unreliable while another owner tab
+was active. Replaced it with a React effect after the alert is committed. Kept the
+same browser assertion; no timeout increase or assertion removal. Rerun the
+production browser checks and remote checks on the corrected head.

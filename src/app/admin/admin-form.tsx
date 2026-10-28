@@ -1,10 +1,12 @@
 'use client';
-import { useRef, useState, type ReactNode, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type ReactNode, type FormEvent } from 'react';
 
 export default function AdminForm({children,label}:{children:ReactNode;label:string}) {
  const [error,setError]=useState('');
  const [pending,setPending]=useState(false);
  const alert=useRef<HTMLDivElement>(null);
+ // Focus after React commits the alert, including when another owner tab was active.
+ useEffect(()=>{if(error)alert.current?.focus();},[error]);
  async function submit(event:FormEvent<HTMLFormElement>) {
   event.preventDefault();
   if(pending)return;
@@ -21,7 +23,6 @@ export default function AdminForm({children,label}:{children:ReactNode;label:str
   }catch(cause){
    setError(cause instanceof Error && cause.name!=='TimeoutError'?cause.message:'The request did not finish. Refresh to check whether it was saved before retrying.');
    setPending(false);
-   requestAnimationFrame(()=>alert.current?.focus());
   }
  }
  return <form action="/api/admin" method="post" onSubmit={submit} className="stack owner-form" aria-label={label} aria-busy={pending}>
