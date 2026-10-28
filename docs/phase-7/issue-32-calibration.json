@@ -1,0 +1,113 @@
+{
+  "model": "Xenova/all-MiniLM-L6-v2@751bff37182d3f1213fa05d7196b954e230abad9",
+  "dimensions": 384,
+  "minSimilarity": 0.3,
+  "minSeparation": 0.05,
+  "ranking": "rrf-60-eligibility-v2",
+  "runtime": "local CPU, q8, one inference thread",
+  "inventorySize": 10,
+  "positives": 8,
+  "baselineHits": 4,
+  "hybridHits": 8,
+  "falsePositives": 0,
+  "leaks": 0,
+  "elapsedMs": 539,
+  "rows": [
+    {
+      "case": 1,
+      "kind": "exact",
+      "baseline": [
+        "20000000-0000-4000-8000-000000000001"
+      ],
+      "hybrid": [
+        "20000000-0000-4000-8000-000000000001"
+      ]
+    },
+    {
+      "case": 2,
+      "kind": "exact",
+      "baseline": [
+        "20000000-0000-4000-8000-000000000001"
+      ],
+      "hybrid": [
+        "20000000-0000-4000-8000-000000000001"
+      ]
+    },
+    {
+      "case": 3,
+      "kind": "exact",
+      "baseline": [
+        "20000000-0000-4000-8000-000000000002"
+      ],
+      "hybrid": [
+        "20000000-0000-4000-8000-000000000002"
+      ]
+    },
+    {
+      "case": 4,
+      "kind": "exact",
+      "baseline": [
+        "20000000-0000-4000-8000-000000000002"
+      ],
+      "hybrid": [
+        "20000000-0000-4000-8000-000000000002"
+      ]
+    },
+    {
+      "case": 5,
+      "kind": "paraphrase",
+      "baseline": [],
+      "hybrid": [
+        "20000000-0000-4000-8000-000000000001"
+      ]
+    },
+    {
+      "case": 6,
+      "kind": "paraphrase",
+      "baseline": [],
+      "hybrid": [
+        "20000000-0000-4000-8000-000000000001"
+      ]
+    },
+    {
+      "case": 7,
+      "kind": "paraphrase",
+      "baseline": [],
+      "hybrid": [
+        "20000000-0000-4000-8000-000000000002"
+      ]
+    },
+    {
+      "case": 8,
+      "kind": "paraphrase",
+      "baseline": [],
+      "hybrid": [
+        "20000000-0000-4000-8000-000000000002"
+      ]
+    },
+    {
+      "case": 9,
+      "kind": "no-match",
+      "baseline": [],
+      "hybrid": []
+    },
+    {
+      "case": 10,
+      "kind": "no-match",
+      "baseline": [],
+      "hybrid": []
+    },
+    {
+      "case": 11,
+      "kind": "wrong-school",
+      "baseline": [],
+      "hybrid": []
+    },
+    {
+      "case": 12,
+      "kind": "wrong-school",
+      "baseline": [],
+      "hybrid": []
+    }
+  ]
+}

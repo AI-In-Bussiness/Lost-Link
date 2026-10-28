@@ -1,3 +1,18 @@
+# Issue #32 correction — 2026-10-28 UTC
+
+The shared Phase 7 branch adds object/color eligibility to public POST search,
+including disabled/busy/error fallback and fresh-inventory recovery. SQL remains
+a high-recall candidate source; the HTTP layer overfetches up to 50 before
+filtering and applying the requested limit. Frozen labels/assessment thresholds
+and cosine gates are unchanged. The frozen gate passes 16/16 core positives with
+zero false positives/leaks; 27 additional known regression cases pass 19/19
+positives with zero false positives. The original 12-case calibration remains
+8/8 with zero negative/trap results. Actual local HTTP checks cover enabled and
+disabled inference, absent objects, real matching objects, scope and limit=1.
+See [issue evidence](../phase-7/issue-32.md). Await PR merge/deployment before
+claiming the production issue resolved. Earlier failure records below remain
+historical; this correction does not approve other release gates.
+
 # Founder B Phase 7 closeout — 2026-10-28 UTC
 
 Fresh public checks pass 17/17 and both schools provide hybrid inference.

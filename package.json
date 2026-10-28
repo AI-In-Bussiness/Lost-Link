@@ -39,7 +39,8 @@
     "test:release": "node --test tests/release-smoke.test.mjs tests/auth-redirects.test.mjs tests/release-readiness.test.mjs",
     "auth:check": "node --use-env-proxy scripts/auth-redirects.mjs check",
     "auth:configure": "node --use-env-proxy scripts/auth-redirects.mjs configure",
-    "release:verify": "node scripts/release-readiness.mjs"
+    "release:verify": "node scripts/release-readiness.mjs",
+    "test:search:relevance": "node scripts/test-search-relevance.mjs"
   },
   "dependencies": {
     "@huggingface/transformers": "4.3.1",

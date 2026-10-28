@@ -35,7 +35,17 @@ Public inventory is re-read after inference. Visibility/content changes invalida
 
 ## Ranking and measured limits
 
-Semantic candidates require cosine similarity >=0.30, a >=0.05 gap between the best two candidate similarities, and similarity within 0.10 of the best. Ambiguous semantic results leave the keyword baseline intact. Reciprocal rank fusion (`rrf-60-v1`) combines semantic and structured ranks; ties use found date descending then ID. These gates were calibrated on the committed small synthetic set and need independent/held-out evaluation.
+Issue #32 follow-up: current ranking is `rrf-60-eligibility-v2`. See the
+[repair evidence](../phase-7/issue-32.md). The numerical semantic thresholds
+below are unchanged. Keyword fallback now uses the same explicit object/color
+eligibility guard as semantic additions. The original evaluation artifact is
+historical; current calibration is 8/8 positives versus 4/8 guarded keywords,
+with zero no-match/wrong-school results. The frozen 28-case gate now has 16/16
+core hits, zero false positives/leaks and a passing unchanged gate. These are
+known synthetic regression sets, not blind or general accuracy estimates.
+
+
+Semantic candidates require cosine similarity >=0.30, a >=0.05 gap between the best two candidate similarities, and similarity within 0.10 of the best. Ambiguous semantic results leave the keyword baseline intact. Reciprocal rank fusion (`rrf-60-eligibility-v2`) combines semantic and structured ranks; ties use found date descending then ID. These gates were calibrated on the committed small synthetic set and need independent/held-out evaluation.
 
 `npm run eval:search` runs the actual local model, with network disabled in its worker, against twelve fixed labeled queries and ten fictional inventory items including eight distractors. It compares the hybrid path with a deterministic counterpart of SQL's public-field keyword algorithm. The [recorded result](evaluation-results.json) is 8/8 positive queries with a relevant item in top three versus 5/8 for keywords, no results on the two no-match/two wrong-school cases, and zero school leaks. One local run took about 0.3 seconds for all twelve cases including model load; this is not a hosting latency guarantee. Initial gates from the former provider underperformed; the revised local gates improved this calibration set. No held-out/general accuracy claim is made. This small English-oriented model has no validated multilingual retrieval coverage here.
 

@@ -1,9 +1,11 @@
+import { supportsQuery } from "./eligibility";
 /** Public allow-list: private fields on an accidental wider DTO never enter embeddings. */
 export type SearchItem = {
   id: string; organizationSlug: string; title: string; publicDescription: string;
   category: string; color: string; publicLocation: string; foundDate: string;
 };
 export type Match<T extends SearchItem = SearchItem> = { item: T; reasons: string[]; method: "structured" | "hybrid" };
+export const RANKING_VERSION = "rrf-60-eligibility-v2";
 export const MAX_CANDIDATES = 50;
 export const DIMENSIONS = 384;
 export const MODEL = "Xenova/all-MiniLM-L6-v2@751bff37182d3f1213fa05d7196b954e230abad9";
@@ -19,10 +21,11 @@ export function cosine(a: number[], b: number[]): number {
   if (!norm) throw new Error("Empty embedding");
   return a.reduce((sum, n, i) => sum + n * b[i], 0) / norm;
 }
-/** Reciprocal rank fusion v1; scores are internal ranking signals, never ownership probabilities. */
-export function rank<T extends SearchItem>(items: T[], vectors: number[][], query: number[], baseline: Match<T>[], limit: number): Match<T>[] {
+/** Reciprocal rank fusion with explicit eligibility; scores are internal ranking signals, never ownership probabilities. */
+export function rank<T extends SearchItem>(items: T[], vectors: number[][], query: number[], baseline: Match<T>[], limit: number, queryText: string): Match<T>[] {
   if (items.length !== vectors.length) throw new Error("Missing embeddings");
   const candidates = items.map((item, i) => ({item, similarity: cosine(query, vectors[i])}))
+    .filter(row => supportsQuery(row.item, queryText))
     .sort((a,b) => b.similarity-a.similarity || b.item.foundDate.localeCompare(a.item.foundDate) || a.item.id.localeCompare(b.item.id));
   // Ambiguous nearest neighbours do not add semantic results. Keep the keyword baseline.
   const best = candidates[0]?.similarity ?? -1;

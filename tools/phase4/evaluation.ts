@@ -1,3 +1,4 @@
+import { eligibleBaseline } from "../../src/lib/search/eligibility.ts";
 import type { SearchItem, Match } from "../../src/lib/search/ranking.ts";
 export type Case = {
   id: string; kind: string; school: string; query: string; relevant: string[];
@@ -15,11 +16,11 @@ export function scoped(items: SearchItem[], c: Case): SearchItem[] {
 export function baseline(items: SearchItem[], query: string): Match[] {
   const stop = new Set(["the","with","and","lost","my","near","at","in","is","it","of","to","for","was","has","have","an"]);
   const tokens = query.toLowerCase().split(/[^a-z0-9]+/).filter(t => t.length > 1 && !stop.has(t));
-  return items.map(item => ({item, score: tokens.filter(t =>
+  return eligibleBaseline(items.map(item => ({item, score: tokens.filter(t =>
     [item.title,item.publicDescription,item.category,item.color,item.publicLocation].join(" ").toLowerCase().includes(t)).length}))
     .filter(row => row.score > 0)
     .sort((a,b) => b.score-a.score || b.item.foundDate.localeCompare(a.item.foundDate) || a.item.id.localeCompare(b.item.id))
-    .slice(0,3).map(({item}) => ({item,reasons:["Matching public item details"],method:"structured"}));
+    .slice(0,50).map(({item}) => ({item,reasons:["Matching public item details"],method:"structured" as const})), query, 3);
 }
 export function assess(c: Case, rows: Match[]) {
   const top = rows.slice(0,3);
