@@ -20,7 +20,7 @@ This harness serves only the interface modules, necessary mock JavaScript, one p
 
 | Route | Interface behavior |
 | --- | --- |
-| `/` | School selector, description search, four-step explanation, staff entry |
+| `/` | LostLink introduction, feature overview, school search, account/claims entry, four-step explanation and staff entry; introduction remains available if the school directory fails |
 | `/o/[orgSlug]/search` | Query, category/color/date filters, public keyword reasons, six-card pagination, empty/error/fallback states |
 | `/o/[orgSlug]/items/[itemId]` | Public item facts, illustration notice, sign-in return path or direct claim link |
 | `/sign-in` | Explicit fictional student/staff demo actions, validated local return path |
