@@ -1,5 +1,37 @@
 # Founder B Phase 7 — deployment and release
 
+## Current closeout — 2026-10-28 UTC
+
+The release package is delivered, but final hosted acceptance remains blocked.
+This section supersedes historical issue-state/source references below.
+
+- Current production application candidate: `ae883e6c038a94d482a8b7bf4ba15f142ef70a2e`.
+  Exact-commit Foundation [40598540517](https://github.com/AI-In-Bussiness/Lost-Link/actions/runs/40598540517)
+  and helper [40598540570](https://github.com/AI-In-Bussiness/Lost-Link/actions/runs/40598540570) passed;
+  Foundation includes real local Auth/photo/API/persisted-browser acceptance.
+- Fresh [public smoke](closeout-public.json): 17/17 passed, hybrid inference
+  available for both schools. Three public invalid-token redirect checks pass.
+  Six rendered auth-page checks pass, retaining resend only after signup.
+  These checks send no production email and do not authenticate a real account.
+- GitHub reports successful [Vercel deployment](https://vercel.com/ddar2425s-projects/lost-link/HRapJJVMpscFimyrGsybdgqqGFR2).
+  Provider-side production alias/configuration inspection is still unavailable.
+- Issues #20/#21/#23 are closed. Their closure is recorded, not represented as
+  evidence that the remaining hosted/relevance requirements passed.
+- Fresh [actual-model evaluation](closeout-relevance.json) exits 1: 16/16 core
+  positives, five negative/trap false positives, zero school/filter leaks.
+  [Forced fallback](closeout-fallback.json) preserves keyword behavior with two
+  baseline false positives. Keyword-only does not itself resolve the proposed
+  no-match gate. Current review/fix is tracked in [#32](https://github.com/AI-In-Bussiness/Lost-Link/issues/32).
+  Thresholds, labels and ranking remain unchanged.
+
+Still required before locking: verified confirmation-email delivery after SMTP
+setup; hosted demo accounts/memberships and the real photo→claim→return journey;
+provider/configuration/schema inspection; compatible rollback rehearsal; and
+independent acceptance of the release and search-quality evidence. Supply the
+operator access in [hosted-access.md](hosted-access.md). No release tag or
+rollback success is claimed. The refreshed [candidate manifest](release-candidate.json)
+pins the tested application source and current lock/model/migration hashes.
+
 Scope: plan.md LL-052–LL-056, live deployment/environment validation, rollback,
 locked demo release, and an audit of automated checks. Founder A owns final UX
 and the requested Phase 0–6 review; the independent Overseer owns final

@@ -1,10 +1,27 @@
+# Founder B Phase 7 closeout — 2026-10-28 UTC
+
+Fresh public checks pass 17/17 and both schools provide hybrid inference.
+All three redirect diagnostics and six auth-page visibility/continuation checks
+pass. Main ae883e6 has successful exact-commit Foundation/helper runs and a
+successful GitHub Vercel status. The actual-model frozen evaluation still exits
+1 with 16/16 core hits and five false positives; fallback retains two keyword
+false positives, with zero school/filter leaks. Current quality tracking is #32.
+Issues #20/#21/#23 are closed; historical references below retain their original
+context and do not establish unrecorded hosted acceptance. Updated candidate
+and raw results live in docs/phase-7/. Hosted account/photo/SMTP/rollback work
+still requires secure operator access; no release lock or independent approval
+is claimed. Prior local report/email-diagnosis changes are preserved.
+
 # Confirmation resend visibility — 2026-10-27 UTC
 
 The owner requests resend only after submitting signup. Removed initial
 sign-in/signup recovery links; the Check your email state retains its form and
 remembered email. Updated error guidance and existing browser acceptance.
-Lint, full build and six local rendered-page checks pass. PR checks and
-production deployment are pending. Provider/account behavior is unchanged.
+Lint, full build and six local rendered-page checks pass. PR #31 merged as
+ae883e6 after both exact-source Foundation/browser runs and helper/preview
+checks passed. Production deployment HRapJJVMpscFimyrGsybdgqqGFR2 succeeded;
+all six public rendered-page assertions pass, including remembered email and
+safe continuation. No production email sent. Provider/account behavior is unchanged.
 
 # Production model download repair — 2026-10-27 UTC
 

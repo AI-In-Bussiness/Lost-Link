@@ -1,5 +1,12 @@
 # Secure hosted access for finishing Founder B Phase 7
 
+On an iPhone, use the task's execution-environment editor if the client exposes
+it. This repository cannot determine the ChatGPT client menu or whether mobile
+supports secret editing. Safari's Request Desktop Website may expose the editor;
+otherwise use a computer. Do not paste tokens into chat or add them to public
+Vercel runtime variables as a workaround. Never send a screenshot containing
+secret values. The agent can continue public checks while access is unavailable.
+
 The public site now passes all 17 deployment checks, including hybrid search.
 The remaining work requires operator access: inspect the current deployment and
 Auth settings, prepare the four synthetic demo accounts, verify real photos and
