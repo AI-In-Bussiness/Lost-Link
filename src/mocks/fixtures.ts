@@ -2,13 +2,13 @@
 import type { Activity, Claim, Organization, Persona, StaffItem } from './contracts.ts';
 export const DEMO_NOW = '2026-10-25T14:00:00.000Z';
 export const organizations: Organization[] = [
-  { id: 'org-cedar', slug: 'cedar-grove', name: 'Cedar Grove School', publicListingEnabled: true },
-  { id: 'org-maple', slug: 'maple-hill', name: 'Maple Hill School', publicListingEnabled: true },
+  { id: 'org-cedar', slug: 'cedar-grove', name: 'Fairfax High School', publicListingEnabled: true },
+  { id: 'org-maple', slug: 'maple-hill', name: 'Flint Hill School', publicListingEnabled: true },
   { id: 'org-closed', slug: 'closed-school', name: 'Disabled Demo School', publicListingEnabled: false },
 ];
 export const collectionInstructions: Record<string, string> = {
-  'org-cedar': 'Visit the Cedar Grove front office on a school day. Show your claim reference to staff.',
-  'org-maple': 'Visit the Maple Hill front office. Show your claim reference to staff.',
+  'org-cedar': 'Visit the Fairfax High School front office on a school day. Show your claim reference to staff.',
+  'org-maple': 'Visit the Flint Hill School front office. Show your claim reference to staff.',
 };
 export const personas: Record<Persona, { userId: string | null; staffOrgIds: string[] }> = {
   anonymous: { userId: null, staffOrgIds: [] },
@@ -29,7 +29,7 @@ const rows: [string, string, string, StaffItem['category'], string, string, stri
   ['item-lunchbag', 'Green insulated lunch bag', 'Green lunch bag with a grey handle and zip.', 'bag', 'green', 'Cafeteria', '2026-10-23', 'Reusable fork with a rainbow handle inside.', 'available'],
   ['item-jacket', 'Red rain jacket', 'Lightweight red jacket with a hood.', 'clothing', 'red', 'Bus waiting area', '2026-10-17', 'Inner pocket holds a folded fictional chess score sheet.', 'reserved'],
   ['item-headphones', 'White over-ear headphones', 'White wireless headphones with padded ear cups.', 'electronics', 'white', 'Music room', '2026-10-16', 'Left inner band has a tiny blue paint mark.', 'returned'],
-  ['item-maple-duffel', 'Black Nike duffel bag', 'Black sports duffel with a white logo and two carry handles.', 'bag', 'black', 'Gym entrance', '2026-10-24', 'Maple-only hidden detail; never visible at Cedar Grove.', 'available'],
+  ['item-maple-duffel', 'Black Nike duffel bag', 'Black sports duffel with a white logo and two carry handles.', 'bag', 'black', 'Gym entrance', '2026-10-24', 'Flint Hill-only hidden detail; never visible at Fairfax High School.', 'available'],
 ];
 export function seedItems(): StaffItem[] {
   return rows.map(([id, title, publicDescription, category, color, foundLocation, foundDate, verificationNotes, status]) => ({
