@@ -4,7 +4,7 @@
 - **Agent:** codex-issue-34 (Codex)
 - **Founder version:** unassigned; no Founder role was supplied for this issue.
 - **Phase:** 01 — home-landing
-- **Status:** Completed (implementation and local verification; remote integration pending)
+- **Status:** Completed (implementation and local verification; integration tracked in PR #36)
 - **Date (UTC):** 2026-10-28
 - **Task / issue:** https://github.com/AI-In-Bussiness/Lost-Link/issues/34
 - **Branch / commit:** Reused `codex/convert-plan-markdown`, fast-forwarded to current main `ae883e6c038a94d482a8b7bf4ba15f142ef70a2e` before editing.
@@ -33,7 +33,7 @@
 - A browser probe against `next start` from the final production build passed feature visibility during actual local API 503s, focused section navigation and the account-creation link reaching the real `/sign-up` page, with zero page errors. No API interception, account creation or hosted access was used. This is a frontend composition check, not configured Auth acceptance.
 - Frozen root install initially failed in the existing Supabase postinstall's direct DNS lookup; installed unchanged dependencies with `npm ci --ignore-scripts --cache /tmp/lostlink-npm-cache` for local frontend verification. Scoped tools installed normally. No lockfile changes.
 - **Tests not run:** Local database, real Auth/photo/return browser journey, pinned-model download/inference and hosted authenticated acceptance; no provider credentials are configured and these are unchanged contracts. Full repository CI remains enabled.
-- **Deliverables:** Landing page, regression coverage and this report. Remote PR/check/merge references follow in a dated addendum.
+- **Deliverables:** Landing page, regression coverage and this report; [PR #36](https://github.com/AI-In-Bussiness/Lost-Link/pull/36) tracks remote CI, integration and issue closure.
 
 ## Thoughts and reflections
 - **What worked well:** Existing search, reusable router and licensed local design assets support the introduction without adding dependencies.
@@ -48,6 +48,15 @@
 - **Questions / requested decisions:** Founder version is unassigned metadata, not a blocker to the user's explicitly authorized issue fix. No product decision is needed for implementation.
 
 ## Follow-up and handoff
-- **Remaining work:** Publish the focused PR, inspect remote checks and diff, merge and confirm issue closure.
+- **Remaining work at report publication:** Inspect remote checks and diff, merge and confirm issue closure through PR #36. Its timeline is the source for final integration status.
 - **Recommended next steps:** Use a normal merge commit to preserve the reused branch's ancestry; do not force-push or delete historical branches.
 - **Relevant references:** Issue #34; `DESIGN.md`; `docs/phase-2/interface-guide.md`; `docs/coordination/integration.md`; Founder A Phase 6 UI report.
+
+## Publication — 2026-10-28 UTC
+
+Implementation commit `6611490ec0946eefb6f04c185781dd8a2847affc` is published on
+the reused source branch in PR #36. The preview build passed. Both Foundation
+runs, cross-platform helpers and interface CI started; the relevance workflow
+remains diagnostic and does not resolve issue #32. Remote results and the final
+merge/closure are recorded on the PR so this dated implementation report does
+not imply acceptance of separately owned release gates.

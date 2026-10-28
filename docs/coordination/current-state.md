@@ -9,8 +9,10 @@ or an empty directory. No backend, authorization or model behavior changes.
 Source starts from main `ae883e6` on reused `codex/convert-plan-markdown`;
 the separate photo/release-readiness PR #33 is not included. Local lint, root/UI
 typechecks, formatting, 51 unit tests, 14 mocks, 19 browser/axe scenarios and direct
-Next production compilation pass. PR CI/integration evidence will be recorded in
-the [issue report](../../agent-logs/codex-issue-34__founder-vunassigned__phase-01-home-landing/codex-issue-34__founder-vunassigned__phase-01-home-landing.md).
+Next production compilation pass. [PR #36](https://github.com/AI-In-Bussiness/Lost-Link/pull/36)
+tracks final CI/integration evidence; the
+[issue report](../../agent-logs/codex-issue-34__founder-vunassigned__phase-01-home-landing/codex-issue-34__founder-vunassigned__phase-01-home-landing.md)
+records implementation and local verification.
 
 # Confirmation resend visibility — 2026-10-27 UTC
 
