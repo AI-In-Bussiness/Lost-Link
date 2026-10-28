@@ -1,3 +1,11 @@
+# PR #33 integration refresh — 2026-10-28 UTC
+
+Merged main `846aacf` (landing-page PR #36) into the existing Phase 7 PR branch
+without rewriting shared history. Resolved coordination-document conflicts by
+retaining both founders’ records and the newer completed auth visibility status.
+The new landing page, staff photo review and issue #32 correction are preserved.
+This integration does not merge PR #33 into main or approve the hosted release.
+
 # Issue #32 correction — 2026-10-28 UTC
 
 The shared Phase 7 branch adds object/color eligibility to public POST search,
@@ -26,6 +34,21 @@ context and do not establish unrecorded hosted acceptance. Updated candidate
 and raw results live in docs/phase-7/. Hosted account/photo/SMTP/rollback work
 still requires secure operator access; no release lock or independent approval
 is claimed. Prior local report/email-diagnosis changes are preserved.
+# Issue #34 landing page — 2026-10-28 UTC
+
+The root page now introduces school-scoped search, published photos and filters,
+private ownership proof, claim tracking and staff review/return. It retains the
+notebook design and school search, adds account/claims entry and keyboard-accessible
+section links, and keeps the introduction visible during school-directory errors
+or an empty directory. No backend, authorization or model behavior changes.
+
+Source starts from main `ae883e6` on reused `codex/convert-plan-markdown`;
+the separate photo/release-readiness PR #33 is not included. Local lint, root/UI
+typechecks, formatting, 51 unit tests, 14 mocks, 19 browser/axe scenarios and direct
+Next production compilation pass. [PR #36](https://github.com/AI-In-Bussiness/Lost-Link/pull/36)
+tracks final CI/integration evidence; the
+[issue report](../../agent-logs/codex-issue-34__founder-vunassigned__phase-01-home-landing/codex-issue-34__founder-vunassigned__phase-01-home-landing.md)
+records implementation and local verification.
 
 # Confirmation resend visibility — 2026-10-27 UTC
 

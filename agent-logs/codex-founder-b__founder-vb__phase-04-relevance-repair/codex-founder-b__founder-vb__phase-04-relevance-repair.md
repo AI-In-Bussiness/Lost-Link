@@ -44,3 +44,27 @@
 - **Remaining work:** Exact-head remote checks, review/merge and hosted verification. Overall Phase 7 rollback/account/acceptance gates remain open.
 - **Recommended next steps:** Review/merge Fixes #32, deploy the accepted source, rerun public checks and independently evaluate matching before recording release acceptance.
 - **Relevant references:** GitHub #32; PR #33; docs/phase-7/issue-32.md; original frozen set and closeout reports.
+
+## Integration addendum — 2026-10-28 UTC
+
+- **Request:** Resolve the merge conflicts shown for PR #33 after PR #36 landed.
+- **Work performed:** Merged main `846aacf` into the existing shared source branch
+  from `1456949`, preserving both commit histories. The only textual conflicts
+  were `docs/coordination/current-state.md` and `task-board.csv`; retained both
+  landing-page and Phase 7/search records, with the newer completed auth status
+  rather than the older In Progress row. Reviewed automatic merges in the public
+  interface and CSS to preserve landing-page and staff photo shortcuts together.
+- **Validation:** Lint, root and interface typechecks, interface formatting,
+  56 unit tests, 14 mock tests and nine relevance tooling tests pass. Production
+  build passes. Actual pinned-model frozen relevance remains 16/16 and additional
+  relevance 19/19, both gates passing. Real HTTP relevance passes with model
+  enabled and disabled, including the object counterexample, scope and limit=1.
+- **Browser checks:** All 19 standalone browser journeys pass, including landing
+  links/directory recovery, responsive/axe, claims and mock photo publication.
+- **Reflections:** Independent additions to shared status documents require
+  combining attributed histories rather than selecting a whole side. No search
+  implementation or landing-page behavior needed a conflict-resolution rewrite.
+- **Handoff:** Push this merge commit through the existing PR #33; repeat exact-head
+  remote checks. This task resolves merge conflicts and does not claim production
+  deployment or independent Phase 7 acceptance. No hosted mutations or unrelated
+  lifecycle/database reset were performed.

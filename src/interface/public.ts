@@ -64,13 +64,29 @@ function homeArt(): string {
 
 async function home(ctx: ViewContext): Promise<View> {
   const result = await ctx.api.listOrganizations();
-  if (!result.ok) return unavailable(result, ctx.refresh);
-  const organizations = result.data;
+  // The introduction stays useful even when the school directory is unavailable.
+  const organizations = result.ok ? result.data : [];
   const first =
     organizations.find((org) => org.slug === ctx.orgSlug) ?? organizations[0];
   return {
     title: "Find what you lost",
-    html: `<section class="hero"><div class="hero-copy"><p class="eyebrow">School lost &amp; found</p><h1>Lost something?<br><em>Let’s find it.</em></h1><p class="hero-description">The bag from practice. The bottle from lunch. Search what’s been handed in at your school and take the first step to getting it back.</p>${first ? `<form id="home-search" class="hero-search stack" method="get" action="${schoolPath(first.slug)}/search"><div class="field"><label for="home-school">Your school</label><select id="home-school" name="school" required>${organizations.map((org) => option(org.slug, first.slug, org.name)).join("")}</select></div><div class="field"><label for="home-query">What are you looking for?</label><input id="home-query" name="q" type="search" maxlength="300" placeholder="Try “black sports bag”" autocomplete="off"></div><button class="button" type="submit">Find my item <span aria-hidden="true"><svg class="arrow-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button><p class="muted">Browsing is open to everyone. Sign in when you're ready to claim.</p></form>` : '<div class="notice"><p>No schools are currently listing items. Contact your school office for help.</p></div>'}<p class="hero-assurance"><strong>Private proof. People decide.</strong><span>Ownership details go to authorized staff. A search match is only a starting point.</span></p></div>${homeArt()}</section><section class="how-section stack" aria-labelledby="how-it-works"><div class="page-heading"><p class="eyebrow">From found to returned</p><h2 id="how-it-works">Back in your hands, in four steps.</h2><p class="muted">A possible match starts the conversation. School staff verify ownership before collection.</p></div><div class="steps">${[
+    html: `<section class="hero"><div class="hero-copy"><p class="eyebrow">Meet LostLink · School lost &amp; found</p><h1>Lost something?<br><em>Let’s find it.</em></h1><p class="hero-description">Your school’s lost-and-found, in one place. Browse found belongings, send a private claim, and follow staff updates on the way to getting your item back.</p><nav class="landing-links" aria-label="Explore LostLink"><a href="#features">Explore features</a><a href="#how-it-works">How it works</a></nav>${first ? `<form id="home-search" class="hero-search stack" method="get" action="${schoolPath(first.slug)}/search"><div class="field"><label for="home-school">Your school</label><select id="home-school" name="school" required>${organizations.map((org) => option(org.slug, first.slug, org.name)).join("")}</select></div><div class="field"><label for="home-query">What are you looking for?</label><input id="home-query" name="q" type="search" maxlength="300" placeholder="Try “black sports bag”" autocomplete="off" aria-describedby="home-search-hint"><p class="muted" id="home-search-hint">Use public details like type and color. Save secret identifying details for your private claim.</p></div><button class="button" type="submit">Find my item <span aria-hidden="true"><svg class="arrow-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button><p class="muted">Browsing is open to everyone. Sign in when you're ready to claim.</p></form>` : result.ok ? '<div class="notice"><p>No schools are currently listing items. Contact your school office for help.</p></div>' : '<div class="notice"><p>We couldn’t load the school list. Try again, or contact your school office for help.</p><button id="home-retry" class="secondary" type="button">Try again</button></div>'}<p class="hero-assurance"><strong>Private proof. People decide.</strong><span>Ownership details go to authorized staff. A search match is only a starting point.</span></p></div>${homeArt()}</section>
+    <section class="landing-features" aria-labelledby="features">
+      <div class="landing-intro">
+        <p class="eyebrow">More than a lost-and-found bin</p>
+        <h2 id="features" tabindex="-1">A clearer way back to your belongings.</h2>
+        <p>From the first search to the school office, LostLink keeps the next step in sight.</p>
+        <p class="muted">Looking for something? You can browse without an account. Sign in or create an account when you’re ready to send a claim.</p>
+        <a class="text-link" href="${ctx.session ? "/my/claims" : ctx.api.live ? "/sign-up" : "/sign-in"}">${ctx.session ? "View my claims" : "Create an account"}</a>
+      </div>
+      <dl class="feature-notes">
+        <div><dt>Search your school</dt><dd>Describe what you lost in your own words. Smart matching suggests possible matches from your school’s listed items, with keyword search available when smart matching isn’t.</dd></div>
+        <div><dt>Look a little closer</dt><dd>Check published photos and public descriptions. Narrow the list by category, color, or the date an item was found.</dd></div>
+        <div><dt>Keep your proof private</dt><dd>Send an identifying detail only the owner would know. Your claim is visible to you and authorized school staff, not other visitors.</dd></div>
+        <div><dt>Follow your claim</dt><dd>See staff decisions and collection instructions in My claims. Approval means ready for collection; staff record the return after the physical handover.</dd></div>
+      </dl>
+    </section>
+    <section class="how-section stack" aria-labelledby="how-it-works"><div class="page-heading"><p class="eyebrow">From found to returned</p><h2 id="how-it-works" tabindex="-1">Back in your hands, in four steps.</h2><p class="muted">A possible match starts the conversation. School staff verify ownership before collection.</p></div><div class="steps">${[
       [
         "01",
         "Describe",
@@ -98,8 +114,9 @@ async function home(ctx: ViewContext): Promise<View> {
       )
       .join(
         "",
-      )}</div></section><section class="staff-callout two-column"><div><p class="eyebrow">At the school office</p><h2>Work at the school office?</h2><p class="muted">List found items, review ownership details, and record each return.</p></div><div class="actions"><a class="button secondary" href="/sign-in">Staff sign in <span aria-hidden="true"><svg class="arrow-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div></section>`,
-    bind: (root) =>
+      )}</div></section><section class="staff-callout two-column" aria-labelledby="staff-intro"><div><p class="eyebrow">At the school office</p><h2 id="staff-intro">Work at the school office?</h2><p class="muted">List found items, review and publish photos, manage private claims, and record each return in your school’s staff workspace.</p><p class="muted">Staff access is assigned by your school. Creating an account does not grant staff permissions.</p></div><div class="actions"><a class="button secondary" href="/sign-in">Staff sign in <span aria-hidden="true"><svg class="arrow-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div></section>`,
+    bind: (root) => {
+      root.querySelector("#home-retry")?.addEventListener("click", ctx.refresh);
       root
         .querySelector<HTMLFormElement>("#home-search")
         ?.addEventListener("submit", (event) => {
@@ -114,7 +131,8 @@ async function home(ctx: ViewContext): Promise<View> {
           ctx.navigate(
             `${schoolPath(slug)}/search${params.size ? "?" + params : ""}`,
           );
-        }),
+        });
+    },
   };
 }
 
