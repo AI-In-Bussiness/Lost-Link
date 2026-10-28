@@ -21,7 +21,7 @@
 - Recognized the successful SDK recovery result in the existing callback. Bound a 15-minute HttpOnly form grant to the user, exact session and intended destination; independently verify the user against Auth on page and mutation requests.
 - Kept same-origin POST checks, strict bounded URL-encoded fields, CSP, no-store responses and server-only session cookies. New-password input cannot change identity, email, metadata or roles.
 - Added unit regressions and a local-only real Auth/mail/Chromium suite for claimant, staff, school-admin and website-owner accounts. The runner compares membership/ownership records before and after and cleans only its random fixtures.
-- **Files created or modified:** `src/app/{forgot-password,reset-password}/`, corresponding `api/auth` routes, `src/app/auth/callback/route.ts`, `src/app/sign-in/page.tsx`, `src/lib/auth/recovery*.ts`, tests/browser runner, CI, password reset guide, README and coordination records.
+- **Files created or modified:** `src/app/{forgot-password,reset-password}/`, corresponding `api/auth` routes, `src/app/auth/callback/route.ts`, `src/app/sign-in/page.tsx`, `src/lib/auth/recovery*.ts`, tests/browser runner, CI, password reset guide, development guide and coordination records.
 - **Decisions made:** Reuse the existing allowlisted callback and public-key user client; no SQL migration, service-role runtime operation or new environment secret. Retain the authenticated recovery session on success and clear its form grant.
 
 ## Validation and results
@@ -47,3 +47,11 @@
 - **Remaining work:** PR integration/review and real hosted email/password-reset acceptance. Exact-head CI status is available in the delivery PR; a local pass is not a claim of hosted email delivery.
 - **Recommended next steps:** After integration/deployment, use **Forgot your password?** on the canonical site with a real account and open its newest email in the requesting browser. No account SQL rerun is needed.
 - **Relevant references:** `docs/password-reset.md`, `docs/administration.md`, `docs/coordination/auth-email-redirects.md`, issue #41.
+
+## Main integration — 2026-10-28 UTC
+
+Before publication, main advanced to `40ad979` with PR #43 moving developer
+guidance from README to `DEVELOPMENT.md`. Merged that history, retained its
+short project README and original documentation report, and moved the new
+password-reset paragraph into the corresponding development-guide section.
+The application and tests are unchanged by this documentation conflict resolution.
