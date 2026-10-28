@@ -20,6 +20,7 @@ export default async function SignInPage({ searchParams }: { searchParams: Promi
       <input type="hidden" name="next" value={destination} />
       <button className="rounded bg-slate-900 px-4 py-3 text-white" type="submit">Sign in</button>
     </form>}
+    <p className="mt-6"><Link href={`/forgot-password?next=${encodeURIComponent(destination)}`} className="underline">Forgot your password?</Link></p>
     <p className="mt-6">New to LostLink? <Link href={`/sign-up?next=${encodeURIComponent(destination)}`} className="underline">Create an account</Link></p>
     <LegalLinks />
   </main>;

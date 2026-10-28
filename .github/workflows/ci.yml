@@ -67,6 +67,7 @@ jobs:
       - run: npm run test:live
       - run: npm run test:browser
       - run: npm run test:admin
+      - run: npm run test:password-reset
       - uses: actions/upload-artifact@v4
         if: always()
         with:
