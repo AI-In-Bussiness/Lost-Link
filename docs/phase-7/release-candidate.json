@@ -73,8 +73,8 @@
     "independent release acceptance"
   ],
   "publicSmoke": {
-    "path": "docs/phase-7/closeout-public.json",
-    "observedAt": "2026-10-28T02:00:42.686Z",
+    "path": "docs/phase-7/readiness-public.json",
+    "observedAt": "2026-10-28T02:18:04.984Z",
     "passed": true,
     "checks": 17,
     "search": {

@@ -250,3 +250,44 @@ No hosted rollback was executed here: there is no verified rollback target
 or provider access. This is an executable operator runbook, not a claim of a
 successful rehearsal. No hosted migrations, accounts, data or aliases were
 modified by this assignment.
+
+## Executable lock-readiness audit
+
+Run `npm run release:verify` to check the recorded release package. It verifies
+current lock/model hashes, the complete ordered migration list, the underlying
+17-check public report, distinct immutable deployment/rollback references and
+absence of unresolved blockers. It exits **1** while any gate is missing; that
+is the expected result for the current blocked candidate, not a test failure.
+`npm run test:release` includes seven regressions for the auditor alongside the
+existing smoke/Auth checks. The auditor performs no deployment, tag creation,
+provider writes or rollback.
+
+The latest public check is [readiness-public.json](readiness-public.json), with
+17/17 passing contracts. [readiness-audit.json](readiness-audit.json) records the
+remaining gates. Historical closeout reports are retained.
+
+For operator/reviewer closeout, add `releaseEvidence` to the candidate, mapping
+each key below to an actual reviewed `docs/phase-7/<name>.json` report:
+
+- `production-configuration`
+- `authenticated-smoke`
+- `photo-claim-return`
+- `confirmation-delivery`
+- `rollback-rehearsal`
+- `relevance-acceptance`
+- `independent-acceptance`
+
+Each report must contain `check` equal to its key, `passed: true` only following
+successful verification, the exact candidate `sourceRevision`, production
+`origin`, an actual ISO `observedAt`, and a nonempty `reference` to its supporting
+run/review. The rollback report also records `rollbackDeploymentId` and
+`restoredDeploymentId`, matching the candidate's verified rollback and intended
+deployment respectively. Record IDs and evidence references, never credentials,
+cookies, private proof or email bodies. Populate these from real results;
+copying a template cannot establish acceptance.
+
+This command checks consistency of recorded evidence, not its provenance or
+operator honesty. It cannot replace independent review, verify remote CI,
+inspect a live alias, or certify a database schema from a local hash. Follow the
+provider inspection and rollback runbook above. Issue #32 remains the current
+relevance decision/fix gate; public hybrid availability does not resolve it.
