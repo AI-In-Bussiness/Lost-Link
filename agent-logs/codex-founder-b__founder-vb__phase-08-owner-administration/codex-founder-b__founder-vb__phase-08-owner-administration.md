@@ -46,3 +46,18 @@
 - **Remaining work:** Remote exact-head CI/review/merge; hosted migration and bootstrap of the confirmed founder accounts; verify live `/admin` for both people and deny ordinary accounts.
 - **Recommended next steps:** Review the PR, use docs/administration.md and the personalized SQL artifact in the intended project, then sign in individually. Record deployment acceptance separately.
 - **Relevant references:** docs/administration.md; pending migration; OWNER-ADMIN coordination row; original Phase 7 evidence.
+
+## Main integration addendum — 2026-10-28 UTC
+
+Main advanced to 7730ff6 during delivery, integrating the separately requested demo
+school names and their old-row display compatibility. Merged that history without
+conflicts and applied the same display helper to the new directory endpoint, so
+new-directory visitors retain the approved labels even while the name migration
+is pending. Custom school names remain unchanged. The owner migration remains
+ordered after the school-name migration. Existing reports and school/account IDs
+are preserved. Final combined validation and PR checks follow.
+
+Final combined local checks pass: 70 unit tests, all five database suites, lint,
+root/UI typechecks, formatting, production build and both real owner-browser
+scenarios (including ordinary and school-admin HTTP denial). Existing security/
+policy browser probes also passed before the school-label-only main integration.
