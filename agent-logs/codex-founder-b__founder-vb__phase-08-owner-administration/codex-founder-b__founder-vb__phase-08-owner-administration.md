@@ -124,3 +124,14 @@ production browser checks and remote checks on the corrected head.
   administrator scopes explicit. A forward migration preserves installations
   that already used earlier setup files. Apply pending 005/006/007 and bootstrap
   the two confirmed founders; hosted activation and independent review remain.
+
+## Accessible SQL handoff — 2026-10-28 UTC
+
+The task owner could not open the temporary local SQL link on iPhone. Added
+`supabase/setup/administration.sql` for a persistent GitHub source link, with the
+three reviewed migration bodies and conditional installation of each missing
+stage. It installs the final two-level schema without creating users, granting
+owners or changing passwords. The owner grant stays a separate query supplied
+privately/in chat, with actual addresses excluded from Git. Updated the guide.
+Validation: fresh install, repeat install and upgrade from initial owner setup
+in disposable local databases; no hosted access or application behavior changed.

@@ -40,6 +40,14 @@ editing remain operator tasks rather than website controls.
 
 ## One-time owner setup
 
+For the dashboard SQL Editor, use the [combined administration setup](../supabase/setup/administration.sql).
+Copy the entire file and run it first, then run the two-email bootstrap query below.
+The combined script supports earlier PR40 setup already being installed and can
+be repeated. It contains no personal emails, passwords or keys. The individual
+migration instructions below are the alternative for the CLI migration workflow;
+do not replay those individual migrations blindly after manual dashboard setup.
+
+
 1. Confirm the intended Supabase/Vercel targets and back up the database under the
    existing operational policy. Apply the reviewed **pending** migration
    `supabase/migrations/202610290005_platform_admin.sql`, then
