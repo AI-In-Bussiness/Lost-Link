@@ -37,3 +37,23 @@ Recorded 2026-10-26 by `codex-founder-b`, Founder B, on `codex/overseer-phase-0-
 | MVP-09/MVP-10 semantic showcase | Deferred to Phase 4; no evaluation results claimed. |
 
 The dates, submission destination, spend/entitlements, member contributions and real demand research require team/organizer evidence. Neither this record nor passing tests invents those facts or marks the joint phase gates Done.
+
+## Website-owner extension
+
+`/admin` and `platform_admin_dispatch` add a separate website-owner role, with
+school settings, publication, school memberships and admin audit. School `admin`
+continues to mean school-scoped staff access. The operator assigns the two
+confirmed founders with `bootstrap_platform_admins`; signup cannot self-promote.
+The public directory discovers published schools dynamically and includes hidden
+schools only for their assigned staff. See [administration](../administration.md)
+for migration order, setup, privacy boundaries and actual validation limits.
+
+### Final two-level administration clarification
+
+The founders are website owners with all-school administration and workspace
+access. School `admin` memberships manage settings and staff/admin access only
+for their school through `/o/<slug>/staff/settings` and `school_admin_dispatch`.
+Ordinary staff retain inventory/claim access. `/admin` and the platform RPC remain
+owner-only. Migration 007 enforces the final scope after migration 006. School
+admins cannot grant owners, create schools or cross school boundaries; the last
+school-admin removal/demotion is blocked except for a website owner recovery.

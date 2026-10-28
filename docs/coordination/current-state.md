@@ -1,3 +1,34 @@
+# Final two-level administration — 2026-10-28 UTC
+
+The task owner clarified the required roles: school admins manage only their own
+school, while both founders have full website-wide access. `/admin` stays restricted
+to website owners. `/o/<slug>/staff/settings` gives assigned school admins scoped
+settings/access management. Website owners can enter every school's workspace
+without individual memberships. Migration 007 completes this scope after 005/006.
+Cross-school operations, owner escalation and last-school-admin lockout are denied.
+This supersedes the intermediate removal of school-admin assignment described below.
+
+# PR #40 owner-only review response — 2026-10-28 UTC
+
+Only website owners receive admin controls. Removed school-admin assignment and
+labels from the new screens; newly assigned school access is staff-only. Legacy
+school-admin accounts retain scoped staff access but are denied every owner
+operation. Forward migration 202610290006 also repairs an already-applied initial
+PR40 setup. Unit/database/build and real owner/legacy-admin browser checks pass.
+See [administration](../administration.md) and the Phase 08 report for setup and
+hosted validation limits.
+
+# Website owner administration — 2026-10-28 UTC
+
+Founder B adds `/admin` for separate website-owner accounts: school creation,
+name/time-zone/contact/collection settings, publication, school memberships and
+transactional admin activity. The school directory is dynamic; hidden schools
+remain accessible to assigned staff. School admins cannot promote themselves to
+website owner. See [administration](../administration.md) for the reviewed pending
+migration and two-account bootstrap. Actual founder addresses are not committed;
+hosted assignment requires confirmed accounts and secure operator access. This
+feature does not record those accounts as provisioned or alter Phase 7 acceptance.
+
 # PR #37 conflict resolution — 2026-10-28 UTC
 
 Merged current main `b5e5f60` (including PR #33) into the existing PR #37 source

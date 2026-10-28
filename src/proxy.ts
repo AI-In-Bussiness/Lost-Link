@@ -26,7 +26,7 @@ export async function proxy(request: NextRequest) {
   headers.set('x-nonce', nonce);
   headers.set('Content-Security-Policy', policy);
   const securedRequest = new NextRequest(request, { headers });
-  const response = request.nextUrl.pathname === '/sign-in' || /^\/account(?:\/|$)/.test(request.nextUrl.pathname)
+  const response = request.nextUrl.pathname === '/sign-in' || /^\/(?:account|admin)(?:\/|$)/.test(request.nextUrl.pathname) || /^\/o\/[a-z0-9-]+\/staff\/settings$/.test(request.nextUrl.pathname)
     ? await refreshSession(securedRequest)
     : NextResponse.next({ request: { headers } });
   response.headers.set('Content-Security-Policy', policy);

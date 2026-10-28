@@ -40,7 +40,7 @@ try {
   await setTimeout(500);
  }
  if(!ready) throw new Error('Browser app failed readiness.');
- const python = spawn('python',['tools/live-browser-test.py'],{env:{...process.env,LOSTLINK_BROWSER_FIXTURES:fixtureFile},stdio:'inherit'});
+ const python = spawn('python',['tools/live-browser-test.py',...process.argv.slice(2)],{env:{...process.env,LOSTLINK_BROWSER_FIXTURES:fixtureFile},stdio:'inherit'});
  process.exitCode = await new Promise(resolve => {python.on('error',()=>resolve(1));python.on('exit',code=>resolve(code??1));});
 } finally {
  if(server) {server.kill('SIGTERM');await new Promise(resolve=>server.exitCode!==null?resolve():server.once('exit',resolve));}

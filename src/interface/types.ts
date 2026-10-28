@@ -18,6 +18,8 @@ export interface Session {
   name: string;
   email: string;
   staffOrgSlugs: string[];
+  websiteOwner?: boolean;
+  schoolAdminOrgSlugs?: string[];
 }
 export interface View {
   title: string;
@@ -29,6 +31,7 @@ export interface ViewContext {
   url: URL;
   orgSlug: string;
   orgName: string;
+  contactEmail?: string;
   session: Session | null;
   navigate(path: string): void;
   refresh(): void;

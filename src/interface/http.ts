@@ -11,7 +11,7 @@ type ClaimDto = {
   status: "submitted" | "approved" | "rejected" | "fulfilled" | "withdrawn" | "cancelled";
   evidenceText: string | null; submittedAt: string; reviewedAt: string | null;
   decisionReason: string | null; version: number; claimantId?: string; reviewedBy?: string;
-  privateReviewNote?: string | null; claimantReason?: string | null;
+  privateReviewNote?: string | null; claimantReason?: string | null; collectionInstructions?: string | null;
 };
 type Envelope<T> = { data: T; page?: { nextCursor: string | null }; search?: { mode: "structured" | "hybrid"; semanticStatus: "disabled" | "available" | "unavailable" } };
 const ok = <T>(data: T): Result<T> => ({ ok: true, data });
@@ -36,7 +36,7 @@ function claim(dto: ClaimDto): MyClaim {
     status: dto.status === "submitted" ? "pending" : dto.status,
     decisionReason: dto.claimantReason ?? (dto.decisionReason === "item_unavailable" ? "The item is no longer available for this claim." : dto.status === "rejected" ? "This claim was not approved. Contact school staff for help." : dto.decisionReason), decidedBy: dto.reviewedBy ?? null,
     decidedAt: dto.reviewedAt, createdAt: dto.submittedAt, version: dto.version,
-    privateReviewNote: dto.privateReviewNote, itemTitle: dto.itemTitle, collectionInstructions: null };
+    privateReviewNote: dto.privateReviewNote, itemTitle: dto.itemTitle, collectionInstructions: dto.collectionInstructions ?? null };
 }
 function page<T>(items: T[], input: Pagination = {}): Result<Page<T>> {
   const number = input.page ?? 1, size = input.pageSize ?? 10;
@@ -47,7 +47,7 @@ function page<T>(items: T[], input: Pagination = {}): Result<Page<T>> {
 }
 
 /** Same-origin cookie transport. No credentials, fixtures or authorization decisions live here. */
-export function createHttpApi(slugs: string[], transport: typeof fetch = fetch): LostLinkApi {
+export function createHttpApi(_slugs: string[], transport: typeof fetch = fetch): LostLinkApi {
   async function request<T>(path: string, body?: unknown): Promise<Result<Envelope<T>>> {
     try {
       const response = await transport(`/api/v1${path}`, {
@@ -129,10 +129,10 @@ export function createHttpApi(slugs: string[], transport: typeof fetch = fetch):
       },
     },
     async listOrganizations() {
-      const results = await Promise.all([...new Set(slugs)].map(slug => request<Organization>(orgPath(slug))));
-      const error = results.find(r => !r.ok && r.error.code !== "NOT_FOUND");
-      if (error && !error.ok) return error;
-      return ok(results.flatMap(r => r.ok ? [{ ...r.data.data, id: r.data.data.slug, publicListingEnabled: true }] : []));
+      const result = await request<Organization[]>("/organizations");
+      if (!result.ok) return result;
+      if (!Array.isArray(result.data.data)) return failure("INTERNAL_ERROR", "The school directory is unavailable.");
+      return ok(result.data.data.map(org => ({ ...org, id: org.slug })));
     },
     async searchItems(input) {
       if (input.category === "accessory") return failure("VALIDATION_ERROR", "This filter is unavailable with the current service.");
