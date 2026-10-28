@@ -17,7 +17,7 @@ export default function PrivacyPage() {
 
     <h2>Public listings and private claims</h2>
     <p>Visitors can see published item descriptions, categories, colors, found dates, broad found locations, and reviewed photographs. Keep names, contact details, and secret identifying marks out of public listings and photographs.</p>
-    <p>Your ownership evidence is available to you and authorized staff at the school handling the claim. Other visitors cannot browse it. Internal staff notes and storage locations are restricted to authorized school staff. Service operators and infrastructure providers may also access information when administering or supporting the service.</p>
+    <p>Your ownership evidence is available to you and authorized staff at the school handling the claim. Other visitors cannot browse it. Internal staff notes and storage locations are restricted to authorized school staff and website owners. School admins manage only their assigned schools. Website owners can administer records across all schools. Service operators and infrastructure providers may also access information when administering or supporting the service.</p>
 
     <h2>How information is used</h2>
     <p>LostLink uses account information to sign you in and control access. Item and claim records support searching, ownership review, collection, and return. Activity records help staff track changes to items and claims.</p>

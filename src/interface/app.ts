@@ -27,15 +27,16 @@ export function mountLostLink(root: HTMLElement, host: InterfaceHost) {
     const next = new URL(path, location.origin);
     if (next.origin !== location.origin) return;
     if (
-      host.live &&
-      [
-        "/sign-in",
-        "/sign-up",
-        "/account",
-        "/privacy",
-        "/terms",
-        "/admin",
-      ].includes(next.pathname)
+      (host.live &&
+        [
+          "/sign-in",
+          "/sign-up",
+          "/account",
+          "/privacy",
+          "/terms",
+          "/admin",
+        ].includes(next.pathname)) ||
+      (host.live && /^\/o\/[a-z0-9-]+\/staff\/settings$/.test(next.pathname))
     ) {
       location.assign(next.pathname + next.search);
       return;
@@ -79,7 +80,9 @@ export function mountLostLink(root: HTMLElement, host: InterfaceHost) {
     const orgSlug = schoolRoute[0] === "o" ? schoolRoute[1] : activeOrgSlug;
     const base = schoolPath(orgSlug);
     const staff = session?.staffOrgSlugs.includes(orgSlug);
-    const nav = `${session?.websiteOwner ? '<a href="/admin">Website admin</a>' : ""}<a href="${base}/search" ${parts[2] === "search" ? 'aria-current="page"' : ""}>Find an item</a><a href="/my/claims" ${parts[0] === "my" ? 'aria-current="page"' : ""}>My claims</a>${staff ? `<a href="${base}/staff" ${parts[2] === "staff" ? 'aria-current="page"' : ""}>Staff workspace</a>` : ""}`;
+    const schoolAdmin =
+      session?.websiteOwner || session?.schoolAdminOrgSlugs?.includes(orgSlug);
+    const nav = `${schoolAdmin ? `<a href="${base}/staff/settings">School settings</a>` : ""}${session?.websiteOwner ? '<a href="/admin">Website admin</a>' : ""}<a href="${base}/search" ${parts[2] === "search" ? 'aria-current="page"' : ""}>Find an item</a><a href="/my/claims" ${parts[0] === "my" ? 'aria-current="page"' : ""}>My claims</a>${staff ? `<a href="${base}/staff" ${parts[2] === "staff" ? 'aria-current="page"' : ""}>Staff workspace</a>` : ""}`;
     // Replacing the old view immediately clears all private forms on navigation/sign-out.
     root.innerHTML = `<a class="skip-link" href="#main">Skip to content</a><header class="site-header"><div class="header-inner"><a class="brand" href="/" aria-label="LostLink home"><span class="brand-mark" aria-hidden="true"><svg class="arrow-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Lost<span>Link</span><span class="brand-dot" aria-hidden="true">.</span></a><nav class="main-nav" aria-label="Main navigation">${nav}</nav><div class="account">${session ? `<span class="account-name">${e(session.name)}</span>${host.live ? '<form method="post" action="/api/auth/sign-out"><button class="plain" type="submit">Sign out</button></form>' : '<button class="plain" id="sign-out" type="button">Sign out</button>'}` : `<a class="button secondary" href="/sign-in">Sign in <span aria-hidden="true"><svg class="arrow-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>`}</div></div></header><div class="school-strip"><div class="container"><span aria-hidden="true">⌂</span> <span id="school-name">School lost &amp; found</span><span class="strip-divider">/</span><a href="/">Change school</a></div></div><main id="main" class="container main-content" tabindex="-1" aria-busy="true"><div class="loading-state" role="status"><span class="spinner" aria-hidden="true"></span>Loading your page…</div></main><footer class="site-footer"><div class="container footer-inner"><a class="brand small" href="/">LostLink.</a><p>School lost &amp; found</p>${host.live ? '<nav class="legal-links" aria-label="Policies"><a href="/privacy">Privacy policy</a><a href="/terms">Terms and conditions</a></nav>' : ""}<span>Staff verify every return.</span></div></footer>`;
     root.querySelector("#sign-out")?.addEventListener("click", () => {

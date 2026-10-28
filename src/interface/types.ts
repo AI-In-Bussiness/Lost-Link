@@ -19,6 +19,7 @@ export interface Session {
   email: string;
   staffOrgSlugs: string[];
   websiteOwner?: boolean;
+  schoolAdminOrgSlugs?: string[];
 }
 export interface View {
   title: string;

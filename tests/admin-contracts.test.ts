@@ -15,7 +15,8 @@ test('owner forms validate real settings and cannot assign website ownership',()
  assert.equal(adminCommand.safeParse({...school,owner:true}).success,false);
  const member={action:'set_member',schoolId:'10000000-0000-4000-8000-000000000001',expectedVersion:'1',email:'staff@example.test',role:'staff'};
  assert.equal(adminCommand.safeParse(member).success,true);
- for(const role of ['owner','admin'])assert.equal(adminCommand.safeParse({...member,role}).success,false);
+ assert.equal(adminCommand.safeParse({...member,role:'admin'}).success,true);
+ for(const role of ['owner','platform_admin'])assert.equal(adminCommand.safeParse({...member,role}).success,false);
  assert.equal(adminCommand.safeParse({...member,expectedVersion:'1e2'}).success,false);
  assert.equal(adminCommand.safeParse({...member,action:'remove_member',email:undefined,userId:member.schoolId,confirm:undefined}).success,false);
 });

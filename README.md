@@ -29,7 +29,7 @@ Lost-and-found for a competition demo. Despite the website being used as a demo,
 
 ## Website owner administration
 
-Website owners can manage schools, public school settings and staff access at `/admin`. School admins remain scoped to their school. See the [administration and secure two-owner setup guide](docs/administration.md); applying the new migration and assigning the two confirmed accounts are operator steps.
+Website owners can manage schools, public school settings and staff access at `/admin`. School admins manage their own school at `/o/<slug>/staff/settings`; the two website owners have access to every school workspace. See the [administration and secure two-owner setup guide](docs/administration.md); applying the new migration and assigning the two confirmed accounts are operator steps.
 
 ## Phase 4 matching
 

@@ -26,7 +26,8 @@ try{
  const legacyAdmin=await actor();
  const legacySchool=(await db(await admin.from('organizations').insert({slug:slug+'-legacy',name:'Fictional legacy school',published:false}).select('id')))[0];
  await db(await admin.from('memberships').insert({organization_id:legacySchool.id,user_id:legacyAdmin.id,role:'admin'}));
- const fixtures={origin:'http://localhost:3000',slug,one:await actor(true),two:await actor(true),staff:await actor(),claimant:await actor(),legacyAdmin};
+ const otherSchool=(await db(await admin.from('organizations').insert({slug:slug+'-other',name:'Fictional other school',published:false}).select('id')))[0];
+ const fixtures={legacySchoolId:legacySchool.id,otherSchoolId:otherSchool.id,origin:'http://localhost:3000',slug,one:await actor(true),two:await actor(true),staff:await actor(),claimant:await actor(),legacyAdmin};
  const file=join(directory,'fixtures.json');writeFileSync(file,JSON.stringify(fixtures),{mode:0o600});
  server=spawn(process.execPath,['node_modules/next/dist/bin/next','start','--hostname','localhost'],{env:process.env,stdio:['ignore','ignore','inherit']});
  let ready=false;
@@ -41,7 +42,7 @@ try{
 }finally{
  if(server){server.kill('SIGTERM');if(server.exitCode===null)await new Promise(resolve=>server.once('exit',resolve));}
  try{
-  const orgs=await db(await admin.from('organizations').select('id').in('slug',[slug,slug+'-legacy']));
+  const orgs=await db(await admin.from('organizations').select('id').in('slug',[slug,slug+'-legacy',slug+'-other']));
   for(const org of orgs){
    await db(await admin.from('platform_admin_events').delete().eq('organization_id',org.id));
    await db(await admin.from('memberships').delete().eq('organization_id',org.id));

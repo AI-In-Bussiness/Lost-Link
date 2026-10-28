@@ -97,3 +97,30 @@ production browser checks and remote checks on the corrected head.
   work; reserve the visible admin designation and administrative controls for
   website owners. Apply pending migration 006 even if setup 005 was already run.
   Remote checks and independent review remain tied to the updated PR head.
+
+## Final two-level scope — 2026-10-28 UTC
+
+- **Clarified scope:** The task owner wants school-admin accounts limited to their
+  assigned school, with both founders having full access across every school.
+  This supersedes the intermediate staff-only assignment change after the PR comment.
+- **Implementation:** Restored school staff/admin assignment. `/admin` remains
+  website-owner-only. Added a separate school settings page and scoped RPC for
+  school admins, with strict route/payload school binding, member management,
+  current versions, audit and last-admin protection. Shared server form handling
+  preserves the exact-origin, session and bounded-field checks for both endpoints.
+- **Full website access:** Website owners satisfy the existing school staff/RLS
+  helper and receive every school workspace in server-verified navigation. No
+  individual school memberships are needed. School users retain scoped access.
+- **Files/contract:** Forward migration 007, school settings page/API, shared
+  fields/handler, role navigation, privacy disclosure, scoped SQL/browser tests,
+  administration guide and private setup artifact. Earlier migrations stay intact.
+- **Validation:** 70 unit cases, six actual local SQL suites, lint/root/UI
+  typechecks/format, production build and three real Auth/database/browser
+  scenarios pass. They cover school settings persistence, role assignment,
+  cross-school IDs/routes, ordinary-staff denial, owner escalation denial,
+  last-school-admin protection, owner all-school access, owner-only `/admin`,
+  audit, refresh, stale form retention, four widths and axe.
+- **Reflection/handoff:** Separate URLs and database authorization make the two
+  administrator scopes explicit. A forward migration preserves installations
+  that already used earlier setup files. Apply pending 005/006/007 and bootstrap
+  the two confirmed founders; hosted activation and independent review remain.

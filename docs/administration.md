@@ -1,16 +1,27 @@
 # Website administration
 
-Website owners sign in normally, then open `/admin` (also linked from Your account
-and the signed-in website navigation). Only website owners can access administration. School memberships grant scoped
-staff access, including legacy memberships stored as `admin`; they never grant
-website administration. Signup never grants either privilege.
+Website owners sign in normally and open `/admin`. School admins open
+`/o/<school-slug>/staff/settings` from their account or school workspace navigation.
+Signup grants neither role.
+
+| Role | Access |
+| --- | --- |
+| Website owner (the two founders) | Create schools; manage settings, access, inventory, photos and claims across every school, including hidden schools |
+| School admin | Manage settings, staff/admin assignments, inventory and claims only in their assigned school |
+| School staff | Manage inventory, photos and claims only in their assigned school |
+| Claimant | Browse public listings and manage their own claims |
+
+School admins cannot create schools, open the website-wide `/admin`, change
+another school's settings or memberships, or grant website ownership. School
+admins must leave at least one school admin assigned when removing or demoting
+admins. Website owners can restore or override school access when necessary.
 
 ## Available controls
 
 - Create schools with a permanent URL slug; new schools default to hidden.
 - Edit school name, time zone, public office email and collection instructions.
 - Publish/hide public listings without deleting inventory, claims or staff access.
-- Assign/remove a confirmed registered account's school staff access.
+- Assign/change/remove a confirmed registered account's school staff or school-admin access.
 - View the two website owners and the latest 100 owner changes.
 
 Published schools appear in the homepage directory without environment edits or
@@ -20,23 +31,23 @@ homepage. Contact emails appear on school search pages; collection instructions
 appear on approved claim receipts. Public settings must not contain private item
 proof, staff storage information or personal contact details.
 
-Owners do not automatically read every school's private claims. They can assign
-an explicit school membership, including to themselves, to use that school's
-workspace; the assignment is audited. New school assignments are always staff.
-The UI has no school-admin role picker; requests to assign an admin role are
-rejected in both the form handler and database. Legacy school-admin memberships
-retain their existing scoped staff permissions and cannot use owner controls. No account deletion, school deletion, password resets, arbitrary
-code editing, provider secrets or billing controls are exposed by this UI.
+Website owners have full access to every school workspace without adding individual
+memberships. School admins and staff stay scoped to their memberships. School
+settings/access changes are audited; school admins see only their school's admin
+activity. Neither school role changes the protected website-owner assignment.
+Account/school deletion, password resets, billing, provider keys and arbitrary code
+editing remain operator tasks rather than website controls.
 
 ## One-time owner setup
 
 1. Confirm the intended Supabase/Vercel targets and back up the database under the
    existing operational policy. Apply the reviewed **pending** migration
-   `supabase/migrations/202610290005_platform_admin.sql`, followed by
-   `supabase/migrations/202610290006_owner_only_administration.sql`. The second
-   migration also supports installations that already applied the initial PR40
-   setup. It keeps the original implementation private and exposes the owner-only,
-   staff-assignment-only RPC. Earlier migrations remain unchanged. Do not reset hosting or replay earlier migrations.
+   `supabase/migrations/202610290005_platform_admin.sql`, then
+   `202610290006_owner_only_administration.sql`, then
+   `202610290007_school_admin_scope.sql`. Apply only the pending ones in order;
+   these support installations that already ran the initial PR40 setup. Migration
+   007 implements the final two-level permissions. Earlier migrations stay intact.
+   Do not reset hosting or replay migrations already recorded as applied.
 2. Deploy the corresponding application source. Keep `NEXT_PUBLIC_SITE_URL`
    matched to the actual canonical HTTPS address and the Supabase callback URLs.
 3. Each person registers on the website and confirms their email, using their own
@@ -94,9 +105,8 @@ npm run test:admin
 
 `test:admin` needs the matched local Supabase stack, the production build, Python
 Playwright/Chromium, axe-core from `tools/phase2`, and free port 3000. It creates
-random confirmed test users/owner rows, a legacy school-admin fixture and a new
-synthetic school, checks both owner accounts and denial of every owner action for
-ordinary and legacy school-admin accounts, then cleans up its own records. It never resets the
+random confirmed test users/owner rows and synthetic schools, checks both owner accounts and denial of every owner action for
+ordinary and school-admin accounts at the website-wide endpoint, then cleans up its own records. It never resets the
 database or provisions the actual founders. Foundation CI runs it after existing
 persisted browser acceptance. The dashboard loads the complete small school and
 membership directory and the latest 100 events; larger deployments will need

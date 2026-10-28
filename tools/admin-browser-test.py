@@ -42,6 +42,7 @@ class OwnerWorkflow(unittest.TestCase):
         form.get_by_label('Public school contact email').fill('office@example.test')
         form.get_by_label('Collection instructions').fill('Collect from the front office after 3pm.')
         self.save(page, form, 'Create school')
+        self.assertEqual(context.request.get(self.origin + '/api/v1/organizations/' + self.fixtures['slug'] + '/staff/items').status, 200)
         visitor = self.browser.new_context()
         self.addCleanup(visitor.close)
         def directory():
@@ -61,7 +62,7 @@ class OwnerWorkflow(unittest.TestCase):
         expect(public.get_by_role('link', name='office@example.test', exact=True)).to_be_visible()
         form = page.get_by_role('form', name='Assign school access')
         form.get_by_label('Account email').fill(self.fixtures['staff']['email'])
-        expect(page.get_by_role('option', name='School admin', exact=True)).to_have_count(0)
+        form.get_by_label('School role').select_option('admin')
         self.save(page, form, 'Save school access')
         staff_context, staff = self.login(self.fixtures['staff'], '/o/' + self.fixtures['slug'] + '/staff')
         expect(staff.get_by_role('heading', name='A little care. A happy return.', exact=True)).to_be_visible()
@@ -87,7 +88,7 @@ class OwnerWorkflow(unittest.TestCase):
         # Hidden school remains available to assigned staff.
         staff.reload()
         expect(staff.get_by_role('heading', name='A little care. A happy return.', exact=True)).to_be_visible()
-        page.get_by_text(self.fixtures['staff']['email'] + ' · School staff', exact=True).click()
+        page.get_by_text(self.fixtures['staff']['email'] + ' · School admin', exact=True).click()
         form = page.get_by_role('form', name='Remove school access for ' + self.fixtures['staff']['email'])
         form.get_by_role('checkbox').check()
         self.save(page, form, 'Remove school access')
@@ -129,6 +130,56 @@ class OwnerWorkflow(unittest.TestCase):
         self.assertEqual(result.status,400)
         result = context.request.post(self.origin + '/api/admin', headers={'Origin':self.origin,'Accept':'application/json'}, form={'action':'set_member','role':'owner'})
         self.assertEqual(result.status,400)
+
+    def test_school_admin_controls_stay_inside_assigned_school(self):
+        own_slug = self.fixtures['slug'] + '-legacy'
+        foreign_slug = self.fixtures['slug'] + '-other'
+        path = '/o/' + own_slug + '/staff/settings'
+        context, page = self.login(self.fixtures['legacyAdmin'], path)
+        expect(page.get_by_role('heading', name='Fictional legacy school settings', exact=True)).to_be_visible()
+        expect(page.get_by_text('Fictional other school', exact=True)).to_have_count(0)
+        expect(page.get_by_role('link', name='Website admin', exact=True)).to_have_count(0)
+        form = page.get_by_role('form', name='School settings', exact=True)
+        form.get_by_label('Public school contact email').fill('legacy-office@example.test')
+        self.save(page, form, 'Save school settings')
+        page.reload()
+        expect(page.get_by_role('form', name='School settings', exact=True).get_by_label('Public school contact email')).to_have_value('legacy-office@example.test')
+        # A school admin cannot demote the last administrator, including themselves.
+        form = page.get_by_role('form', name='Assign school access')
+        form.get_by_label('Confirmed account email').fill(self.fixtures['legacyAdmin']['email'])
+        form.get_by_label('School role').select_option('staff')
+        form.get_by_role('button', name='Save school access', exact=True).click()
+        expect(form.get_by_role('alert')).to_contain_text('Keep at least one school admin')
+        form.get_by_label('Confirmed account email').fill(self.fixtures['claimant']['email'])
+        self.save(page, form, 'Save school access')
+        staff_context, staff = self.login(self.fixtures['claimant'], '/o/' + own_slug + '/staff')
+        self.assertEqual(staff_context.request.get(self.origin + path).status, 404)
+        own_api = self.origin + '/api/school-admin/' + own_slug
+        headers = {'Origin':self.origin, 'Accept':'application/json'}
+        self.assertEqual(staff_context.request.post(own_api, headers=headers, form={'action':'update_school'}).status, 404)
+        self.assertEqual(context.request.get(self.origin + '/o/' + foreign_slug + '/staff/settings').status, 404)
+        self.assertEqual(context.request.post(self.origin + '/api/school-admin/' + foreign_slug, headers=headers, form={'action':'update_school'}).status, 404)
+        self.assertEqual(context.request.get(self.origin + '/api/v1/organizations/' + foreign_slug + '/staff/items').status, 404)
+        # A substituted school ID on an allowed route is also denied.
+        version = page.get_by_role('form', name='Assign school access').locator('[name=expectedVersion]').input_value()
+        bad = {'action':'set_member','schoolId':self.fixtures['otherSchoolId'],'expectedVersion':version,'email':self.fixtures['claimant']['email'],'role':'admin'}
+        self.assertEqual(context.request.post(own_api,headers=headers,form=bad).status,404)
+        bad['schoolId'] = self.fixtures['legacySchoolId']
+        bad['role'] = 'owner'
+        self.assertEqual(context.request.post(own_api,headers=headers,form=bad).status,400)
+        self.assertEqual(context.request.post(own_api,headers={'Origin':'https://evil.example','Accept':'application/json'},form=bad).status,403)
+        # School admins can promote a second admin, who remains scoped to this school.
+        form = page.get_by_role('form', name='Assign school access')
+        form.get_by_label('Confirmed account email').fill(self.fixtures['claimant']['email'])
+        form.get_by_label('School role').select_option('admin')
+        self.save(page, form, 'Save school access')
+        self.assertEqual(staff_context.request.get(self.origin + path).status,200)
+        self.assertEqual(staff_context.request.post(self.origin + '/api/admin',headers=headers,form={'action':'create_school'}).status,403)
+        for width in [320,390,768,1440]:
+            page.set_viewport_size({'width':width,'height':1000})
+            self.assertFalse(page.evaluate('document.documentElement.scrollWidth > innerWidth + 1'))
+        page.evaluate(Path('tools/phase2/node_modules/axe-core/axe.min.js').read_text())
+        self.assertEqual(page.evaluate('async () => (await axe.run(document,{runOnly:{type:"tag",values:["wcag2a","wcag2aa","wcag21aa"]}})).violations.map(v=>v.id)'),[])
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

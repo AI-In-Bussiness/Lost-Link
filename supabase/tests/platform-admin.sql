@@ -41,15 +41,14 @@ insert into public.claims(id,organization_id,item_id,claimant_id,evidence_text,p
 select pg_temp.assert_true((private.backend_claim_json('49000000-0000-4000-8000-000000000001')->>'collectionInstructions')='Office from 3pm'
  and not(private.backend_claim_json('49000000-0000-4000-8000-000000000001') ? 'privateReviewNote'),'claim receipt inherits collection instructions without private notes');
 set local role authenticated;
-select pg_temp.assert_true(not exists(select 1 from jsonb_array_elements(public.school_directory()->'data') s where s->>'slug'='owner-test-school'),'new school starts hidden');
-select pg_temp.assert_true(not private.is_staff(:'school_id'::uuid),'owner does not implicitly receive private school access');
+select pg_temp.assert_true(exists(select 1 from jsonb_array_elements(public.school_directory()->'data') s where s->>'slug'='owner-test-school' and s->>'publicListingEnabled'='false'),'owner sees hidden school without publishing it');
+select pg_temp.assert_true(private.is_staff(:'school_id'::uuid),'website owner has full school access');
 select pg_temp.denied('update_school',jsonb_build_object('schoolId',:'school_id','expectedVersion',1,'name','Renamed school','timezone','Invalid/Zone','contactEmail','','collectionInstructions','','published',true),'VALIDATION_ERROR');
 select public.platform_admin_dispatch('update_school',jsonb_build_object('schoolId',:'school_id','expectedVersion',1,'name','Renamed school','timezone','UTC','contactEmail','office@example.test','collectionInstructions','Office from 3pm','published',true));
 select pg_temp.assert_true(exists(select 1 from jsonb_array_elements(public.school_directory()->'data') s where s->>'slug'='owner-test-school' and s->>'contactEmail'='office@example.test'),'published school dynamically discoverable with safe public settings');
 select pg_temp.denied('update_school',jsonb_build_object('schoolId',:'school_id','expectedVersion',1,'name','Stale overwrite','timezone','UTC','contactEmail','','collectionInstructions','','published',false),'CONFLICT');
 select pg_temp.denied('set_member',jsonb_build_object('schoolId',:'school_id','expectedVersion',2,'email','school-staff@example.test','role','owner'),'VALIDATION_ERROR');
 select pg_temp.denied('set_member',jsonb_build_object('schoolId',:'school_id','expectedVersion',2,'email','unconfirmed-owner-test@example.test','role','staff'),'ACCOUNT_NOT_READY');
-select pg_temp.denied('set_member',jsonb_build_object('schoolId',:'school_id','expectedVersion',2,'email','school-staff@example.test','role','admin'),'VALIDATION_ERROR');
 select public.platform_admin_dispatch('set_member',jsonb_build_object('schoolId',:'school_id','expectedVersion',2,'email','school-staff@example.test','role','staff'));
 reset role;
 -- Existing school admins remain scoped staff, with no website-owner permissions.

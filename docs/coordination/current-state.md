@@ -1,3 +1,13 @@
+# Final two-level administration — 2026-10-28 UTC
+
+The task owner clarified the required roles: school admins manage only their own
+school, while both founders have full website-wide access. `/admin` stays restricted
+to website owners. `/o/<slug>/staff/settings` gives assigned school admins scoped
+settings/access management. Website owners can enter every school's workspace
+without individual memberships. Migration 007 completes this scope after 005/006.
+Cross-school operations, owner escalation and last-school-admin lockout are denied.
+This supersedes the intermediate removal of school-admin assignment described below.
+
 # PR #40 owner-only review response — 2026-10-28 UTC
 
 Only website owners receive admin controls. Removed school-admin assignment and

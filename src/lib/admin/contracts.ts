@@ -15,7 +15,7 @@ const settings = {
 export const adminCommand = z.discriminatedUnion('action', [
  z.strictObject({action:z.literal('create_school'), ...settings, slug:z.string().min(1).max(63).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)}),
  z.strictObject({action:z.literal('update_school'), schoolId:id, expectedVersion:version, ...settings}),
- z.strictObject({action:z.literal('set_member'), schoolId:id, expectedVersion:version, email:z.email().max(254), role:z.literal('staff')}),
+ z.strictObject({action:z.literal('set_member'), schoolId:id, expectedVersion:version, email:z.email().max(254), role:z.enum(['staff','admin'])}),
  z.strictObject({action:z.literal('remove_member'), schoolId:id, expectedVersion:version, userId:id, confirm:z.literal('remove')}),
 ]);
 export async function readAdminCommand(request: Request) {

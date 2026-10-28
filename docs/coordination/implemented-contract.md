@@ -47,3 +47,13 @@ confirmed founders with `bootstrap_platform_admins`; signup cannot self-promote.
 The public directory discovers published schools dynamically and includes hidden
 schools only for their assigned staff. See [administration](../administration.md)
 for migration order, setup, privacy boundaries and actual validation limits.
+
+### Final two-level administration clarification
+
+The founders are website owners with all-school administration and workspace
+access. School `admin` memberships manage settings and staff/admin access only
+for their school through `/o/<slug>/staff/settings` and `school_admin_dispatch`.
+Ordinary staff retain inventory/claim access. `/admin` and the platform RPC remain
+owner-only. Migration 007 enforces the final scope after migration 006. School
+admins cannot grant owners, create schools or cross school boundaries; the last
+school-admin removal/demotion is blocked except for a website owner recovery.
