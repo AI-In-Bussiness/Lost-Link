@@ -1,7 +1,7 @@
 -- Synthetic inventory only. Auth users are provisioned separately; no passwords.
 insert into public.organizations(id,slug,name,published) values
- ('10000000-0000-4000-8000-000000000001','maple-school','Maple School (fictional)',true),
- ('10000000-0000-4000-8000-000000000002','cedar-school','Cedar School (fictional)',true)
+ ('10000000-0000-4000-8000-000000000001','maple-school','Flint Hill School',true),
+ ('10000000-0000-4000-8000-000000000002','cedar-school','Fairfax High School',true)
 on conflict(id) do nothing;
 insert into public.items(id,organization_id,title,public_description,category,color,public_location,found_date) values
  ('20000000-0000-4000-8000-000000000001','10000000-0000-4000-8000-000000000001','Black athletic backpack','Black bag with a white sports logo.','bag','black','Gym entrance',current_date-1),

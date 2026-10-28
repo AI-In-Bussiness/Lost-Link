@@ -23,7 +23,8 @@ declare
  payload jsonb:=jsonb_build_object('title','Black demo backpack','publicDescription','A black sports backpack with white logo.','category','bag','color','black','publicLocation','Gym entrance','foundDate',current_date::text,'identifyingDetails','Synthetic secret hidden dinosaur keyring.','storageLocation','Private demo cabinet');
 begin
  perform set_config('request.jwt.claim.sub','',true);
- perform pg_temp.check_true(public.backend_dispatch('organization','maple-school')->'data'->>'name'='Maple School (fictional)','public organization');
+ perform pg_temp.check_true(public.backend_dispatch('organization','maple-school')->'data'->>'name'='Flint Hill School','public organization');
+ perform pg_temp.check_true(public.backend_dispatch('organization','cedar-school')->'data'->>'name'='Fairfax High School','second public organization');
  perform pg_temp.check_true(jsonb_array_length(public.backend_dispatch('search','maple-school',null,'{"query":"zzzzzunrelated"}')->'data')=0,'no arbitrary matches');
  perform pg_temp.expect_error('UNAUTHORIZED','create_item');
  perform pg_temp.expect_error('VALIDATION_ERROR','search','maple-school',null,'{"query":"bag","limit":0}');
