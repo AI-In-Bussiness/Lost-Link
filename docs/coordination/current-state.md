@@ -1,3 +1,23 @@
+# Issue #35 security and presentation review — 2026-10-28 UTC
+
+Prepared on reused `codex/convert-plan-markdown` from main `846aacf`: a nonce-based
+document CSP, HttpOnly session cookies, fail-closed public Supabase configuration,
+scheduled dependency/history security checks, the existing brand mark as favicon,
+an explicit school lost-and-found hero, and linked privacy/terms pages. The owner
+authorized factual legal drafts **for review**, so this is draft delivery awaiting
+wording approval and PR checks, not a production release or completed issue.
+
+Local lint/root/UI typechecks/format, 57 unit cases, 19 interface browser scenarios,
+two production browser security/policy scenarios with axe and five viewports, a
+webpack production build, and four SQL suites with minimal test interfaces pass.
+The full Supabase image could not extract within the Docker storage quota; real
+Auth/Storage/HTTP integration is left to CI. Default Turbopack is also blocked by
+the executor's port-binding restriction. Gitleaks found no leaks in 91 fetched
+commits or source, and the dependency audit reports zero known vulnerabilities.
+See [the checklist and operational limits](issue-35-audit.md). The owner has no
+custom domain yet; domain, shared edge abuse controls, hosted Auth/retention and
+backup settings remain launch work. PR #33's separately owned changes are preserved.
+
 # Issue #34 landing page — 2026-10-28 UTC
 
 The root page now introduces school-scoped search, published photos and filters,

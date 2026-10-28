@@ -10,6 +10,7 @@ remain in place so historical links and active branches stay compatible.
 - [Frontend/backend integration checklist](coordination/integration.md)
 - [Shared coordination board](coordination/task-board.csv)
 - [Email confirmation redirect repair and verification](coordination/auth-email-redirects.md)
+- [Issue 35 security audit and legal draft review](coordination/issue-35-audit.md)
 
 ## Product, research, and UX — Phase 0
 

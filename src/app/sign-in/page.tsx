@@ -1,6 +1,7 @@
 import { safeReturnPath } from "@/lib/auth/security";
 import Link from "next/link";
 import { supabaseConfiguration } from "@/lib/supabase/server";
+import LegalLinks from '../legal-links';
 
 export const dynamic = "force-dynamic";
 
@@ -20,5 +21,6 @@ export default async function SignInPage({ searchParams }: { searchParams: Promi
       <button className="rounded bg-slate-900 px-4 py-3 text-white" type="submit">Sign in</button>
     </form>}
     <p className="mt-6">New to LostLink? <Link href={`/sign-up?next=${encodeURIComponent(destination)}`} className="underline">Create an account</Link></p>
+    <LegalLinks />
   </main>;
 }

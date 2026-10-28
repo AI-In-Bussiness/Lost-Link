@@ -126,7 +126,7 @@ class InterfaceTest(unittest.TestCase):
             getSession:()=>null,signOut:()=>{}});
         }""")
         self.ready()
-        expect(p.locator('h1')).to_contain_text('Lost something?')
+        expect(p.locator('h1')).to_contain_text('School lost')
         expect(p.locator('#features')).to_be_visible()
         expect(p.locator('main')).to_contain_text('We couldn’t load the school list.')
         expect(p.locator('#home-search')).to_have_count(0)
