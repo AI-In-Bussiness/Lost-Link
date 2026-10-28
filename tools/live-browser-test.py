@@ -143,7 +143,7 @@ class PersistedWorkflow(unittest.TestCase):
         self.assertEqual(page.evaluate('new URL(document.baseURI).origin'), self.origin)
         for path in ['/.env', '/.env.local', '/.git/config', '/package.json', '/src/proxy.ts', '/supabase/config.toml', '/tools/phase2-preview.html']:
             self.assertEqual(context.request.get(self.origin + path).status, 404, path)
-        for path in ['/api/auth/sign-in', '/api/auth/sign-up', '/api/auth/resend-confirmation', '/api/auth/sign-out', '/api/v1/organizations/' + self.fixtures['orgs'][0]['slug'] + '/staff/items']:
+        for path in ['/api/auth/sign-in', '/api/auth/sign-up', '/api/auth/resend-confirmation', '/api/auth/forgot-password', '/api/auth/reset-password', '/api/auth/sign-out', '/api/v1/organizations/' + self.fixtures['orgs'][0]['slug'] + '/staff/items']:
             rejected = context.request.post(self.origin + path, headers={'Origin': 'https://example.invalid'}, data={})
             self.assertEqual(rejected.status, 403, path)
             self.assertNotIn('access-control-allow-origin', rejected.headers)

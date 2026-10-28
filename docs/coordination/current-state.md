@@ -1,3 +1,14 @@
+# Issue #41 password reset — 2026-10-28 UTC
+
+Sign-in now links to a role-independent password recovery flow. Real Supabase
+PKCE recovery mail opens a verified, session-bound 15-minute new-password form;
+password replacement preserves existing account identity and permissions.
+Unknown accounts receive a generic response without registration. Existing
+signup/confirmation callbacks retain their behavior. See
+[password reset](../password-reset.md) for implementation and hosted settings.
+Delivery and exact validation evidence are recorded in the issue's phase report;
+actual hosted email delivery remains a separate acceptance step.
+
 # Final two-level administration — 2026-10-28 UTC
 
 The task owner clarified the required roles: school admins manage only their own

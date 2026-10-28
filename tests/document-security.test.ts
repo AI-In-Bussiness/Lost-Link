@@ -28,7 +28,7 @@ test('document policies use fresh server nonces and replace forged request polic
 });
 
 test('all document routes receive CSP while data and local assets keep their existing handling', () => {
-  for (const path of ['/', '/sign-in', '/sign-up', '/resend-confirmation', '/account', '/my/claims', '/o/maple-school/search', '/o/maple-school/staff', '/privacy', '/terms', '/missing-page']) {
+  for (const path of ['/', '/sign-in', '/sign-up', '/resend-confirmation', '/forgot-password', '/reset-password', '/account', '/my/claims', '/o/maple-school/search', '/o/maple-school/staff', '/privacy', '/terms', '/missing-page']) {
     assert.equal(unstable_doesMiddlewareMatch({ config, nextConfig: {}, url: path }), true, path);
   }
   for (const path of ['/api/auth/sign-in', '/api/v1/me/claims', '/_next/static/chunk.js', '/_next/image', '/design/caveat.ttf', '/mock-assets/item-placeholder.svg', '/icon.svg', '/favicon.ico']) {

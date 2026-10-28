@@ -42,7 +42,8 @@
     "release:verify": "node scripts/release-readiness.mjs",
     "test:search:relevance": "node scripts/test-search-relevance.mjs",
     "admin:bootstrap": "node scripts/bootstrap-owners.mjs",
-    "test:admin": "node scripts/test-admin.mjs"
+    "test:admin": "node scripts/test-admin.mjs",
+    "test:password-reset": "node scripts/test-password-reset.mjs"
   },
   "dependencies": {
     "@huggingface/transformers": "4.3.1",
