@@ -49,11 +49,20 @@ select pg_temp.assert_true(exists(select 1 from jsonb_array_elements(public.scho
 select pg_temp.denied('update_school',jsonb_build_object('schoolId',:'school_id','expectedVersion',1,'name','Stale overwrite','timezone','UTC','contactEmail','','collectionInstructions','','published',false),'CONFLICT');
 select pg_temp.denied('set_member',jsonb_build_object('schoolId',:'school_id','expectedVersion',2,'email','school-staff@example.test','role','owner'),'VALIDATION_ERROR');
 select pg_temp.denied('set_member',jsonb_build_object('schoolId',:'school_id','expectedVersion',2,'email','unconfirmed-owner-test@example.test','role','staff'),'ACCOUNT_NOT_READY');
-select public.platform_admin_dispatch('set_member',jsonb_build_object('schoolId',:'school_id','expectedVersion',2,'email','school-staff@example.test','role','admin'));
+select pg_temp.denied('set_member',jsonb_build_object('schoolId',:'school_id','expectedVersion',2,'email','school-staff@example.test','role','admin'),'VALIDATION_ERROR');
+select public.platform_admin_dispatch('set_member',jsonb_build_object('schoolId',:'school_id','expectedVersion',2,'email','school-staff@example.test','role','staff'));
+reset role;
+-- Existing school admins remain scoped staff, with no website-owner permissions.
+update public.memberships set role='admin' where organization_id=:'school_id'::uuid and user_id='39000000-0000-4000-8000-000000000003';
+set local role authenticated;
 select set_config('request.jwt.claim.sub','39000000-0000-4000-8000-000000000003',true);
 select pg_temp.assert_true(private.is_staff(:'school_id'::uuid),'assigned school admin has scoped access');
 select pg_temp.denied('overview','{}','FORBIDDEN');
 select pg_temp.denied('create_school','{}','FORBIDDEN');
+select pg_temp.denied('update_school','{}','FORBIDDEN');
+select pg_temp.denied('set_member','{}','FORBIDDEN');
+select pg_temp.denied('remove_member','{}','FORBIDDEN');
+do $$ begin perform private.platform_admin_dispatch('overview','{}');raise exception 'FAIL private owner dispatch';exception when insufficient_privilege then raise notice 'PASS private owner implementation cannot bypass owner-only wrapper';end $$;
 select pg_temp.assert_true((select count(*)=0 from public.platform_admin_events),'school admin cannot read owner audit');
 select set_config('request.jwt.claim.sub','39000000-0000-4000-8000-000000000002',true);
 select pg_temp.assert_true(jsonb_array_length(public.platform_admin_dispatch('overview')->'owners')=2,'second owner has same website controls');

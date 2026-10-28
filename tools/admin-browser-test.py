@@ -61,7 +61,7 @@ class OwnerWorkflow(unittest.TestCase):
         expect(public.get_by_role('link', name='office@example.test', exact=True)).to_be_visible()
         form = page.get_by_role('form', name='Assign school access')
         form.get_by_label('Account email').fill(self.fixtures['staff']['email'])
-        form.get_by_label('School role').select_option('admin')
+        expect(page.get_by_role('option', name='School admin', exact=True)).to_have_count(0)
         self.save(page, form, 'Save school access')
         staff_context, staff = self.login(self.fixtures['staff'], '/o/' + self.fixtures['slug'] + '/staff')
         expect(staff.get_by_role('heading', name='A little care. A happy return.', exact=True)).to_be_visible()
@@ -87,7 +87,7 @@ class OwnerWorkflow(unittest.TestCase):
         # Hidden school remains available to assigned staff.
         staff.reload()
         expect(staff.get_by_role('heading', name='A little care. A happy return.', exact=True)).to_be_visible()
-        page.get_by_text(self.fixtures['staff']['email'] + ' · admin', exact=True).click()
+        page.get_by_text(self.fixtures['staff']['email'] + ' · School staff', exact=True).click()
         form = page.get_by_role('form', name='Remove school access for ' + self.fixtures['staff']['email'])
         form.get_by_role('checkbox').check()
         self.save(page, form, 'Remove school access')
@@ -111,11 +111,16 @@ class OwnerWorkflow(unittest.TestCase):
         self.assertEqual(result.status, 307)
         result = visitor.request.post(self.origin + '/api/admin', headers={'Origin':self.origin,'Accept':'application/json'}, form={'action':'create_school'})
         self.assertEqual(result.status, 401)
-        for actor in [self.fixtures['claimant'], self.fixtures['staff']]:
+        for actor in [self.fixtures['claimant'], self.fixtures['staff'], self.fixtures['legacyAdmin']]:
             context, page = self.login(actor)
             expect(page.get_by_role('heading', name='Website-owner access required')).to_be_visible()
-            result = context.request.post(self.origin + '/api/admin', headers={'Origin': self.origin, 'Accept':'application/json'}, form={'action':'create_school'})
-            self.assertEqual(result.status, 403)
+            for action in ['create_school','update_school','set_member','remove_member']:
+                result = context.request.post(self.origin + '/api/admin', headers={'Origin': self.origin, 'Accept':'application/json'}, form={'action':action})
+                self.assertEqual(result.status, 403, action)
+            page.goto(self.origin + '/account')
+            expect(page.get_by_role('link', name='Website administration', exact=False)).to_have_count(0)
+            page.goto(self.origin)
+            expect(page.get_by_role('link', name='Website admin', exact=True)).to_have_count(0)
         context, page = self.login(self.fixtures['one'])
         for origin in ['https://attacker.example', 'null', '']:
             result = context.request.post(self.origin + '/api/admin', headers={'Origin':origin,'Accept':'application/json'}, form={'action':'create_school'})

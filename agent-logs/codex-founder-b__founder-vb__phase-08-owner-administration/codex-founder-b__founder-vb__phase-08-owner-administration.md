@@ -70,3 +70,30 @@ but the animation-frame focus callback was unreliable while another owner tab
 was active. Replaced it with a React effect after the alert is committed. Kept the
 same browser assertion; no timeout increase or assertion removal. Rerun the
 production browser checks and remote checks on the corrected head.
+
+## PR #40 owner-only review response — 2026-10-28 UTC
+
+- **Request:** [Review comment](https://github.com/AI-In-Bussiness/Lost-Link/pull/40#issuecomment-6476784242): “The admin should be only for website owner, not school admin”.
+- **Change:** `/admin` was already owner-gated. Removed the school-admin assignment
+  option and raw school-admin labels from the new owner screen/account page. New
+  assignments must be staff in both strict form validation and the database RPC.
+  Only securely bootstrapped website owners receive admin controls; existing
+  school-admin rows retain their previous scoped staff permissions.
+- **Migration:** Added forward migration 202610290006 instead of changing the
+  original setup already offered to the owner. It moves the original implementation
+  into private schema, revokes client execution, and wraps it with owner-only,
+  staff-assignment-only validation. Neither school staff nor legacy school admins
+  can bypass the wrapper or perform any owner action.
+- **Validation:** 70 unit tests, all five actual database suites, lint/typecheck,
+  production build and both real owner-browser scenarios pass. Browser fixtures
+  now include an actual legacy school-admin membership and verify denial of
+  `/admin`, all owner POST actions and admin navigation. Existing owner workflows,
+  four-width checks, axe, stale-form preservation and scoped staff access pass.
+- **Setup artifact:** Refreshed the private SQL handoff to support fresh and earlier
+  PR40 setups. Tested fresh install, repeat install and current-schema use with
+  synthetic confirmed accounts in rolled-back/disposable local databases; no real
+  founder accounts or hosted configuration were changed.
+- **Reflection/handoff:** Preserve legacy memberships to avoid disrupting school
+  work; reserve the visible admin designation and administrative controls for
+  website owners. Apply pending migration 006 even if setup 005 was already run.
+  Remote checks and independent review remain tied to the updated PR head.

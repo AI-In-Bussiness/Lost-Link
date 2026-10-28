@@ -1,3 +1,13 @@
+# PR #40 owner-only review response — 2026-10-28 UTC
+
+Only website owners receive admin controls. Removed school-admin assignment and
+labels from the new screens; newly assigned school access is staff-only. Legacy
+school-admin accounts retain scoped staff access but are denied every owner
+operation. Forward migration 202610290006 also repairs an already-applied initial
+PR40 setup. Unit/database/build and real owner/legacy-admin browser checks pass.
+See [administration](../administration.md) and the Phase 08 report for setup and
+hosted validation limits.
+
 # Website owner administration — 2026-10-28 UTC
 
 Founder B adds `/admin` for separate website-owner accounts: school creation,
