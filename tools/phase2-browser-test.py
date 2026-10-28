@@ -77,6 +77,72 @@ class InterfaceTest(unittest.TestCase):
         self.tab_to(target)
         self.page.keyboard.press(key)
 
+    def test_landing_features_and_next_steps(self):
+        p = self.page
+        expect(p.locator('.hero-description')).to_contain_text('Your school’s lost-and-found')
+        expect(p.locator('.feature-notes')).to_contain_text('Keep your proof private')
+        expect(p.locator('.feature-notes')).to_contain_text('physical handover')
+        self.keyboard_activate(p.get_by_role('link', name='Explore features', exact=True))
+        expect(p.locator('#features')).to_be_focused()
+        self.assertTrue(p.url.endswith('#features'))
+        self.keyboard_activate(p.get_by_role('link', name='How it works', exact=True))
+        expect(p.locator('#how-it-works')).to_be_focused()
+        self.assertTrue(p.url.endswith('#how-it-works'))
+        p.go_back()
+        self.ready()
+        expect(p.locator('#features')).to_be_focused()
+        p.reload()
+        self.ready()
+        expect(p.locator('#features')).to_be_focused()
+        p.get_by_role('link', name='Create an account', exact=True).click()
+        self.ready()
+        expect(p.get_by_role('button', name='Continue as demo student')).to_be_visible()
+        p.get_by_role('button', name='Continue as demo student').click()
+        self.ready()
+        self.route('/')
+        p.get_by_role('link', name='View my claims', exact=True).click()
+        self.ready()
+        self.assertEqual(p.url, BASE + '/my/claims')
+        self.route('/')
+        p.get_by_role('link', name='Staff sign in', exact=True).click()
+        self.ready()
+        expect(p.get_by_role('button', name='Continue as demo staff')).to_be_visible()
+
+    def test_landing_stays_available_without_school_directory(self):
+        p = self.page
+        # Exercise the live composition contract with a synthetic directory only.
+        p.evaluate("""async () => {
+          const {mountLostLink} = await import('/src/interface/app.ts');
+          const {createMockApi,createMockStore} = await import('/src/mocks/client.ts');
+          const original = createMockApi(createMockStore());
+          window.__homeDirectory = 'failure';
+          const api = {...original,live:true,listOrganizations:async () =>
+            window.__homeDirectory === 'failure'
+              ? {ok:false,error:{code:'NETWORK_ERROR',message:'Unavailable',requestId:'test'}}
+              : window.__homeDirectory === 'empty' ? {ok:true,data:[]} : original.listOrganizations()};
+          document.querySelector('#app').remove();
+          const root = document.createElement('div');root.id='app';document.body.prepend(root);
+          window.__homeApp = mountLostLink(root,{live:true,getApi:()=>api,
+            getSession:()=>null,signOut:()=>{}});
+        }""")
+        self.ready()
+        expect(p.locator('h1')).to_contain_text('Lost something?')
+        expect(p.locator('#features')).to_be_visible()
+        expect(p.locator('main')).to_contain_text('We couldn’t load the school list.')
+        expect(p.locator('#home-search')).to_have_count(0)
+        expect(p.get_by_role('link', name='Create an account', exact=True)).to_have_attribute('href', '/sign-up')
+        p.evaluate("window.__homeDirectory = 'normal'")
+        p.get_by_role('button', name='Try again', exact=True).click()
+        self.ready()
+        expect(p.locator('#home-search')).to_be_visible()
+        expect(p.locator('h1')).to_be_focused()
+        p.evaluate("window.__homeDirectory = 'empty'; window.__homeApp.refresh()")
+        self.ready()
+        expect(p.locator('main')).to_contain_text('No schools are currently listing items.')
+        expect(p.locator('#features')).to_be_visible()
+        expect(p.locator('#home-search')).to_have_count(0)
+        expect(p.get_by_role('button', name='Try again', exact=True)).to_have_count(0)
+
     def test_public_search_filters_and_private_boundary(self):
         p = self.page
         p.get_by_label('What are you looking for?').fill('black Nike duffel')

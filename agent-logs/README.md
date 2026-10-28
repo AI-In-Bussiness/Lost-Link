@@ -35,6 +35,8 @@ Submit the missing evidence for independent re-review before marking a phase gat
 
 # Agent reports
 
+- [Issue #34 home/landing page](codex-issue-34__founder-vunassigned__phase-01-home-landing/codex-issue-34__founder-vunassigned__phase-01-home-landing.md) — feature introduction, existing search and account/claims entry, directory recovery and accessible section navigation.
+
 - [Issue #27 registration plan](codex-issue-27__founder-vunassigned__phase-00-signup-plan/codex-issue-27__founder-vunassigned__phase-00-signup-plan.md) and [implementation](codex-issue-27__founder-vunassigned__phase-01-signup/codex-issue-27__founder-vunassigned__phase-01-signup.md).
 
 - [Founder A Phase 7 final UX / Overseer review](codex-founder-a-07__founder-va__phase-07-final-ux-review/codex-founder-a-07__founder-va__phase-07-final-ux-review.md) — review delivered; release/submission blocked; issues #24 and #25.

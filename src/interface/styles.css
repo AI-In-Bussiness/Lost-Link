@@ -1704,6 +1704,59 @@ th {
   color: var(--muted);
   font-size: 0.95rem;
 }
+.landing-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 28px;
+  margin-bottom: 24px;
+}
+.landing-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.landing-features {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 32px 64px;
+  border-top: 2px solid var(--ink);
+  padding-block: 36px 48px;
+}
+.landing-intro h2 {
+  font-size: 2.8rem;
+}
+.landing-intro .text-link {
+  display: inline-block;
+  padding-block: 10px;
+}
+.feature-notes {
+  margin: 0;
+  padding-left: 24px;
+  border-left: 2px solid #b66e5b;
+}
+.feature-notes > div + div {
+  border-top: 1px dashed var(--line);
+  margin-top: 20px;
+  padding-top: 20px;
+}
+.feature-notes dt {
+  font-family: var(--hand);
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.feature-notes dd {
+  margin: 8px 0 0;
+  color: var(--muted);
+}
+.landing-features,
+.landing-links {
+  overflow-wrap: anywhere;
+}
+#features,
+#how-it-works {
+  scroll-margin-top: 24px;
+}
 .staff-brief {
   display: flex;
   align-items: center;
@@ -1743,6 +1796,15 @@ th {
 }
 
 @media (max-width: 700px) {
+  .landing-features {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .landing-intro h2 {
+    font-size: 2.3rem;
+  }
+  .feature-notes {
+    padding-left: 16px;
+  }
   .hero h1 {
     font-size: clamp(3.1rem, 13vw, 4.5rem);
   }

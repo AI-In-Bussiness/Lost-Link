@@ -166,8 +166,22 @@ export function mountLostLink(root: HTMLElement, host: InterfaceHost) {
       main.removeAttribute("aria-busy");
       view.bind?.(main);
       document.title = view.title + " · LostLink";
+      // Hash navigation can render before the target exists. Restore its position
+      // and keyboard focus after mounting, including direct links and history.
+      const anchor = url.hash
+        ? document.getElementById(url.hash.slice(1))
+        : null;
+      if (
+        anchor &&
+        main.contains(anchor) &&
+        !main.querySelector(".error-summary:focus")
+      ) {
+        if (anchor.tabIndex < 0) anchor.tabIndex = -1;
+        anchor.focus({ preventScroll: true });
+        anchor.scrollIntoView();
+      }
       // Form views may have focused a validation summary; retain that useful focus.
-      if (focus) {
+      else if (focus) {
         window.scrollTo(0, 0);
         if (!main.querySelector(".error-summary:focus")) focusHeading(main);
       }
