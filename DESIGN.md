@@ -29,6 +29,11 @@ school lost-and-found interface, following the task owner's paper/pen direction.
 - No external runtime font/image services; serve the licensed assets locally.
 - No randomness in layout, illegible script, text filters or scroll animations.
 - No backend/route changes just to achieve a visual effect.
+- Keep the purpose explicit in the hero. Do not add pill buttons, emoji icons,
+  em dashes, fabricated reviews/metrics/customer counts, cursor effects, or
+  AI-builder branding. Do not introduce generated photographs or marketing copy.
+- Preserve existing local vector/brand assets. New public legal wording needs
+  owner-supplied text or explicit approval to prepare a factual draft.
 
 Reference: https://agent-design.com/blog/stop-ai-ui-looking-templated
 The guide informs persistent constraints; the school notebook design is the

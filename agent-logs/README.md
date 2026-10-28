@@ -37,6 +37,10 @@ Submit the missing evidence for independent re-review before marking a phase gat
 
 # Agent reports
 
+- [PR #37 conflict resolution](codex-issue-35__founder-vunassigned__phase-02-conflict-resolution/codex-issue-35__founder-vunassigned__phase-02-conflict-resolution.md) — main/PR #33 merged into the existing source branch while retaining both histories and all records; owner retains the final merge.
+
+- [Issue #35 triage](codex-issue-35__founder-vunassigned__phase-00-issue-triage/codex-issue-35__founder-vunassigned__phase-00-issue-triage.md) and [security/presentation implementation](codex-issue-35__founder-vunassigned__phase-01-best-practices/codex-issue-35__founder-vunassigned__phase-01-best-practices.md) — source audit, CSP, cookies, configuration guard, favicon and legal drafts awaiting owner review.
+
 - [Issue #34 home/landing page](codex-issue-34__founder-vunassigned__phase-01-home-landing/codex-issue-34__founder-vunassigned__phase-01-home-landing.md) — feature introduction, existing search and account/claims entry, directory recovery and accessible section navigation.
 
 - [Issue #27 registration plan](codex-issue-27__founder-vunassigned__phase-00-signup-plan/codex-issue-27__founder-vunassigned__phase-00-signup-plan.md) and [implementation](codex-issue-27__founder-vunassigned__phase-01-signup/codex-issue-27__founder-vunassigned__phase-01-signup.md).

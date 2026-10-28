@@ -60,6 +60,10 @@ class PersistedWorkflow(unittest.TestCase):
         page.get_by_role('button', name='Sign in', exact=True).click()
         page.wait_for_url(self.origin + path)
         expect(page.locator('main')).not_to_have_attribute('aria-busy', 'true')
+        session_cookies = [cookie for cookie in context.cookies() if cookie['name'].startswith('sb-') and '-auth-token' in cookie['name']]
+        self.assertTrue(session_cookies, 'Sign-in must establish server session cookies')
+        self.assertTrue(all(cookie['httpOnly'] and cookie['sameSite'] == 'Lax' and cookie['secure'] == self.origin.startswith('https:') for cookie in session_cookies))
+        self.assertFalse(page.evaluate("document.cookie.split(';').some(value => /^\\s*sb-.*-auth-token/.test(value))"), 'Browser JavaScript must not read session tokens')
         return context, page
 
     def review(self, page, name):
@@ -68,7 +72,9 @@ class PersistedWorkflow(unittest.TestCase):
         axe = Path('tools/phase2/node_modules/axe-core/axe.min.js')
         self.assertTrue(axe.exists(), 'Install the pinned tools/phase2 dependencies for accessibility checks.')
         if not page.evaluate('typeof window.axe !== "undefined"'):
-            page.add_script_tag(path=str(axe))
+            # Run the fixed test tool through the debugger; CSP intentionally
+            # blocks unnonced script tags inserted into the application.
+            page.evaluate(axe.read_text())
         for width, height in [(320, 1000), (390, 844), (568, 320), (768, 1000), (1440, 1000)]:
             with self.subTest(route=name, width=width, height=height):
                 page.set_viewport_size({'width': width, 'height': height})
@@ -88,6 +94,82 @@ class PersistedWorkflow(unittest.TestCase):
             page.evaluate('value => document.documentElement.style.fontSize=value', original_size)
             page.emulate_media(reduced_motion='no-preference')
             page.set_viewport_size({'width': 1440, 'height': 1000})
+
+    def test_document_security_and_exposed_file_boundaries(self):
+        context = self.context()
+        page = context.new_page()
+        response = page.goto(self.origin + '/sign-in')
+        page.get_by_role('heading', name='Sign in', exact=True).wait_for()
+        policy = response.headers['content-security-policy']
+        nonce = __import__('re').search(r"'nonce-([^']+)'", policy).group(1)
+        self.assertNotIn("'unsafe-eval'", policy)
+        self.assertIn("frame-ancestors 'none'", policy)
+        self.assertIn("form-action 'self'", policy)
+        self.assertIn('no-store', response.headers['cache-control'])
+        scripts = page.locator('script').evaluate_all('(nodes) => nodes.map(node => node.nonce)')
+        self.assertTrue(scripts and all(value == nonce for value in scripts), 'Framework scripts must match the response nonce')
+        reloaded = page.reload()
+        page.get_by_role('heading', name='Sign in', exact=True).wait_for()
+        self.assertNotEqual(policy, reloaded.headers['content-security-policy'])
+        icon = page.locator('link[rel=icon]').first.get_attribute('href')
+        icon_response = context.request.get(self.origin + icon)
+        self.assertEqual(icon_response.status, 200)
+        self.assertIn('image/svg+xml', icon_response.headers['content-type'])
+        # Simulate untrusted markup in the real HTML response, preserving the
+        # server's CSP and nonces. API responses are never intercepted.
+        def inject_markup(route):
+            original = route.fetch()
+            body = original.text().replace('</head>', '<meta name="security-injection-probe" content="present"><script>window.__parserInjectionExecuted = true</script></head>', 1)
+            route.fulfill(response=original, body=body)
+        context.route(self.origin + '/sign-in', inject_markup)
+        page.reload()
+        page.get_by_role('heading', name='Sign in', exact=True).wait_for()
+        page.wait_for_load_state('networkidle')
+        expect(page.locator('meta[name=security-injection-probe]')).to_have_count(1)
+        self.assertFalse(page.evaluate('window.__parserInjectionExecuted === true'))
+        page.evaluate("""() => {
+          window.__securityProbe = 0;
+          window.__policyViolations = [];
+          document.addEventListener('securitypolicyviolation', event => {
+            window.__policyViolations.push(event.effectiveDirective);
+            if (window.__policyViolations.length >= 2) document.documentElement.dataset.securityProbeComplete = 'true';
+          });
+          const button = document.createElement('button');
+          button.setAttribute('onclick', 'window.__securityProbe += 1'); document.body.append(button); button.click(); button.remove();
+          const base = document.createElement('base'); base.href = 'https://example.invalid/'; document.head.append(base);
+        }""")
+        expect(page.locator('html')).to_have_attribute('data-security-probe-complete', 'true')
+        self.assertEqual(page.evaluate('window.__securityProbe'), 0)
+        self.assertEqual(page.evaluate('new URL(document.baseURI).origin'), self.origin)
+        for path in ['/.env', '/.env.local', '/.git/config', '/package.json', '/src/proxy.ts', '/supabase/config.toml', '/tools/phase2-preview.html']:
+            self.assertEqual(context.request.get(self.origin + path).status, 404, path)
+        for path in ['/api/auth/sign-in', '/api/auth/sign-up', '/api/auth/resend-confirmation', '/api/auth/sign-out', '/api/v1/organizations/' + self.fixtures['orgs'][0]['slug'] + '/staff/items']:
+            rejected = context.request.post(self.origin + path, headers={'Origin': 'https://example.invalid'}, data={})
+            self.assertEqual(rejected.status, 403, path)
+            self.assertNotIn('access-control-allow-origin', rejected.headers)
+        preflight = context.request.fetch(self.origin + '/api/auth/sign-in', method='OPTIONS', headers={'Origin': 'https://example.invalid', 'Access-Control-Request-Method': 'POST'})
+        self.assertNotIn('access-control-allow-origin', preflight.headers)
+
+    def test_policy_pages_and_public_navigation(self):
+        page = self.context().new_page()
+        page.goto(self.origin)
+        page.get_by_role('heading', level=1, name='School lost & found').wait_for()
+        page.get_by_role('navigation', name='Policies').get_by_role('link', name='Privacy policy', exact=True).click()
+        page.wait_for_url(self.origin + '/privacy')
+        page.get_by_role('heading', level=1, name='Privacy policy', exact=True).wait_for()
+        expect(page.locator('main')).to_contain_text('does not yet enforce an automatic deletion schedule')
+        self.review(page, 'privacy')
+        page.get_by_role('navigation', name='Policies').get_by_role('link', name='Terms and conditions', exact=True).click()
+        page.wait_for_url(self.origin + '/terms')
+        page.get_by_role('heading', level=1, name='Terms and conditions', exact=True).wait_for()
+        self.review(page, 'terms')
+        page.goto(self.origin + '/sign-up')
+        page.get_by_role('navigation', name='Policies').get_by_role('link', name='Privacy policy', exact=True).click()
+        page.wait_for_url(self.origin + '/privacy')
+        page.get_by_role('heading', level=1, name='Privacy policy', exact=True).wait_for()
+        page.get_by_role('link', name='LostLink home', exact=True).click()
+        page.wait_for_url(self.origin + '/')
+        page.get_by_role('heading', level=1, name='School lost & found').wait_for()
 
     def test_real_upload_claim_review_return_and_isolation(self):
         staff_context, staff = self.login(self.fixtures['staff'], self.school + '/staff/items/new')
@@ -141,7 +223,7 @@ class PersistedWorkflow(unittest.TestCase):
         public_photo_url = photo.get_attribute('src')
         self.review(visitor, 'public-item')
         visitor.goto(self.origin)
-        visitor.get_by_role('heading', level=1, name='Lost something?').wait_for()
+        visitor.get_by_role('heading', level=1, name='School lost & found').wait_for()
         self.review(visitor, 'home')
         visitor.goto(self.origin + self.school + '/search?from=2026-01-02')
         visitor.get_by_text('No matching items found.', exact=True).wait_for()

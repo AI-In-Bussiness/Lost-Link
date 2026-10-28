@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import LegalLinks from '../legal-links';
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -22,5 +23,6 @@ export default async function AccountPage() {
     <h2 className="mt-8 text-xl font-semibold">Organization access</h2>
     {membershipError ? <p role="alert">Organization access could not be loaded. Please refresh to retry.</p> : memberships?.length ? <ul className="mt-3 grid gap-2">{memberships.map((membership) => <li key={membership.organization_id}>{membership.organizations?.name ?? "Organization unavailable"} · {membership.role} {membership.organizations && <Link href={`/o/${membership.organizations.slug}/staff`}>Open staff workspace</Link>}</li>)}</ul> : <p className="mt-3">You have claimant access. No staff memberships are assigned.</p>}
     <form method="post" action="/api/auth/sign-out" className="mt-8"><button className="rounded border px-4 py-3" type="submit">Sign out</button></form>
+    <LegalLinks />
   </main>;
 }

@@ -4,6 +4,7 @@ import { pendingSignupEmailCookie } from "@/lib/auth/confirmation";
 import { safeReturnPath } from "@/lib/auth/security";
 import { supabaseConfiguration } from "@/lib/supabase/server";
 import ResendConfirmationForm from "../resend-confirmation/form";
+import LegalLinks from '../legal-links';
 
 export const dynamic = "force-dynamic";
 
@@ -38,5 +39,6 @@ export default async function SignUpPage({ searchParams }: { searchParams: Promi
       <button className="rounded bg-slate-900 px-4 py-3 text-white" type="submit">Create account</button>
     </form>}
     <p className="mt-6">Already have an account? <Link href={signIn} className="underline">Sign in</Link></p>
+    <LegalLinks />
   </main>;
 }

@@ -4,6 +4,7 @@ import { pendingSignupEmailCookie } from "@/lib/auth/confirmation";
 import { safeReturnPath } from "@/lib/auth/security";
 import { supabaseConfiguration } from "@/lib/supabase/server";
 import ResendConfirmationForm from "./form";
+import LegalLinks from '../legal-links';
 
 export const dynamic = "force-dynamic";
 
@@ -28,5 +29,6 @@ export default async function ResendConfirmationPage({ searchParams }: { searchP
       <ResendConfirmationForm email={email} next={destination} />
     </>}
     <p className="mt-6"><Link href={`/sign-in?next=${encodeURIComponent(destination)}`} className="underline">Sign in</Link></p>
+    <LegalLinks />
   </main>;
 }

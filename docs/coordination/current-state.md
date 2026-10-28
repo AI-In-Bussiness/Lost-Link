@@ -1,3 +1,39 @@
+# PR #37 conflict resolution — 2026-10-28 UTC
+
+Merged current main `b5e5f60` (including PR #33) into the existing PR #37 source
+branch without rewriting either history. The only textual conflicts were the
+current-state snapshot and coordination board; both sides' records are retained
+below, including the newer completed auth visibility status. The combined source
+retains issue #35's CSP/cookies/configuration guards, policies, favicon and hero,
+alongside main's search eligibility fixes and staff photo-review shortcuts.
+
+Root lint/typecheck, 62 unit cases, 21 release cases, UI typecheck/format and a
+webpack production build pass locally. Production browser security and legal
+navigation checks also pass on the combined source. Fresh PR checks will verify
+the full persisted Auth/database/photo workflow and relevance gates. The owner
+requested conflict repair so they can merge; PR readiness is left unchanged and
+no production merge or issue closure is performed by this repair.
+
+# Issue #35 security and presentation review — 2026-10-28 UTC
+
+Prepared on reused `codex/convert-plan-markdown` from main `846aacf`: a nonce-based
+document CSP, HttpOnly session cookies, fail-closed public Supabase configuration,
+scheduled dependency/history security checks, the existing brand mark as favicon,
+an explicit school lost-and-found hero, and linked privacy/terms pages. The owner
+authorized factual legal drafts **for review**, so this is draft delivery awaiting
+wording approval and PR checks, not a production release or completed issue.
+
+Local lint/root/UI typechecks/format, 57 unit cases, 19 interface browser scenarios,
+two production browser security/policy scenarios with axe and five viewports, a
+webpack production build, and four SQL suites with minimal test interfaces pass.
+The full Supabase image could not extract within the Docker storage quota; real
+Auth/Storage/HTTP integration is left to CI. Default Turbopack is also blocked by
+the executor's port-binding restriction. Gitleaks found no leaks in 91 fetched
+commits or source, and the dependency audit reports zero known vulnerabilities.
+See [the checklist and operational limits](issue-35-audit.md). The owner has no
+custom domain yet; domain, shared edge abuse controls, hosted Auth/retention and
+backup settings remain launch work. PR #33's separately owned changes are preserved.
+
 # PR #33 integration refresh — 2026-10-28 UTC
 
 Merged main `846aacf` (landing-page PR #36) into the existing Phase 7 PR branch

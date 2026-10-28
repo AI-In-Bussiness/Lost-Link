@@ -1,12 +1,14 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextRequest, NextResponse } from "next/server";
+import { publicSupabaseConfiguration, sessionCookieOptions } from './config';
 
 export async function refreshSession(request: NextRequest) {
   let response = NextResponse.next({ request });
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !key) return response;
+  const config = publicSupabaseConfiguration();
+  if (!config) return response;
+  const { url, key } = config;
   const client = createServerClient(url, key, {
+    cookieOptions: sessionCookieOptions(),
     cookies: {
       getAll: () => request.cookies.getAll(),
       setAll: (values) => {
