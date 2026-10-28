@@ -1,0 +1,68 @@
+{
+  "check": "release-readiness",
+  "sourceRevision": "ae883e6c038a94d482a8b7bf4ba15f142ef70a2e",
+  "readyForLock": false,
+  "checks": [
+    {
+      "name": "source revision recorded",
+      "passed": true
+    },
+    {
+      "name": "production origin recorded",
+      "passed": true
+    },
+    {
+      "name": "lockfile pin matches",
+      "passed": true
+    },
+    {
+      "name": "model pin matches",
+      "passed": true
+    },
+    {
+      "name": "complete ordered migration pins match",
+      "passed": true
+    },
+    {
+      "name": "public smoke passed for production origin",
+      "passed": true
+    },
+    {
+      "name": "immutable candidate and rollback deployments recorded",
+      "passed": false
+    },
+    {
+      "name": "no unresolved release blockers",
+      "passed": false
+    },
+    {
+      "name": "production-configuration",
+      "passed": false
+    },
+    {
+      "name": "authenticated-smoke",
+      "passed": false
+    },
+    {
+      "name": "photo-claim-return",
+      "passed": false
+    },
+    {
+      "name": "confirmation-delivery",
+      "passed": false
+    },
+    {
+      "name": "rollback-rehearsal",
+      "passed": false
+    },
+    {
+      "name": "relevance-acceptance",
+      "passed": false
+    },
+    {
+      "name": "independent-acceptance",
+      "passed": false
+    }
+  ],
+  "scope": "Recorded evidence consistency only; does not create tags, deploy, roll back, or independently certify hosted results."
+}

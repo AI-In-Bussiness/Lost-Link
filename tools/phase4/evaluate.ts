@@ -3,9 +3,11 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { embed, closeEmbedder } from "../../src/lib/search/embeddings";
 import { semanticSearch } from "../../src/lib/search/service";
-import { MODEL, MIN_SIMILARITY, MIN_SEPARATION, type SearchItem } from "../../src/lib/search/ranking";
+import { RANKING_VERSION, MODEL, MIN_SIMILARITY, MIN_SEPARATION, type SearchItem } from "../../src/lib/search/ranking";
 import { scoped, baseline, assess, type Case } from "./evaluation.ts";
-const set = JSON.parse(readFileSync(fileURLToPath(new URL("./relevance-set.json",import.meta.url)),"utf8")) as {version:string;items:SearchItem[];cases:Case[]};
+const dataset = process.argv[3] ?? "frozen";
+if (!["frozen","additional"].includes(dataset)) throw Error("Use frozen or additional");
+const set = JSON.parse(readFileSync(fileURLToPath(new URL(dataset === "frozen" ? "./relevance-set.json" : "./additional-cases.json",import.meta.url)),"utf8")) as {version:string;items:SearchItem[];cases:Case[]};
 const mode = process.argv[2] ?? "model";
 if (!["model","fallback"].includes(mode)) throw Error("Use model or fallback");
 const rows = [];
@@ -28,8 +30,9 @@ try {
   const core = rows.filter(r=>["exact","paraphrase"].includes(r.kind));
   const filters = rows.filter(r=>r.kind==="filter" && r.positive);
   const passed = core.filter(r=>r.actual.hit).length >= 14 &&
-    filters.every(r=>r.actual.hit) && rows.every(r=>!r.actual.falsePositive && !r.actual.leaks && !r.actual.filterLeaks);
-  console.log(JSON.stringify({version:set.version,mode,model:MODEL,minSimilarity:MIN_SIMILARITY,minSeparation:MIN_SEPARATION,
+    filters.every(r=>r.actual.hit) && rows.every(r=>!r.actual.falsePositive && !r.actual.leaks && !r.actual.filterLeaks) &&
+    (dataset !== "additional" || rows.filter(r=>r.positive).every(r=>r.actual.hit));
+  console.log(JSON.stringify({version:set.version,mode,model:MODEL,ranking:RANKING_VERSION,minSimilarity:MIN_SIMILARITY,minSeparation:MIN_SEPARATION,
     inventorySize:set.items.length,caseCount:rows.length,
     coreHits:core.filter(r=>r.actual.hit).length,corePositives:core.length,
     baselineCoreHits:core.filter(r=>r.keyword.hit).length,

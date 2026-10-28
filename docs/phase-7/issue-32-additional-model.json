@@ -1,0 +1,660 @@
+{
+  "version": "issue-32-additional-v1",
+  "mode": "model",
+  "model": "Xenova/all-MiniLM-L6-v2@751bff37182d3f1213fa05d7196b954e230abad9",
+  "ranking": "rrf-60-eligibility-v2",
+  "minSimilarity": 0.3,
+  "minSeparation": 0.05,
+  "inventorySize": 21,
+  "caseCount": 27,
+  "coreHits": 19,
+  "corePositives": 19,
+  "baselineCoreHits": 19,
+  "coreMRR": 1,
+  "proposedGatePassed": true,
+  "rows": [
+    {
+      "id": "context-1",
+      "kind": "exact",
+      "positive": true,
+      "baseline": [
+        "a-duffel"
+      ],
+      "results": [
+        "a-duffel"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "context-2",
+      "kind": "exact",
+      "positive": true,
+      "baseline": [
+        "a-hoody"
+      ],
+      "results": [
+        "a-hoody"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "context-3",
+      "kind": "exact",
+      "positive": true,
+      "baseline": [
+        "a-buds"
+      ],
+      "results": [
+        "a-buds"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "context-4",
+      "kind": "exact",
+      "positive": true,
+      "baseline": [
+        "a-case"
+      ],
+      "results": [
+        "a-case"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "context-5",
+      "kind": "exact",
+      "positive": true,
+      "baseline": [
+        "b-tote"
+      ],
+      "results": [
+        "b-tote"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "context-6",
+      "kind": "exact",
+      "positive": true,
+      "baseline": [
+        "b-glasses"
+      ],
+      "results": [
+        "b-glasses"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "context-7",
+      "kind": "exact",
+      "positive": true,
+      "baseline": [
+        "b-keys"
+      ],
+      "results": [
+        "b-keys"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "context-8",
+      "kind": "exact",
+      "positive": true,
+      "baseline": [
+        "b-scarf"
+      ],
+      "results": [
+        "b-scarf"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "details-1",
+      "kind": "exact",
+      "positive": true,
+      "baseline": [
+        "a-duffel"
+      ],
+      "results": [
+        "a-duffel"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "details-2",
+      "kind": "exact",
+      "positive": true,
+      "baseline": [
+        "a-hoody"
+      ],
+      "results": [
+        "a-hoody"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "details-3",
+      "kind": "exact",
+      "positive": true,
+      "baseline": [
+        "a-buds"
+      ],
+      "results": [
+        "a-buds"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "details-4",
+      "kind": "exact",
+      "positive": true,
+      "baseline": [
+        "a-case"
+      ],
+      "results": [
+        "a-case"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "details-5",
+      "kind": "exact",
+      "positive": true,
+      "baseline": [
+        "b-tote"
+      ],
+      "results": [
+        "b-tote"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "details-6",
+      "kind": "exact",
+      "positive": true,
+      "baseline": [
+        "b-glasses"
+      ],
+      "results": [
+        "b-glasses"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "details-7",
+      "kind": "exact",
+      "positive": true,
+      "baseline": [
+        "b-keys"
+      ],
+      "results": [
+        "b-keys"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "details-8",
+      "kind": "exact",
+      "positive": true,
+      "baseline": [
+        "b-scarf"
+      ],
+      "results": [
+        "b-scarf"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "absent-1",
+      "kind": "no-match",
+      "positive": false,
+      "baseline": [],
+      "results": [],
+      "keyword": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "absent-2",
+      "kind": "no-match",
+      "positive": false,
+      "baseline": [],
+      "results": [],
+      "keyword": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "absent-3",
+      "kind": "no-match",
+      "positive": false,
+      "baseline": [],
+      "results": [],
+      "keyword": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "absent-4",
+      "kind": "no-match",
+      "positive": false,
+      "baseline": [],
+      "results": [],
+      "keyword": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "absent-5",
+      "kind": "no-match",
+      "positive": false,
+      "baseline": [],
+      "results": [],
+      "keyword": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "absent-6",
+      "kind": "no-match",
+      "positive": false,
+      "baseline": [],
+      "results": [],
+      "keyword": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "absent-7",
+      "kind": "no-match",
+      "positive": false,
+      "baseline": [],
+      "results": [],
+      "keyword": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "absent-8",
+      "kind": "no-match",
+      "positive": false,
+      "baseline": [],
+      "results": [],
+      "keyword": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "present-1",
+      "kind": "exact",
+      "positive": true,
+      "baseline": [
+        "present-1"
+      ],
+      "results": [
+        "present-1"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "present-2",
+      "kind": "exact",
+      "positive": true,
+      "baseline": [
+        "present-2"
+      ],
+      "results": [
+        "present-2"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "present-3",
+      "kind": "exact",
+      "positive": true,
+      "baseline": [
+        "present-3"
+      ],
+      "results": [
+        "present-3"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    }
+  ]
+}

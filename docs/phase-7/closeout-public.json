@@ -1,0 +1,121 @@
+{
+  "check": "release-public-smoke",
+  "observedAt": "2026-10-28T02:00:42.686Z",
+  "origin": "https://lost-link-beta.vercel.app",
+  "passed": true,
+  "scope": "Public HTTP only; authenticated workflow, provider configuration, deployment identity and rollback require separate evidence",
+  "search": {
+    "maple-school": {
+      "mode": "hybrid",
+      "semanticStatus": "available"
+    },
+    "cedar-school": {
+      "mode": "hybrid",
+      "semanticStatus": "available"
+    }
+  },
+  "checks": [
+    {
+      "name": "public page",
+      "path": "/",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "name": "public page",
+      "path": "/sign-in",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "name": "published school",
+      "path": "/api/v1/organizations/maple-school",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "name": "public inventory",
+      "path": "/api/v1/organizations/maple-school/items?limit=50",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "name": "showcase item",
+      "path": "/api/v1/organizations/maple-school/items/20000000-0000-4000-8000-000000000001",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "name": "scoped search",
+      "path": "/api/v1/organizations/maple-school/search",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "name": "foreign-school item hidden",
+      "path": "/api/v1/organizations/maple-school/items/20000000-0000-4000-8000-000000000002",
+      "status": 404,
+      "passed": true
+    },
+    {
+      "name": "anonymous staff denied",
+      "path": "/api/v1/organizations/maple-school/staff/items",
+      "status": 401,
+      "passed": true
+    },
+    {
+      "name": "published school",
+      "path": "/api/v1/organizations/cedar-school",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "name": "public inventory",
+      "path": "/api/v1/organizations/cedar-school/items?limit=50",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "name": "showcase item",
+      "path": "/api/v1/organizations/cedar-school/items/20000000-0000-4000-8000-000000000002",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "name": "scoped search",
+      "path": "/api/v1/organizations/cedar-school/search",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "name": "foreign-school item hidden",
+      "path": "/api/v1/organizations/cedar-school/items/20000000-0000-4000-8000-000000000001",
+      "status": 404,
+      "passed": true
+    },
+    {
+      "name": "anonymous staff denied",
+      "path": "/api/v1/organizations/cedar-school/staff/items",
+      "status": 401,
+      "passed": true
+    },
+    {
+      "name": "anonymous claims denied",
+      "path": "/api/v1/me/claims",
+      "status": 401,
+      "passed": true
+    },
+    {
+      "name": "cross-origin sign-out denied",
+      "path": "/api/auth/sign-out",
+      "status": 403,
+      "passed": true
+    },
+    {
+      "name": "same-origin auth configured",
+      "path": "/api/auth/sign-in",
+      "status": 303,
+      "passed": true
+    }
+  ]
+}

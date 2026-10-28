@@ -1,5 +1,34 @@
 # Repair email confirmation redirects
 
+## Signup limit across different addresses — 2026-10-27
+
+Signup makes one Supabase Auth request and forwards its throttling result.
+An error after changing recipients can indicate a project-wide email quota.
+The current mapping also includes request throttles; inspect the Auth log error
+code before assuming which specific quota fired.
+
+Supabase's default mail service currently permits two messages per hour across
+the project and only delivers to project team addresses. See [official SMTP
+documentation](https://supabase.com/docs/guides/auth/auth-smtp).
+
+Operator repair:
+
+1. Open Authentication → Email → SMTP Settings for project `ldhwtrxhmaanfcgmtsbp`.
+2. If custom SMTP is disabled, configure an email provider with its host, port,
+   credentials and verified sender. Enter secrets directly into the dashboard.
+3. With custom SMTP enabled, inspect Authentication → Rate Limits and set the
+   email-send quota to the expected volume supported by the email provider.
+   Keep per-address cooldown and request protections in place.
+4. If custom SMTP was already enabled, inspect Auth logs for
+   `over_email_send_rate_limit` versus `over_request_rate_limit`, and check
+   provider quotas/delivery logs. Adjust the limit that actually fired.
+5. After setup and quota refill, test a new address and its confirmation link
+   in the same browser. Do not repeatedly submit while throttled.
+
+Hosted configuration is not inspected or repaired yet: this workspace has no
+Supabase management credentials, SMTP bindings or authenticated dashboard tools.
+Changing local `supabase/config.toml` does not update hosted Auth settings.
+
 Resolved on 2026-10-27 after the task owner saved the dashboard settings below.
 A fresh `auth:check` passes all three redirect cases on the public origin,
 including the return-destination query. The instructions remain for future URL

@@ -1,7 +1,7 @@
 {
   "status": "blocked",
-  "sourceRevision": "567ad420f62f6b7c8e6c0580dc9994dc8a89928e",
-  "sourceMeaning": "Merged Phase 7 candidate; production alias identity and authenticated/rollback acceptance still require provider inspection before locking.",
+  "sourceRevision": "ae883e6c038a94d482a8b7bf4ba15f142ef70a2e",
+  "sourceMeaning": "Production application candidate verified through public HTTP and exact-commit CI. This documentation refresh does not establish authenticated hosting, provider configuration, rollback or independent acceptance.",
   "productionOrigin": "https://lost-link-beta.vercel.app",
   "vercelProject": "ddar2425s-projects/lost-link",
   "supabaseProjectRefToConfirm": "ldhwtrxhmaanfcgmtsbp",
@@ -49,18 +49,20 @@
   "baselineChecks": [
     {
       "name": "Foundation",
-      "runId": 40558339465,
+      "runId": 40598540517,
       "conclusion": "success"
     },
     {
       "name": "Linux and Windows helpers",
-      "runId": 40558339463,
+      "runId": 40598540570,
       "conclusion": "success"
     }
   ],
   "blockers": [
-    "https://github.com/AI-In-Bussiness/Lost-Link/issues/20",
-    "https://github.com/AI-In-Bussiness/Lost-Link/issues/21"
+    "Hosted provider/configuration inspection and account/photo/return acceptance require secure access",
+    "Confirmation email delivery after SMTP setup has not been verified",
+    "Compatible rollback target/rehearsal and independent release acceptance remain unverified",
+    "https://github.com/AI-In-Bussiness/Lost-Link/issues/32"
   ],
   "requiredBeforeLock": [
     "passing checks on final SHA",
@@ -71,8 +73,8 @@
     "independent release acceptance"
   ],
   "publicSmoke": {
-    "path": "docs/phase-7/public-smoke-after-setup.json",
-    "observedAt": "2026-10-27T19:25:48.183Z",
+    "path": "docs/phase-7/readiness-public.json",
+    "observedAt": "2026-10-28T02:18:04.984Z",
     "passed": true,
     "checks": 17,
     "search": {
@@ -87,9 +89,32 @@
     }
   },
   "reportedVercelCommitStatus": {
-    "sha": "567ad420f62f6b7c8e6c0580dc9994dc8a89928e",
+    "sha": "ae883e6c038a94d482a8b7bf4ba15f142ef70a2e",
     "state": "success",
-    "inspectorUrl": "https://vercel.com/ddar2425s-projects/lost-link/3U89roLdWYWdGUtEvcnStnPNgSkv",
-    "scope": "GitHub commit status only; production alias/deployment identity not yet inspected"
+    "inspectorUrl": "https://vercel.com/ddar2425s-projects/lost-link/HRapJJVMpscFimyrGsybdgqqGFR2",
+    "scope": "GitHub commit status and public-origin behavior verified; provider alias/configuration inspection unavailable"
+  },
+  "relevanceEvidence": {
+    "path": "docs/phase-7/closeout-relevance.json",
+    "coreHits": 16,
+    "corePositives": 16,
+    "falsePositiveCases": [
+      "negative-3",
+      "negative-4",
+      "school-1",
+      "school-3",
+      "school-4"
+    ],
+    "proposedGatePassed": false,
+    "commandExitCode": 1,
+    "issue": "https://github.com/AI-In-Bussiness/Lost-Link/issues/32",
+    "fallbackPath": "docs/phase-7/closeout-fallback.json",
+    "fallbackFalsePositives": 2,
+    "note": "No school/filter leaks; false positives are irrelevant in-scope results. Keyword-only does not satisfy the proposed no-match gate either."
+  },
+  "historicalIssueStates": {
+    "20": "closed without hosted acceptance evidence in issue body/comments",
+    "21": "closed; fresh quality failure tracked by #32",
+    "23": "closed; CI recovery verified"
   }
 }

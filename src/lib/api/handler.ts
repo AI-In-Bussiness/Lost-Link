@@ -8,6 +8,7 @@ import { Action, encodeCursor, endpoints, queryObject, slug, uuid } from "./cont
 import { BodyError, readJsonBody } from "./body";
 
 import { enhanceSearch } from "@/lib/search/server";
+import { eligibleBaseline } from "@/lib/search/eligibility";
 import { InventoryChanged } from "@/lib/search/service";
 
 const responseHeaders = { "Cache-Control": "private, no-store" };
@@ -43,7 +44,7 @@ export async function handleApi(request: NextRequest, action: Action, params: Re
       const { data: { user }, error } = await client.auth.getUser();
       if (error || !user) return fail(error && error.status && error.status >= 500 ? "UNAVAILABLE" : "UNAUTHORIZED");
     }
-    const { data, error } = await client.rpc("backend_dispatch", { p_action: action, p_org_slug: params.orgSlug ?? null, p_id: targetId ?? null, p_payload: payload });
+    const { data, error } = await client.rpc("backend_dispatch", { p_action: action, p_org_slug: params.orgSlug ?? null, p_id: targetId ?? null, p_payload: action === "search" ? {...payload, limit:50} : payload });
     if (error) {
       if (error.code === "P0001" && failures[error.message]) return fail(error.message);
       if (error.code === "23505") return fail("CONFLICT");
@@ -57,9 +58,9 @@ export async function handleApi(request: NextRequest, action: Action, params: Re
       try { result = await enhanceSearch(client, params.orgSlug, payload, data); }
       catch (error) {
         if (!(error instanceof InventoryChanged)) throw error;
-        const fresh = await client.rpc("backend_dispatch", { p_action: action, p_org_slug: params.orgSlug, p_payload: payload });
+        const fresh = await client.rpc("backend_dispatch", { p_action: action, p_org_slug: params.orgSlug, p_payload: {...payload, limit:50} });
         if (fresh.error || !Array.isArray(fresh.data?.data)) return fail("UNAVAILABLE");
-        result = {...fresh.data, search:{mode:"structured",semanticStatus:"unavailable"}};
+        result = {...fresh.data, data: eligibleBaseline(fresh.data.data, String(payload.query), Number(payload.limit)), search:{mode:"structured",semanticStatus:"unavailable"}};
       }
     }
     return NextResponse.json(result, { status: endpoint.created ? 201 : 200, headers: { ...responseHeaders, "X-Request-Id": requestId } });

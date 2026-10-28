@@ -1,0 +1,471 @@
+{
+  "version": "issue-32-additional-v1",
+  "items": [
+    {
+      "id": "a-duffel",
+      "organizationSlug": "evaluation-maple",
+      "title": "Black Nike duffel",
+      "publicDescription": "Soft sports bag with a white swoosh and two short carry handles.",
+      "category": "bag",
+      "color": "black",
+      "publicLocation": "Basketball court",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "a-pack",
+      "organizationSlug": "evaluation-maple",
+      "title": "Black school backpack",
+      "publicDescription": "Two shoulder straps and a padded laptop sleeve.",
+      "category": "bag",
+      "color": "black",
+      "publicLocation": "Library",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "a-flask",
+      "organizationSlug": "evaluation-maple",
+      "title": "Purple insulated flask",
+      "publicDescription": "Metal drinking bottle with a screw cap and carry loop.",
+      "category": "bottle",
+      "color": "purple",
+      "publicLocation": "Sports hall",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "a-hoody",
+      "organizationSlug": "evaluation-maple",
+      "title": "Navy hooded sweatshirt",
+      "publicDescription": "Cotton pullover with a hood and a large front pocket.",
+      "category": "clothing",
+      "color": "navy",
+      "publicLocation": "Changing rooms",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "a-buds",
+      "organizationSlug": "evaluation-maple",
+      "title": "White wireless earbuds",
+      "publicDescription": "Two small in-ear headphones in a white charging case.",
+      "category": "electronics",
+      "color": "white",
+      "publicLocation": "Cafeteria",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "a-case",
+      "organizationSlug": "evaluation-maple",
+      "title": "Blue pencil case",
+      "publicDescription": "Zipped fabric pouch for pens and erasers.",
+      "category": "other",
+      "color": "blue",
+      "publicLocation": "Classroom",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "a-umbrella",
+      "organizationSlug": "evaluation-maple",
+      "title": "Yellow folding umbrella",
+      "publicDescription": "Small rain umbrella with a wrist strap.",
+      "category": "other",
+      "color": "yellow",
+      "publicLocation": "Reception",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "a-lunch",
+      "organizationSlug": "evaluation-maple",
+      "title": "Green lunch box",
+      "publicDescription": "Rectangular sandwich container with clips.",
+      "category": "other",
+      "color": "green",
+      "publicLocation": "Cafeteria",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "a-old-flask",
+      "organizationSlug": "evaluation-maple",
+      "title": "Purple insulated flask",
+      "publicDescription": "Metal drinking bottle with a screw cap and carry loop.",
+      "category": "bottle",
+      "color": "purple",
+      "publicLocation": "Sports hall",
+      "foundDate": "2026-09-01"
+    },
+    {
+      "id": "b-tote",
+      "organizationSlug": "evaluation-cedar",
+      "title": "Red canvas tote",
+      "publicDescription": "Open cloth shopping bag with two long shoulder handles.",
+      "category": "bag",
+      "color": "red",
+      "publicLocation": "Art room",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "b-glasses",
+      "organizationSlug": "evaluation-cedar",
+      "title": "Black reading glasses",
+      "publicDescription": "Rectangular spectacles with thin black frames.",
+      "category": "other",
+      "color": "black",
+      "publicLocation": "Library",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "b-keys",
+      "organizationSlug": "evaluation-cedar",
+      "title": "Keys on green lanyard",
+      "publicDescription": "Two silver keys attached to a green neck strap.",
+      "category": "keys",
+      "color": "green",
+      "publicLocation": "Reception",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "b-scarf",
+      "organizationSlug": "evaluation-cedar",
+      "title": "Grey knitted scarf",
+      "publicDescription": "Long wool neck warmer with fringed ends.",
+      "category": "clothing",
+      "color": "grey",
+      "publicLocation": "Playground",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "b-bottle",
+      "organizationSlug": "evaluation-cedar",
+      "title": "Blue water bottle",
+      "publicDescription": "Clear blue reusable plastic drinking bottle.",
+      "category": "bottle",
+      "color": "blue",
+      "publicLocation": "Gym",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "b-ball",
+      "organizationSlug": "evaluation-cedar",
+      "title": "Orange basketball",
+      "publicDescription": "Round orange sports ball with black seams.",
+      "category": "other",
+      "color": "orange",
+      "publicLocation": "Court",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "b-pack",
+      "organizationSlug": "evaluation-cedar",
+      "title": "Black school backpack",
+      "publicDescription": "Two shoulder straps and a padded laptop sleeve.",
+      "category": "bag",
+      "color": "black",
+      "publicLocation": "Library",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "b-jacket",
+      "organizationSlug": "evaluation-cedar",
+      "title": "Red rain jacket",
+      "publicDescription": "Waterproof zip-up coat with hood.",
+      "category": "clothing",
+      "color": "red",
+      "publicLocation": "Reception",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "b-pencil",
+      "organizationSlug": "evaluation-cedar",
+      "title": "Yellow pencil case",
+      "publicDescription": "Small zip pouch containing pencils.",
+      "category": "other",
+      "color": "yellow",
+      "publicLocation": "Classroom",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "present-1",
+      "organizationSlug": "evaluation-additional",
+      "title": "Blue desktop computer",
+      "publicDescription": "Fictional additional object, not a component of another item.",
+      "category": "electronics",
+      "color": "blue",
+      "publicLocation": "Library",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "present-2",
+      "organizationSlug": "evaluation-additional",
+      "title": "Wooden cello in a hard case",
+      "publicDescription": "Fictional additional object, not a component of another item.",
+      "category": "other",
+      "color": "brown",
+      "publicLocation": "Library",
+      "foundDate": "2026-10-20"
+    },
+    {
+      "id": "present-3",
+      "organizationSlug": "evaluation-additional",
+      "title": "Golf clubs",
+      "publicDescription": "Fictional additional object, not a component of another item.",
+      "category": "other",
+      "color": "black",
+      "publicLocation": "Library",
+      "foundDate": "2026-10-20"
+    }
+  ],
+  "cases": [
+    {
+      "id": "context-1",
+      "kind": "exact",
+      "school": "evaluation-maple",
+      "query": "please help find my black Nike duffel left somewhere yesterday",
+      "relevant": [
+        "a-duffel"
+      ],
+      "rationale": "Additional natural-language context must not bury a public item identity."
+    },
+    {
+      "id": "context-2",
+      "kind": "exact",
+      "school": "evaluation-maple",
+      "query": "please help find my navy hooded sweatshirt left somewhere yesterday",
+      "relevant": [
+        "a-hoody"
+      ],
+      "rationale": "Additional natural-language context must not bury a public item identity."
+    },
+    {
+      "id": "context-3",
+      "kind": "exact",
+      "school": "evaluation-maple",
+      "query": "please help find my white wireless earbuds left somewhere yesterday",
+      "relevant": [
+        "a-buds"
+      ],
+      "rationale": "Additional natural-language context must not bury a public item identity."
+    },
+    {
+      "id": "context-4",
+      "kind": "exact",
+      "school": "evaluation-maple",
+      "query": "please help find my blue pencil case left somewhere yesterday",
+      "relevant": [
+        "a-case"
+      ],
+      "rationale": "Additional natural-language context must not bury a public item identity."
+    },
+    {
+      "id": "context-5",
+      "kind": "exact",
+      "school": "evaluation-cedar",
+      "query": "please help find my red canvas tote left somewhere yesterday",
+      "relevant": [
+        "b-tote"
+      ],
+      "rationale": "Additional natural-language context must not bury a public item identity."
+    },
+    {
+      "id": "context-6",
+      "kind": "exact",
+      "school": "evaluation-cedar",
+      "query": "please help find my black reading glasses left somewhere yesterday",
+      "relevant": [
+        "b-glasses"
+      ],
+      "rationale": "Additional natural-language context must not bury a public item identity."
+    },
+    {
+      "id": "context-7",
+      "kind": "exact",
+      "school": "evaluation-cedar",
+      "query": "please help find my keys green lanyard left somewhere yesterday",
+      "relevant": [
+        "b-keys"
+      ],
+      "rationale": "Additional natural-language context must not bury a public item identity."
+    },
+    {
+      "id": "context-8",
+      "kind": "exact",
+      "school": "evaluation-cedar",
+      "query": "please help find my grey knitted scarf left somewhere yesterday",
+      "relevant": [
+        "b-scarf"
+      ],
+      "rationale": "Additional natural-language context must not bury a public item identity."
+    },
+    {
+      "id": "details-1",
+      "kind": "exact",
+      "school": "evaluation-maple",
+      "query": "black Nike duffel white swoosh",
+      "relevant": [
+        "a-duffel"
+      ],
+      "rationale": "Additional public attributes should retain the corresponding title match."
+    },
+    {
+      "id": "details-2",
+      "kind": "exact",
+      "school": "evaluation-maple",
+      "query": "navy cotton hooded sweatshirt",
+      "relevant": [
+        "a-hoody"
+      ],
+      "rationale": "Additional public attributes should retain the corresponding title match."
+    },
+    {
+      "id": "details-3",
+      "kind": "exact",
+      "school": "evaluation-maple",
+      "query": "white earbuds charging case",
+      "relevant": [
+        "a-buds"
+      ],
+      "rationale": "Additional public attributes should retain the corresponding title match."
+    },
+    {
+      "id": "details-4",
+      "kind": "exact",
+      "school": "evaluation-maple",
+      "query": "blue pencil case pens erasers",
+      "relevant": [
+        "a-case"
+      ],
+      "rationale": "Additional public attributes should retain the corresponding title match."
+    },
+    {
+      "id": "details-5",
+      "kind": "exact",
+      "school": "evaluation-cedar",
+      "query": "red canvas tote shoulder handles",
+      "relevant": [
+        "b-tote"
+      ],
+      "rationale": "Additional public attributes should retain the corresponding title match."
+    },
+    {
+      "id": "details-6",
+      "kind": "exact",
+      "school": "evaluation-cedar",
+      "query": "black reading glasses thin frames",
+      "relevant": [
+        "b-glasses"
+      ],
+      "rationale": "Additional public attributes should retain the corresponding title match."
+    },
+    {
+      "id": "details-7",
+      "kind": "exact",
+      "school": "evaluation-cedar",
+      "query": "green lanyard two keys",
+      "relevant": [
+        "b-keys"
+      ],
+      "rationale": "Additional public attributes should retain the corresponding title match."
+    },
+    {
+      "id": "details-8",
+      "kind": "exact",
+      "school": "evaluation-cedar",
+      "query": "grey knitted scarf fringed ends",
+      "relevant": [
+        "b-scarf"
+      ],
+      "rationale": "Additional public attributes should retain the corresponding title match."
+    },
+    {
+      "id": "absent-1",
+      "kind": "no-match",
+      "school": "evaluation-cedar",
+      "query": "blue desktop computer",
+      "relevant": [],
+      "rationale": "No corresponding object exists; color, a component or a carrying case alone is insufficient."
+    },
+    {
+      "id": "absent-2",
+      "kind": "no-match",
+      "school": "evaluation-cedar",
+      "query": "green laptop computer",
+      "relevant": [],
+      "rationale": "No corresponding object exists; color, a component or a carrying case alone is insufficient."
+    },
+    {
+      "id": "absent-3",
+      "kind": "no-match",
+      "school": "evaluation-cedar",
+      "query": "wooden cello in a hard case",
+      "relevant": [],
+      "rationale": "No corresponding object exists; color, a component or a carrying case alone is insufficient."
+    },
+    {
+      "id": "absent-4",
+      "kind": "no-match",
+      "school": "evaluation-maple",
+      "query": "orange hooded sweatshirt",
+      "relevant": [],
+      "rationale": "No corresponding object exists; color, a component or a carrying case alone is insufficient."
+    },
+    {
+      "id": "absent-5",
+      "kind": "no-match",
+      "school": "evaluation-maple",
+      "query": "yellow wireless headphones",
+      "relevant": [],
+      "rationale": "No corresponding object exists; color, a component or a carrying case alone is insufficient."
+    },
+    {
+      "id": "absent-6",
+      "kind": "no-match",
+      "school": "evaluation-maple",
+      "query": "racing bicycle",
+      "relevant": [],
+      "rationale": "No corresponding object exists; color, a component or a carrying case alone is insufficient."
+    },
+    {
+      "id": "absent-7",
+      "kind": "no-match",
+      "school": "evaluation-cedar",
+      "query": "golf clubs",
+      "relevant": [],
+      "rationale": "No corresponding object exists; color, a component or a carrying case alone is insufficient."
+    },
+    {
+      "id": "absent-8",
+      "kind": "no-match",
+      "school": "evaluation-maple",
+      "query": "silver microwave oven",
+      "relevant": [],
+      "rationale": "No corresponding object exists; color, a component or a carrying case alone is insufficient."
+    },
+    {
+      "id": "present-1",
+      "kind": "exact",
+      "school": "evaluation-additional",
+      "query": "blue desktop computer",
+      "relevant": [
+        "present-1"
+      ],
+      "rationale": "Counterpart to an absent-object query: matching objects must be returned when they really exist in scope."
+    },
+    {
+      "id": "present-2",
+      "kind": "exact",
+      "school": "evaluation-additional",
+      "query": "wooden cello in a hard case",
+      "relevant": [
+        "present-2"
+      ],
+      "rationale": "Counterpart to an absent-object query: matching objects must be returned when they really exist in scope."
+    },
+    {
+      "id": "present-3",
+      "kind": "exact",
+      "school": "evaluation-additional",
+      "query": "golf clubs",
+      "relevant": [
+        "present-3"
+      ],
+      "rationale": "Counterpart to an absent-object query: matching objects must be returned when they really exist in scope."
+    }
+  ]
+}
