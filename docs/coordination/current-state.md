@@ -1,3 +1,14 @@
+# Website owner administration — 2026-10-28 UTC
+
+Founder B adds `/admin` for separate website-owner accounts: school creation,
+name/time-zone/contact/collection settings, publication, school memberships and
+transactional admin activity. The school directory is dynamic; hidden schools
+remain accessible to assigned staff. School admins cannot promote themselves to
+website owner. See [administration](../administration.md) for the reviewed pending
+migration and two-account bootstrap. Actual founder addresses are not committed;
+hosted assignment requires confirmed accounts and secure operator access. This
+feature does not record those accounts as provisioned or alter Phase 7 acceptance.
+
 # PR #37 conflict resolution — 2026-10-28 UTC
 
 Merged current main `b5e5f60` (including PR #33) into the existing PR #37 source

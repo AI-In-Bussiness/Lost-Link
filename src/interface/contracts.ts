@@ -6,7 +6,7 @@ export type ErrorCode = 'VALIDATION_ERROR' | 'UNAUTHENTICATED' | 'FORBIDDEN' | '
 export type Result<T> = { ok: true; data: T } | {
   ok: false; error: { code: ErrorCode; message: string; requestId: string; fieldErrors?: Record<string, string> };
 };
-export interface Organization { id: string; slug: string; name: string; publicListingEnabled: boolean }
+export interface Organization { id: string; slug: string; name: string; publicListingEnabled: boolean; contactEmail?: string; collectionInstructions?: string }
 export interface Photo { url: string; alt: string; isPlaceholder: boolean }
 export interface PublicItem {
   id: string; organizationId: string; title: string; publicDescription: string;

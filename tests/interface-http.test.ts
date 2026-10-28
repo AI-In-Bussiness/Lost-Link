@@ -89,7 +89,7 @@ test("safe failures map validation fields, authentication, throttling and malfor
     assert.ok(!JSON.stringify(result).includes("private diagnostic"));
   }
   const api = createHttpApi([], async () => new Response("bad gateway", { status: 502 }));
-  assert.equal((await api.listOrganizations()).ok, true, "no configured slugs needs no requests");
+  assert.equal((await api.listOrganizations()).ok, false, "dynamic school directory failures remain visible");
   assert.equal((await api.getPublicItem("maple-school", "item-1")).ok, false);
 });
 
@@ -132,4 +132,22 @@ test("search maps semantic metadata and fallback notice without claiming ownersh
     assert.equal(result.data.mode,mode==="hybrid"?"hybrid":"keyword");
     assert.equal(result.data.smartMatchingUnavailable,semanticStatus==="unavailable");
   }
+});
+
+test('school directory discovers newly published schools independently of old configured slugs',async()=>{
+ const api=createHttpApi(['maple-school'],async(url,init)=>{
+  assert.equal(url,'/api/v1/organizations');
+  assert.equal(init?.method,'GET');
+  return response({data:[{id:'real-id',slug:'new-school',name:'New school',contactEmail:'office@example.test'}]});
+ });
+ const result=await api.listOrganizations();
+ assert.ok(result.ok);
+ assert.equal(result.data[0].slug,'new-school');
+ assert.equal(result.data[0].contactEmail,'office@example.test');
+});
+test('claim receipts use the school collection instructions',async()=>{
+ const api=createHttpApi([],async()=>response({data:[{...dto,status:'approved',collectionInstructions:'Visit the office after 3pm.'}]}));
+ const result=await api.listMyClaims();
+ assert.ok(result.ok);
+ assert.equal(result.data.items[0].collectionInstructions,'Visit the office after 3pm.');
 });

@@ -97,3 +97,5 @@ shared phase acceptance still requires its review evidence.
 - [Founder A Phase 6 competition polish](codex-founder-a-06__founder-va__phase-06-competition-polish/codex-founder-a-06__founder-va__phase-06-competition-polish.md) — presentation changes and pitch draft; summary excluded by task owner.
 
 - [Founder B Phase 7 deployment release](codex-founder-b-phase7__founder-vb__phase-07-deployment-release/codex-founder-b-phase7__founder-vb__phase-07-deployment-release.md) — release checks/pins/rollback package; hosted acceptance blocked in #20 and relevance review in #21.
+
+- [Website owner administration](codex-founder-b__founder-vb__phase-08-owner-administration/codex-founder-b__founder-vb__phase-08-owner-administration.md) — school settings, owner security and two-account activation handoff.

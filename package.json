@@ -40,7 +40,9 @@
     "auth:check": "node --use-env-proxy scripts/auth-redirects.mjs check",
     "auth:configure": "node --use-env-proxy scripts/auth-redirects.mjs configure",
     "release:verify": "node scripts/release-readiness.mjs",
-    "test:search:relevance": "node scripts/test-search-relevance.mjs"
+    "test:search:relevance": "node scripts/test-search-relevance.mjs",
+    "admin:bootstrap": "node scripts/bootstrap-owners.mjs",
+    "test:admin": "node scripts/test-admin.mjs"
   },
   "dependencies": {
     "@huggingface/transformers": "4.3.1",

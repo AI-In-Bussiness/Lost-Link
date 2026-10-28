@@ -65,7 +65,9 @@ function homeArt(): string {
 async function home(ctx: ViewContext): Promise<View> {
   const result = await ctx.api.listOrganizations();
   // The introduction stays useful even when the school directory is unavailable.
-  const organizations = result.ok ? result.data : [];
+  const organizations = result.ok
+    ? result.data.filter((org) => org.publicListingEnabled)
+    : [];
   const first =
     organizations.find((org) => org.slug === ctx.orgSlug) ?? organizations[0];
   return {
@@ -184,7 +186,7 @@ async function search(ctx: ViewContext): Promise<View> {
   }
   return {
     title: `Found items · ${ctx.orgName}`,
-    html: `<section class="page-heading"><p class="eyebrow">${e(ctx.orgName)}</p><h1>Let's find your item.</h1><p class="muted">Describe what you lost, or browse everything that's been handed in.</p></section><div class="search-layout"><form id="item-search" class="filter-panel card stack" method="get" action="${base}"><h2>Your search</h2>${
+    html: `<section class="page-heading"><p class="eyebrow">${e(ctx.orgName)}</p><h1>Let's find your item.</h1><p class="muted">Describe what you lost, or browse everything that's been handed in.</p>${ctx.contactEmail ? `<p>School office: <a href="mailto:${e(ctx.contactEmail)}">${e(ctx.contactEmail)}</a></p>` : ""}</section><div class="search-layout"><form id="item-search" class="filter-panel card stack" method="get" action="${base}"><h2>Your search</h2>${
       !result.ok && result.error.code === "VALIDATION_ERROR"
         ? `<div id="search-errors" class="error-summary" tabindex="-1" role="alert"><strong>${e(result.error.message)}</strong>${
             Object.entries(fields).length

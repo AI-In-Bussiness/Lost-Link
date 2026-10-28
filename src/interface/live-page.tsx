@@ -11,7 +11,8 @@ export default async function LivePage({ orgSlug }: { orgSlug?: string }) {
     if (user) {
       const { data } = await client.from("memberships").select("organizations(slug)").eq("user_id", user.id)
         .returns<{ organizations: { slug: string } | null }[]>();
-      session = { name: user.email ?? "Your account", email: user.email ?? "",
+      const {data:owner} = await client.from("platform_admins").select("user_id").eq("user_id",user.id).maybeSingle();
+      session = { websiteOwner: !!owner, name: user.email ?? "Your account", email: user.email ?? "",
         staffOrgSlugs: data?.flatMap(row => row.organizations ? [row.organizations.slug] : []) ?? [] };
     }
   }
