@@ -97,9 +97,9 @@ This operator script uses local CLI credentials for the local stack; for a hoste
 
 | Synthetic account | Access |
 | --- | --- |
-| staff.maple@example.test | Maple School staff |
-| staff.cedar@example.test | Cedar School staff |
-| admin.maple@example.test | Maple School admin |
+| staff.maple@example.test | Flint Hill School staff |
+| staff.cedar@example.test | Fairfax High School staff |
+| admin.maple@example.test | Flint Hill School admin |
 | claimant@example.test | Claimant, no staff role |
 
 This cloud instance has a generated local demo password in ignored `.env.demo.local` (owner-readable only). To reuse it for provisioning locally, run `node --env-file=.env.demo.local scripts/provision-demo.mjs`. Do not copy its value into Git or chat.
@@ -153,7 +153,7 @@ Architecture and security decisions: [Phase 0 handoff](docs/phase-0/README.md). 
 
 ### Phase 3 interface checks
 
-The homepage, `/o/:slug/search`, item/claim screens, `/my/claims` and staff workspace now use the real cookie-authenticated API. `LOSTLINK_ORGANIZATION_SLUGS` optionally sets the school selector’s comma-separated public slugs (defaults to the two fictional seed schools). Direct organization URLs are also resolved by the API. Sign in with an operator-provisioned account; the real application has no demo persona controls.
+The homepage, `/o/:slug/search`, item/claim screens, `/my/claims` and staff workspace now use the real cookie-authenticated API. `LOSTLINK_ORGANIZATION_SLUGS` optionally sets the school selector’s comma-separated public slugs (defaults to the Flint Hill School and Fairfax High School demo entries). Direct organization URLs are also resolved by the API. Sign in with an operator-provisioned account; the real application has no demo persona controls.
 
 For repeatable browser checks, start `npm start` and, separately, `node tools/phase2-preview.mjs`, then run `python tools/phase3-browser-test.py` with Python Playwright and Chromium installed. This suite checks production routes and exercises authenticated interactions in an isolated HTTP-fixture harness. It does **not** prove Supabase persistence. See the Phase 3 handoffs for their original verification boundaries and the [current integration snapshot](docs/coordination/current-state.md) for remaining photo/activity UI work.
 
@@ -175,3 +175,7 @@ Run `npm run release:check -- https://lost-link-beta.vercel.app` to check public
 HTTP behavior without credentials. See the [Phase 7 release runbook](docs/phase-7/README.md)
 for secure hosted setup, authenticated demo checks, release pins and rollback.
 A loading homepage alone does not establish a working demo.
+
+### Demo school names
+
+The two example schools are **Flint Hill School** (formerly Maple) and **Fairfax High School** (formerly Cedar). Inventory and accounts remain synthetic. Existing organization IDs, `maple-school` / `cedar-school` URLs and test-account emails are retained so existing links and memberships keep working. Apply `supabase/migrations/202610280005_demo_school_names.sql` to update existing database entries; fresh setups use the updated seed.

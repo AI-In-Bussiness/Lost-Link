@@ -175,7 +175,7 @@ try{
  const account=await fetch(`${site}/account`,{headers:{cookie:cookieHeader(jar)},redirect:'manual'});
  assert.equal(account.status,200);
  const html=await account.text();
- assert.ok(html.includes(credentials.email) && html.includes('Maple School'));
+ assert.ok(html.includes(credentials.email) && html.includes('Flint Hill School'));
  assert.ok(account.headers.get('cache-control').includes('no-store'));
  const logout=await fetch(`${site}/api/auth/sign-out`,{method:'POST',headers:{origin:site,cookie:cookieHeader(jar)},redirect:'manual'});
  assert.equal(logout.status,303);applyCookies(jar,logout);

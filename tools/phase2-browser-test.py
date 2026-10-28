@@ -312,15 +312,15 @@ class InterfaceTest(unittest.TestCase):
         self.assertEqual(p.url, item_url)
         p.get_by_role('link', name='This might be mine').click()
         self.ready()
-        expect(p.locator('#school-name')).to_have_text('Maple Hill School')
+        expect(p.locator('#school-name')).to_have_text('Flint Hill School')
         expect(p.get_by_role('link', name='Back to school search')).to_have_attribute('href', '/o/maple-hill/search')
         p.get_by_role('button', name='Continue as demo student').click()
         self.ready()
         self.assertIn('/o/maple-hill/items/item-maple-duffel/claim', p.url)
-        p.get_by_label('How can staff tell this belongs to you?').fill('Fictional Maple Hill ownership detail in the inner pocket.')
+        p.get_by_label('How can staff tell this belongs to you?').fill('Fictional Flint Hill ownership detail in the inner pocket.')
         p.get_by_role('button', name='Send private claim').click()
         self.ready()
-        expect(p.locator('#school-name')).to_have_text('Maple Hill School')
+        expect(p.locator('#school-name')).to_have_text('Flint Hill School')
         expect(p.locator('.main-nav').get_by_role('link', name='Find an item')).to_have_attribute('href', '/o/maple-hill/search')
 
     def test_staff_intake_public_preview_and_rejection(self):
@@ -407,7 +407,7 @@ class InterfaceTest(unittest.TestCase):
             ? {ok:false,error:{code:'INTERNAL_ERROR',message:'Please retry your claim.',requestId:'test'}}
             : api.submitClaim(input)};
           const ctx = {api:transport,url:new URL('/o/cedar-grove/items/item-duffel/claim',location.origin),
-            orgSlug:'cedar-grove',orgName:'Cedar Grove School',
+            orgSlug:'cedar-grove',orgName:'Fairfax High School',
             session:{name:'Avery',email:'avery@example.invalid',staffOrgSlugs:[]},
             navigate:path => window.__claimPath=path,refresh:()=>{}};
           const view = await claimsView(ctx);
@@ -433,7 +433,7 @@ class InterfaceTest(unittest.TestCase):
           const conflict={ok:false,error:{code:'CONFLICT',message:'This item is no longer available.',requestId:'test'}};
           const ctx={api:{...api,submitClaim:async()=>conflict},
             url:new URL('/o/cedar-grove/items/item-duffel/claim',location.origin),
-            orgSlug:'cedar-grove',orgName:'Cedar Grove School',
+            orgSlug:'cedar-grove',orgName:'Fairfax High School',
             session:{name:'Avery',email:'avery@example.invalid',staffOrgSlugs:[]},navigate:()=>{},refresh:()=>{}};
           const view=await claimsView(ctx);
           const section=document.createElement('section');section.id='conflict-test';
@@ -454,7 +454,7 @@ class InterfaceTest(unittest.TestCase):
           const conflict={ok:false,error:{code:'CONFLICT',message:'Another staff member reviewed this claim.',requestId:'test'}};
           const ctx={api:{...api,decideClaim:async()=>conflict},
             url:new URL('/o/cedar-grove/staff/claims/claim-pending',location.origin),
-            orgSlug:'cedar-grove',orgName:'Cedar Grove School',
+            orgSlug:'cedar-grove',orgName:'Fairfax High School',
             session:{name:'Staff',email:'staff@example.invalid',staffOrgSlugs:['cedar-grove']},
             navigate:()=>{},refresh:()=>window.__refreshed=true};
           const view=await staffView(ctx);
