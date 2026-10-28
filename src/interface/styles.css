@@ -954,6 +954,10 @@ td a {
   position: absolute;
   inset: 0;
 }
+.item-card .photo-review-link {
+  position: relative;
+  z-index: 1;
+}
 .item-card h3 a:focus-visible:after {
   outline: 3px solid #327ada;
   outline-offset: -4px;

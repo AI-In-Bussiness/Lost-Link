@@ -291,3 +291,15 @@ operator honesty. It cannot replace independent review, verify remote CI,
 inspect a live alias, or certify a database schema from a local hash. Follow the
 provider inspection and rollback runbook above. Issue #32 remains the current
 relevance decision/fix gate; public hybrid availability does not resolve it.
+
+## Photo review clarity correction
+
+The user reported "photo pending" on public cards. That text was hardcoded in
+the illustration, not a processing status. The placeholder now says "No published
+photograph". Staff see direct Review or add photos links on their school's cards
+and detail pages; management shows the photo panel first, with explicit guidance
+to inspect the private preview, check confirmation and Publish reviewed photo.
+Uploads remain private until that action succeeds. The real local browser
+journey verifies both staff shortcuts, pending-preview persistence and public
+photo delivery after publication. This correction awaits PR review/merge; it
+does not establish hosted upload completion or overall release acceptance.
