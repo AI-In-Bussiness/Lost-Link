@@ -1,0 +1,677 @@
+{
+  "version": "founder-a-04-v1",
+  "mode": "model",
+  "model": "Xenova/all-MiniLM-L6-v2@751bff37182d3f1213fa05d7196b954e230abad9",
+  "ranking": "rrf-60-eligibility-v2",
+  "minSimilarity": 0.3,
+  "minSeparation": 0.05,
+  "inventorySize": 18,
+  "caseCount": 28,
+  "coreHits": 16,
+  "corePositives": 16,
+  "baselineCoreHits": 13,
+  "coreMRR": 1,
+  "proposedGatePassed": true,
+  "rows": [
+    {
+      "id": "exact-1",
+      "kind": "exact",
+      "positive": true,
+      "baseline": [
+        "a-duffel"
+      ],
+      "results": [
+        "a-duffel"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "paraphrase-1",
+      "kind": "paraphrase",
+      "positive": true,
+      "baseline": [
+        "a-duffel"
+      ],
+      "results": [
+        "a-duffel"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "exact-2",
+      "kind": "exact",
+      "positive": true,
+      "baseline": [
+        "a-hoody"
+      ],
+      "results": [
+        "a-hoody"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "paraphrase-2",
+      "kind": "paraphrase",
+      "positive": true,
+      "baseline": [
+        "a-hoody"
+      ],
+      "results": [
+        "a-hoody"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "exact-3",
+      "kind": "exact",
+      "positive": true,
+      "baseline": [
+        "a-buds"
+      ],
+      "results": [
+        "a-buds"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "paraphrase-3",
+      "kind": "paraphrase",
+      "positive": true,
+      "baseline": [
+        "a-buds"
+      ],
+      "results": [
+        "a-buds"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "exact-4",
+      "kind": "exact",
+      "positive": true,
+      "baseline": [
+        "a-case"
+      ],
+      "results": [
+        "a-case"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "paraphrase-4",
+      "kind": "paraphrase",
+      "positive": true,
+      "baseline": [],
+      "results": [
+        "a-case"
+      ],
+      "keyword": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "exact-5",
+      "kind": "exact",
+      "positive": true,
+      "baseline": [
+        "b-tote"
+      ],
+      "results": [
+        "b-tote"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "paraphrase-5",
+      "kind": "paraphrase",
+      "positive": true,
+      "baseline": [],
+      "results": [
+        "b-tote"
+      ],
+      "keyword": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "exact-6",
+      "kind": "exact",
+      "positive": true,
+      "baseline": [
+        "b-glasses"
+      ],
+      "results": [
+        "b-glasses"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "paraphrase-6",
+      "kind": "paraphrase",
+      "positive": true,
+      "baseline": [
+        "b-glasses"
+      ],
+      "results": [
+        "b-glasses"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "exact-7",
+      "kind": "exact",
+      "positive": true,
+      "baseline": [
+        "b-keys"
+      ],
+      "results": [
+        "b-keys"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "paraphrase-7",
+      "kind": "paraphrase",
+      "positive": true,
+      "baseline": [
+        "b-keys"
+      ],
+      "results": [
+        "b-keys"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "exact-8",
+      "kind": "exact",
+      "positive": true,
+      "baseline": [
+        "b-scarf"
+      ],
+      "results": [
+        "b-scarf"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "paraphrase-8",
+      "kind": "paraphrase",
+      "positive": true,
+      "baseline": [],
+      "results": [
+        "b-scarf"
+      ],
+      "keyword": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "negative-1",
+      "kind": "no-match",
+      "positive": false,
+      "baseline": [],
+      "results": [],
+      "keyword": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "negative-2",
+      "kind": "no-match",
+      "positive": false,
+      "baseline": [],
+      "results": [],
+      "keyword": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "negative-3",
+      "kind": "no-match",
+      "positive": false,
+      "baseline": [],
+      "results": [],
+      "keyword": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "negative-4",
+      "kind": "no-match",
+      "positive": false,
+      "baseline": [],
+      "results": [],
+      "keyword": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "school-1",
+      "kind": "wrong-school",
+      "positive": false,
+      "baseline": [],
+      "results": [],
+      "keyword": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "school-2",
+      "kind": "wrong-school",
+      "positive": false,
+      "baseline": [],
+      "results": [],
+      "keyword": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "school-3",
+      "kind": "wrong-school",
+      "positive": false,
+      "baseline": [],
+      "results": [],
+      "keyword": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "school-4",
+      "kind": "wrong-school",
+      "positive": false,
+      "baseline": [],
+      "results": [],
+      "keyword": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "filter-date",
+      "kind": "filter",
+      "positive": true,
+      "baseline": [
+        "a-flask"
+      ],
+      "results": [
+        "a-flask"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "filter-category",
+      "kind": "filter",
+      "positive": true,
+      "baseline": [
+        "a-duffel",
+        "a-pack"
+      ],
+      "results": [
+        "a-duffel",
+        "a-pack"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "filter-color",
+      "kind": "filter",
+      "positive": true,
+      "baseline": [
+        "b-jacket"
+      ],
+      "results": [
+        "b-jacket"
+      ],
+      "keyword": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": true,
+        "reciprocalRank": 1,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    },
+    {
+      "id": "filter-excludes",
+      "kind": "filter",
+      "positive": false,
+      "baseline": [],
+      "results": [],
+      "keyword": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      },
+      "actual": {
+        "hit": false,
+        "reciprocalRank": 0,
+        "falsePositive": false,
+        "leaks": 0,
+        "filterLeaks": 0
+      }
+    }
+  ]
+}

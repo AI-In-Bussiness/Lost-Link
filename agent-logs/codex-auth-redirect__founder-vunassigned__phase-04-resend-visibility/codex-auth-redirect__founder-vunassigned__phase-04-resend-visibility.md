@@ -43,3 +43,9 @@
 - **Remaining work:** CI and production release verification pending at report creation.
 - **Recommended next steps:** Merge after checks; verify all six public page states.
 - **Relevant references:** Previous phases 02/03 and docs/coordination/auth-email-redirects.md.
+
+## Release verification — 2026-10-27 UTC
+
+- PR #31 merged as ae883e6c038a94d482a8b7bf4ba15f142ef70a2e after exact-source Foundation runs 40597899076 and 40597920453 passed, including real Auth/database/browser acceptance. Both Linux/Windows helper runs and Vercel preview passed.
+- Production deployment HRapJJVMpscFimyrGsybdgqqGFR2 succeeded. The same six HTTP/HTML assertions passed on https://lost-link-beta.vercel.app: initial/error auth pages hide resend; the post-signup waiting state shows its button with remembered email and preserved destination. No production email sent.
+- Source tree matches the tested commit. Delivery complete; independent acceptance remains separate. Final evidence is also recorded in the merged PR description.

@@ -1,5 +1,7 @@
 # Overseer review: phases 0–2
 
+Latest Founder B follow-up: [Phase 7 release closeout](codex-auth-redirect__founder-vb__phase-07-release-closeout/codex-auth-redirect__founder-vb__phase-07-release-closeout.md) — current public/CI/candidate evidence; actual quality failure and secure-access gates remain explicit.
+
 Latest UI follow-up: [confirmation resend visibility](codex-auth-redirect__founder-vunassigned__phase-04-resend-visibility/codex-auth-redirect__founder-vunassigned__phase-04-resend-visibility.md) — initial auth forms hide resend; registration waiting screen retains the button.
 
 Current authentication follow-up: [email confirmation redirect diagnosis and repair](codex-auth-redirect__founder-vunassigned__phase-01-auth-redirect-repair/codex-auth-redirect__founder-vunassigned__phase-01-auth-redirect-repair.md). Hosted URL repair is verified after the owner's dashboard update.
@@ -34,6 +36,8 @@ Original agents must also add their own phase reports using the repository's AGE
 Submit the missing evidence for independent re-review before marking a phase gate Done. These findings describe the reviewed commit and must be rechecked against subsequent changes.
 
 # Agent reports
+
+- [PR #37 conflict resolution](codex-issue-35__founder-vunassigned__phase-02-conflict-resolution/codex-issue-35__founder-vunassigned__phase-02-conflict-resolution.md) — main/PR #33 merged into the existing source branch while retaining both histories and all records; owner retains the final merge.
 
 - [Issue #35 triage](codex-issue-35__founder-vunassigned__phase-00-issue-triage/codex-issue-35__founder-vunassigned__phase-00-issue-triage.md) and [security/presentation implementation](codex-issue-35__founder-vunassigned__phase-01-best-practices/codex-issue-35__founder-vunassigned__phase-01-best-practices.md) — source audit, CSP, cookies, configuration guard, favicon and legal drafts awaiting owner review.
 

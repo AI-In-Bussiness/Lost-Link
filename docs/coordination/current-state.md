@@ -1,3 +1,19 @@
+# PR #37 conflict resolution — 2026-10-28 UTC
+
+Merged current main `b5e5f60` (including PR #33) into the existing PR #37 source
+branch without rewriting either history. The only textual conflicts were the
+current-state snapshot and coordination board; both sides' records are retained
+below, including the newer completed auth visibility status. The combined source
+retains issue #35's CSP/cookies/configuration guards, policies, favicon and hero,
+alongside main's search eligibility fixes and staff photo-review shortcuts.
+
+Root lint/typecheck, 62 unit cases, 21 release cases, UI typecheck/format and a
+webpack production build pass locally. Production browser security and legal
+navigation checks also pass on the combined source. Fresh PR checks will verify
+the full persisted Auth/database/photo workflow and relevance gates. The owner
+requested conflict repair so they can merge; PR readiness is left unchanged and
+no production merge or issue closure is performed by this repair.
+
 # Issue #35 security and presentation review — 2026-10-28 UTC
 
 Prepared on reused `codex/convert-plan-markdown` from main `846aacf`: a nonce-based
@@ -18,6 +34,42 @@ See [the checklist and operational limits](issue-35-audit.md). The owner has no
 custom domain yet; domain, shared edge abuse controls, hosted Auth/retention and
 backup settings remain launch work. PR #33's separately owned changes are preserved.
 
+# PR #33 integration refresh — 2026-10-28 UTC
+
+Merged main `846aacf` (landing-page PR #36) into the existing Phase 7 PR branch
+without rewriting shared history. Resolved coordination-document conflicts by
+retaining both founders’ records and the newer completed auth visibility status.
+The new landing page, staff photo review and issue #32 correction are preserved.
+This integration does not merge PR #33 into main or approve the hosted release.
+
+# Issue #32 correction — 2026-10-28 UTC
+
+The shared Phase 7 branch adds object/color eligibility to public POST search,
+including disabled/busy/error fallback and fresh-inventory recovery. SQL remains
+a high-recall candidate source; the HTTP layer overfetches up to 50 before
+filtering and applying the requested limit. Frozen labels/assessment thresholds
+and cosine gates are unchanged. The frozen gate passes 16/16 core positives with
+zero false positives/leaks; 27 additional known regression cases pass 19/19
+positives with zero false positives. The original 12-case calibration remains
+8/8 with zero negative/trap results. Actual local HTTP checks cover enabled and
+disabled inference, absent objects, real matching objects, scope and limit=1.
+See [issue evidence](../phase-7/issue-32.md). Await PR merge/deployment before
+claiming the production issue resolved. Earlier failure records below remain
+historical; this correction does not approve other release gates.
+
+# Founder B Phase 7 closeout — 2026-10-28 UTC
+
+Fresh public checks pass 17/17 and both schools provide hybrid inference.
+All three redirect diagnostics and six auth-page visibility/continuation checks
+pass. Main ae883e6 has successful exact-commit Foundation/helper runs and a
+successful GitHub Vercel status. The actual-model frozen evaluation still exits
+1 with 16/16 core hits and five false positives; fallback retains two keyword
+false positives, with zero school/filter leaks. Current quality tracking is #32.
+Issues #20/#21/#23 are closed; historical references below retain their original
+context and do not establish unrecorded hosted acceptance. Updated candidate
+and raw results live in docs/phase-7/. Hosted account/photo/SMTP/rollback work
+still requires secure operator access; no release lock or independent approval
+is claimed. Prior local report/email-diagnosis changes are preserved.
 # Issue #34 landing page — 2026-10-28 UTC
 
 The root page now introduces school-scoped search, published photos and filters,
@@ -39,8 +91,11 @@ records implementation and local verification.
 The owner requests resend only after submitting signup. Removed initial
 sign-in/signup recovery links; the Check your email state retains its form and
 remembered email. Updated error guidance and existing browser acceptance.
-Lint, full build and six local rendered-page checks pass. PR checks and
-production deployment are pending. Provider/account behavior is unchanged.
+Lint, full build and six local rendered-page checks pass. PR #31 merged as
+ae883e6 after both exact-source Foundation/browser runs and helper/preview
+checks passed. Production deployment HRapJJVMpscFimyrGsybdgqqGFR2 succeeded;
+all six public rendered-page assertions pass, including remembered email and
+safe continuation. No production email sent. Provider/account behavior is unchanged.
 
 # Production model download repair — 2026-10-27 UTC
 

@@ -1,4 +1,4 @@
-name: Phase 4 relevance diagnostics
+name: Phase 4 relevance checks
 on:
   workflow_dispatch:
   push:
@@ -21,15 +21,16 @@ jobs:
       - run: node --test --test-isolation=none tools/phase4/*.test.mjs
       - run: npx tsx tools/phase4/evaluate.ts fallback > fallback-results.json
       - run: npm run model:download
-      # Proposed relevance targets are diagnostic until founders/Overseer agree.
-      # Existing required Foundation checks are unchanged.
+      # Regressions must fail CI. Passing this synthetic gate is not independent
+      # release acceptance or a claim of general matching accuracy.
       - id: quality
-        continue-on-error: true
         run: npx tsx tools/phase4/evaluate.ts model > relevance-results.json
+      - run: npx tsx tools/phase4/evaluate.ts fallback additional > additional-fallback-results.json
+      - run: npx tsx tools/phase4/evaluate.ts model additional > additional-relevance-results.json
       - name: Record quality outcome
         env:
           QUALITY_OUTCOME: ${{ steps.quality.outcome }}
-        run: echo "Proposed relevance gate outcome is $QUALITY_OUTCOME. Inspect the JSON artifact; diagnostic CI success is not phase acceptance." >> "$GITHUB_STEP_SUMMARY"
+        run: echo "Frozen relevance gate outcome is $QUALITY_OUTCOME. Inspect the JSON artifact; passing synthetic checks is not independent phase acceptance." >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -37,4 +38,6 @@ jobs:
           path: |
             fallback-results.json
             relevance-results.json
+            additional-fallback-results.json
+            additional-relevance-results.json
           if-no-files-found: warn

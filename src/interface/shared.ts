@@ -59,13 +59,14 @@ export function itemImage(item: PublicItem, className = ""): string {
       !/[\\\x00-\x1f]/.test(url)) ||
     /^https:\/\//i.test(url) ||
     url.startsWith("blob:" + location.origin + "/");
-  return `<div class="item-image ${e(className)}"><img src="${e(safe ? url : "/mock-assets/item-placeholder.svg")}" alt="${e(item.photo.alt)}" loading="lazy">${item.photo.isPlaceholder ? '<span class="photo-label">No photograph · illustration</span>' : ""}</div>`;
+  return `<div class="item-image ${e(className)}"><img src="${e(safe ? url : "/mock-assets/item-placeholder.svg")}" alt="${e(item.photo.alt)}" loading="lazy">${item.photo.isPlaceholder ? '<span class="photo-label">No published photograph · illustration</span>' : ""}</div>`;
 }
 export function itemCard(
   item: PublicItem & { matchReasons?: string[] },
   orgSlug: string,
+  canManagePhotos = false,
 ): string {
-  return `<article class="item-card">${itemImage(item)}<div class="item-card-body"><div class="eyebrow">${e(label(item.category))} <span aria-hidden="true">/</span> ${e(label(item.color))}</div><h3><a href="${schoolPath(orgSlug)}/items/${encodeURIComponent(item.id)}">${e(item.title)}</a></h3><p class="muted">${e(item.foundLocation)}<br>Found ${date(item.foundDate)}</p>${item.matchReasons?.length ? `<div class="match-reason"><p><strong>Why this may match</strong></p><ul>${item.matchReasons.map((reason) => `<li>${e(reason)}</li>`).join("")}</ul></div>` : ""}<span class="text-link" aria-hidden="true">View item <svg class="arrow-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div></article>`;
+  return `<article class="item-card">${itemImage(item)}<div class="item-card-body"><div class="eyebrow">${e(label(item.category))} <span aria-hidden="true">/</span> ${e(label(item.color))}</div><h3><a href="${schoolPath(orgSlug)}/items/${encodeURIComponent(item.id)}">${e(item.title)}</a></h3><p class="muted">${e(item.foundLocation)}<br>Found ${date(item.foundDate)}</p>${item.matchReasons?.length ? `<div class="match-reason"><p><strong>Why this may match</strong></p><ul>${item.matchReasons.map((reason) => `<li>${e(reason)}</li>`).join("")}</ul></div>` : ""}${canManagePhotos && item.photo.isPlaceholder ? `<a class="button secondary photo-review-link" href="${schoolPath(orgSlug)}/staff/items/${encodeURIComponent(item.id)}">Review or add photos</a>` : ""}<span class="text-link" aria-hidden="true">View item <svg class="arrow-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div></article>`;
 }
 export function unavailable(
   result: Extract<Result<unknown>, { ok: false }>,

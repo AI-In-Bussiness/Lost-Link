@@ -1,5 +1,37 @@
 # Founder B Phase 7 — deployment and release
 
+## Current closeout — 2026-10-28 UTC
+
+The release package is delivered, but final hosted acceptance remains blocked.
+This section supersedes historical issue-state/source references below.
+
+- Current production application candidate: `ae883e6c038a94d482a8b7bf4ba15f142ef70a2e`.
+  Exact-commit Foundation [40598540517](https://github.com/AI-In-Bussiness/Lost-Link/actions/runs/40598540517)
+  and helper [40598540570](https://github.com/AI-In-Bussiness/Lost-Link/actions/runs/40598540570) passed;
+  Foundation includes real local Auth/photo/API/persisted-browser acceptance.
+- Fresh [public smoke](closeout-public.json): 17/17 passed, hybrid inference
+  available for both schools. Three public invalid-token redirect checks pass.
+  Six rendered auth-page checks pass, retaining resend only after signup.
+  These checks send no production email and do not authenticate a real account.
+- GitHub reports successful [Vercel deployment](https://vercel.com/ddar2425s-projects/lost-link/HRapJJVMpscFimyrGsybdgqqGFR2).
+  Provider-side production alias/configuration inspection is still unavailable.
+- Issues #20/#21/#23 are closed. Their closure is recorded, not represented as
+  evidence that the remaining hosted/relevance requirements passed.
+- Fresh [actual-model evaluation](closeout-relevance.json) exits 1: 16/16 core
+  positives, five negative/trap false positives, zero school/filter leaks.
+  [Forced fallback](closeout-fallback.json) preserves keyword behavior with two
+  baseline false positives. Keyword-only does not itself resolve the proposed
+  no-match gate. Current review/fix is tracked in [#32](https://github.com/AI-In-Bussiness/Lost-Link/issues/32).
+  Thresholds, labels and ranking remain unchanged.
+
+Still required before locking: verified confirmation-email delivery after SMTP
+setup; hosted demo accounts/memberships and the real photo→claim→return journey;
+provider/configuration/schema inspection; compatible rollback rehearsal; and
+independent acceptance of the release and search-quality evidence. Supply the
+operator access in [hosted-access.md](hosted-access.md). No release tag or
+rollback success is claimed. The refreshed [candidate manifest](release-candidate.json)
+pins the tested application source and current lock/model/migration hashes.
+
 Scope: plan.md LL-052–LL-056, live deployment/environment validation, rollback,
 locked demo release, and an audit of automated checks. Founder A owns final UX
 and the requested Phase 0–6 review; the independent Overseer owns final
@@ -218,3 +250,56 @@ No hosted rollback was executed here: there is no verified rollback target
 or provider access. This is an executable operator runbook, not a claim of a
 successful rehearsal. No hosted migrations, accounts, data or aliases were
 modified by this assignment.
+
+## Executable lock-readiness audit
+
+Run `npm run release:verify` to check the recorded release package. It verifies
+current lock/model hashes, the complete ordered migration list, the underlying
+17-check public report, distinct immutable deployment/rollback references and
+absence of unresolved blockers. It exits **1** while any gate is missing; that
+is the expected result for the current blocked candidate, not a test failure.
+`npm run test:release` includes seven regressions for the auditor alongside the
+existing smoke/Auth checks. The auditor performs no deployment, tag creation,
+provider writes or rollback.
+
+The latest public check is [readiness-public.json](readiness-public.json), with
+17/17 passing contracts. [readiness-audit.json](readiness-audit.json) records the
+remaining gates. Historical closeout reports are retained.
+
+For operator/reviewer closeout, add `releaseEvidence` to the candidate, mapping
+each key below to an actual reviewed `docs/phase-7/<name>.json` report:
+
+- `production-configuration`
+- `authenticated-smoke`
+- `photo-claim-return`
+- `confirmation-delivery`
+- `rollback-rehearsal`
+- `relevance-acceptance`
+- `independent-acceptance`
+
+Each report must contain `check` equal to its key, `passed: true` only following
+successful verification, the exact candidate `sourceRevision`, production
+`origin`, an actual ISO `observedAt`, and a nonempty `reference` to its supporting
+run/review. The rollback report also records `rollbackDeploymentId` and
+`restoredDeploymentId`, matching the candidate's verified rollback and intended
+deployment respectively. Record IDs and evidence references, never credentials,
+cookies, private proof or email bodies. Populate these from real results;
+copying a template cannot establish acceptance.
+
+This command checks consistency of recorded evidence, not its provenance or
+operator honesty. It cannot replace independent review, verify remote CI,
+inspect a live alias, or certify a database schema from a local hash. Follow the
+provider inspection and rollback runbook above. Issue #32 remains the current
+relevance decision/fix gate; public hybrid availability does not resolve it.
+
+## Photo review clarity correction
+
+The user reported "photo pending" on public cards. That text was hardcoded in
+the illustration, not a processing status. The placeholder now says "No published
+photograph". Staff see direct Review or add photos links on their school's cards
+and detail pages; management shows the photo panel first, with explicit guidance
+to inspect the private preview, check confirmation and Publish reviewed photo.
+Uploads remain private until that action succeeds. The real local browser
+journey verifies both staff shortcuts, pending-preview persistence and public
+photo delivery after publication. This correction awaits PR review/merge; it
+does not establish hosted upload completion or overall release acceptance.

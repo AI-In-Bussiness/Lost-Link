@@ -1,3 +1,4 @@
+import { eligibleBaseline } from "./eligibility";
 import { MAX_CANDIDATES, publicText, rank, type Match, type SearchItem } from "./ranking";
 export type SearchMeta = {mode:"structured"|"hybrid"; semanticStatus:"disabled"|"available"|"unavailable"};
 type Inventory<T> = {items:T[]; overflow:boolean};
@@ -5,7 +6,8 @@ export async function semanticSearch<T extends SearchItem>(options: {
   slug:string; query:string; limit:number; baseline:Match<T>[]; enabled:boolean;
   inventory:()=>Promise<Inventory<T>>; embed:(input:string[])=>Promise<number[][]>;
 }):Promise<{data:Match<T>[]; search:SearchMeta}> {
-  const fallback=(status:SearchMeta["semanticStatus"])=>({data:options.baseline, search:{mode:"structured" as const, semanticStatus:status}});
+  const baseline = eligibleBaseline(options.baseline, options.query, options.limit);
+  const fallback=(status:SearchMeta["semanticStatus"])=>({data:baseline, search:{mode:"structured" as const, semanticStatus:status}});
   if (!options.enabled) return fallback("disabled");
   try {
     const before=await options.inventory();
@@ -21,7 +23,7 @@ export async function semanticSearch<T extends SearchItem>(options: {
       // Do not return an earlier baseline whose visibility may have changed.
       throw new InventoryChanged();
     }
-    const data=rank(after.items,vectors.slice(1),vectors[0],options.baseline,options.limit);
+    const data=rank(after.items,vectors.slice(1),vectors[0],baseline,options.limit,options.query);
     return {data,search:{mode:data.some(row=>row.method==="hybrid") ? "hybrid" : "structured",semanticStatus:"available"}};
   } catch (error) {
     if (error instanceof InventoryChanged) throw error;

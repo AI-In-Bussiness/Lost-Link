@@ -1,3 +1,4 @@
+import { eligibleBaseline } from "../src/lib/search/eligibility";
 // Run only against the disposable local seed. No privileged key, writes or provisioning.
 import { readFileSync } from "node:fs";
 import { createClient } from "@supabase/supabase-js";
@@ -11,8 +12,9 @@ let positives=0,baselineHits=0,hybridHits=0,falsePositives=0,leaks=0;
 const rows=[];
 for (const [index,c] of cases.entries()) {
   const payload={query:c.query,limit:3};
-  const baseline=await client.rpc("backend_dispatch",{p_action:"search",p_org_slug:c.school,p_payload:payload});
+  const baseline=await client.rpc("backend_dispatch",{p_action:"search",p_org_slug:c.school,p_payload:{...payload,limit:50}});
   if (baseline.error) throw Error("Baseline unavailable");
+  if (!baseline.error) baseline.data.data = eligibleBaseline(baseline.data.data,c.query,3);
   const response=await fetch(`${base}/api/v1/organizations/${c.school}/search`,{method:"POST",headers:{Origin:base,"Content-Type":"application/json"},body:JSON.stringify(payload)});
   const hybrid=await response.json();
   if (!response.ok || hybrid.search?.semanticStatus!=="available") throw Error(`Case ${index+1}: local model unavailable/disabled; no quality result claimed`);
@@ -23,5 +25,5 @@ for (const [index,c] of cases.entries()) {
   leaks+=hybrid.data.filter((row:{item:{organizationSlug:string}})=>row.item.organizationSlug!==c.school).length;
   rows.push({case:index+1,kind:c.kind,baseline:ids(baseline.data.data),hybrid:ids(hybrid.data)});
 }
-console.log(JSON.stringify({model:MODEL,dimensions:DIMENSIONS,minSimilarity:MIN_SIMILARITY,ranking:"rrf-60-v1",positives,baselineHits,hybridHits,falsePositives,leaks,rows},null,2));
+console.log(JSON.stringify({model:MODEL,dimensions:DIMENSIONS,minSimilarity:MIN_SIMILARITY,ranking:"rrf-60-eligibility-v2",positives,baselineHits,hybridHits,falsePositives,leaks,rows},null,2));
 if(hybridHits<7 || falsePositives || leaks) process.exitCode=1;

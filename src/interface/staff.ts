@@ -347,11 +347,12 @@ async function manageItem(ctx: ViewContext, id: string): Promise<View> {
         "Manage the listing, review claims and record a verified return.",
       ) +
       `
+    ${ctx.api.photos ? photoPanel(item, photos) : ""}
     <div class="two-column"><section class="card stack">${badge(item.status)}${itemImage(item)}<h2>Public listing</h2><p>${e(item.publicDescription)}</p>${publicDetails(item)}${item.status === "available" ? `<a href="${schoolPath(ctx.orgSlug)}/items/${encodeURIComponent(item.id)}">View public listing <svg class="arrow-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>` : '<p class="muted">This item is no longer in public search.</p>'}</section>
     <section class="card stack privacy"><p class="eyebrow">Staff only</p><h2>Verification details</h2><dl class="detail-list"><div><dt>Private notes</dt><dd>${e(item.verificationNotes || "No notes recorded.")}</dd></div><div><dt>Storage location</dt><dd>${e(item.storageLocation)}</dd></div></dl>
     <h2>Claims</h2>${claims.length ? `<ul class="stack">${claims.map((c) => `<li>${badge(c.status)} <a href="${claimPath(ctx, c.id)}">${e(c.id)}</a> · ${e(ctx.api.live ? c.claimantId : c.contactEmail)}</li>`).join("")}</ul>` : "<p>No claims yet.</p>"}
     ${approved && item.status === "reserved" ? returnForm(ctx, item, approved) : item.status === "returned" ? '<div class="notice"><strong>Return recorded</strong><p>The item has been handed over and is no longer available.</p></div>' : ""}</section></div>
-    ${ctx.api.photos ? photoPanel(item, photos) : ""}<section class="card stack"><h2>Activity</h2>${activity.length ? `<ol class="stack">${activity.map((a) => `<li><strong>${e(a.action === "photo_upload_reserved" ? "Photo received" : label(a.action))}</strong> · ${date(a.timestamp)}</li>`).join("")}</ol>` : "<p>No activity recorded.</p>"}</section>`,
+    <section class="card stack"><h2>Activity</h2>${activity.length ? `<ol class="stack">${activity.map((a) => `<li><strong>${e(a.action === "photo_upload_reserved" ? "Photo received" : label(a.action))}</strong> · ${date(a.timestamp)}</li>`).join("")}</ol>` : "<p>No activity recorded.</p>"}</section>`,
     bind: (root) => {
       if (approved) bindReturn(root, ctx, item, approved);
       bindPhotoPanel(root, ctx, item.id);

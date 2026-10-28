@@ -63,6 +63,7 @@ jobs:
       - run: python -m playwright install --with-deps chromium
       - run: npm run build
       - run: npm run check:search:bundle
+      - run: npm run test:search:relevance
       - run: npm run test:live
       - run: npm run test:browser
       - uses: actions/upload-artifact@v4
