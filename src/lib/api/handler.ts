@@ -9,6 +9,7 @@ import { BodyError, readJsonBody } from "./body";
 
 import { enhanceSearch } from "@/lib/search/server";
 import { eligibleBaseline } from "@/lib/search/eligibility";
+import { organizationDisplayName } from "@/lib/organizations/display-name";
 import { InventoryChanged } from "@/lib/search/service";
 
 const responseHeaders = { "Cache-Control": "private, no-store" };
@@ -54,6 +55,9 @@ export async function handleApi(request: NextRequest, action: Action, params: Re
     if (!data || typeof data !== "object" || !("data" in data)) return fail("UNAVAILABLE");
     if (data.page?.nextCursor) data.page.nextCursor = encodeCursor(data.page.nextCursor);
     let result = data;
+    if (action === "organization") {
+      result = { ...data, data: { ...data.data, name: organizationDisplayName(data.data) } };
+    }
     if (action === "search") {
       try { result = await enhanceSearch(client, params.orgSlug, payload, data); }
       catch (error) {
