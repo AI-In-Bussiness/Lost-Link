@@ -109,7 +109,7 @@ class OwnerWorkflow(unittest.TestCase):
         context, page = self.login(self.fixtures['one'])
         path = '/admin?school=' + self.fixtures['deletionSchoolId']
         page.goto(self.origin + path)
-        page.get_by_text('Delete school permanently', exact=True).click()
+        page.locator('summary').filter(has_text='Delete school permanently').click()
         form = page.get_by_role('form', name='Delete school', exact=True)
         form.get_by_label('Type the school web address', exact=False).fill('wrong-school')
         form.get_by_role('checkbox').check()
@@ -126,7 +126,7 @@ class OwnerWorkflow(unittest.TestCase):
         expect(form.get_by_role('alert')).to_contain_text('another session')
         page.reload()
         expect(page.get_by_role('heading', name='Renamed Delete School settings', exact=True)).to_be_visible()
-        page.get_by_text('Delete school permanently', exact=True).click()
+        page.locator('summary').filter(has_text='Delete school permanently').click()
         form = page.get_by_role('form', name='Delete school', exact=True)
         form.get_by_label('Type the school web address', exact=False).fill(self.fixtures['slug'] + '-delete')
         form.get_by_role('checkbox').check()
@@ -143,7 +143,7 @@ class OwnerWorkflow(unittest.TestCase):
         expect(page.get_by_role('link', name='Fictional other school', exact=True)).to_be_visible()
         # The second owner can permanently remove an empty hidden school too.
         second.goto(self.origin + '/admin?school=' + self.fixtures['emptyDeletionSchoolId'])
-        second.get_by_text('Delete school permanently', exact=True).click()
+        second.locator('summary').filter(has_text='Delete school permanently').click()
         form = second.get_by_role('form', name='Delete school', exact=True)
         form.get_by_label('Type the school web address', exact=False).fill(self.fixtures['slug'] + '-delete-empty')
         form.get_by_role('checkbox').check()

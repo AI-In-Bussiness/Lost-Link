@@ -46,3 +46,10 @@
 - **Remaining work:** Verify full persisted PR CI and integrate the PR; hosted migration/deployment remains separate unless operator access is available.
 - **Recommended next steps:** Merge after required verification, close issue 45 and apply pending migration 008 to the intended hosted database before using deletion.
 - **Relevant references:** docs/administration.md; upstream codex-founder-b phase-08-owner-administration report; issue 45; migration 202610300008_owner_school_deletion.sql.
+
+## PR verification follow-up — 2026-10-30 UTC
+
+PR #47 publishes the implementation. During final review, scoped the browser's
+expand-delete selector to `summary` because the confirmation button has the same
+visible text. This prevents a Playwright strict-locator collision; application
+behavior is unchanged. Full persisted CI is running against the updated source.
