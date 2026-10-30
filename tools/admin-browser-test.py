@@ -31,6 +31,56 @@ class OwnerWorkflow(unittest.TestCase):
         with page.expect_navigation(wait_until='load'):
             form.get_by_role('button', name=button, exact=True).click()
         expect(page.get_by_role('status')).to_have_text('Changes saved.')
+    def test_owner_and_school_staff_review_student_claims(self):
+        school = '/o/' + self.fixtures['reviewSlug']
+        api = self.origin + '/api/v1/organizations/' + self.fixtures['reviewSlug']
+        headers = {'Origin': self.origin}
+        owner_context, owner = self.login(self.fixtures['one'], school + '/staff')
+        created = owner_context.request.post(api + '/staff/items', headers=headers, data={
+            'title': 'Fictional review bag', 'publicDescription': 'A fictional black bag for claim review.',
+            'category': 'bag', 'color': 'black', 'publicLocation': 'Library', 'foundDate': '2026-10-25',
+            'identifyingDetails': 'Fictional hidden green star.', 'storageLocation': 'Office shelf',
+        })
+        self.assertEqual(created.status, 201)
+        item_id = created.json()['data']['id']
+        claimant_context, claimant = self.login(self.fixtures['claimant'], '/my/claims')
+        evidence = 'My fictional bag has a hidden green star.'
+        submitted = claimant_context.request.post(api + '/items/' + item_id + '/claims', headers=headers, data={'evidenceText': evidence})
+        self.assertEqual(submitted.status, 201)
+        claim_id = submitted.json()['data']['id']
+        review_path = school + '/staff/claims/' + claim_id
+        # Owners have no school membership; ordinary staff retain school-scoped access.
+        staff_context, staff = self.login(self.fixtures['staff'], school + '/staff')
+        for context, page in [(owner_context, owner), (staff_context, staff)]:
+            for suffix in ['/staff/items/' + item_id + '/photos', '/staff/activity?itemId=' + item_id]:
+                result = context.request.get(api + suffix)
+                self.assertEqual(result.status, 200)
+                self.assertIn('no-store', result.headers['cache-control'])
+            page.goto(self.origin + school + '/staff')
+            page.get_by_role('row').filter(has_text=claim_id).get_by_role('link', name='Review').click()
+            page.wait_for_url(self.origin + review_path)
+            expect(page.get_by_role('heading', name='Review this claim', exact=True)).to_be_visible()
+            expect(page.locator('blockquote')).to_have_text(evidence)
+            expect(page.get_by_text('Fictional hidden green star.', exact=True)).to_be_visible()
+            page.reload()
+            expect(page.get_by_role('heading', name='Review this claim', exact=True)).to_be_visible()
+        foreign_context, foreign = self.login(self.fixtures['legacyAdmin'], '/my/claims')
+        visitor_context = self.browser.new_context()
+        self.addCleanup(visitor_context.close)
+        for suffix in ['/staff/claims', '/staff/items/' + item_id, '/staff/items/' + item_id + '/photos', '/staff/activity?itemId=' + item_id]:
+            self.assertEqual(foreign_context.request.get(api + suffix).status, 404)
+            self.assertEqual(claimant_context.request.get(api + suffix).status, 404)
+            self.assertEqual(visitor_context.request.get(api + suffix).status, 401)
+        for page in [foreign, claimant]:
+            page.goto(self.origin + review_path)
+            expect(page.get_by_role('heading', name='This page is unavailable', exact=True)).to_be_visible()
+        owner.get_by_role('button', name='Approve for collection', exact=True).click()
+        expect(owner.get_by_role('heading', name='Record physical handover', exact=True)).to_be_visible()
+        owner.reload()
+        expect(owner.get_by_role('heading', name='Record physical handover', exact=True)).to_be_visible()
+        owner.get_by_label('I confirm').check()
+        owner.get_by_role('button', name='Mark item returned', exact=True).click()
+        expect(owner.get_by_text('The physical handover has been recorded.', exact=True)).to_be_visible()
     def test_owner_school_settings_membership_and_public_discovery(self):
         context, page = self.login(self.fixtures['one'])
         expect(page.get_by_role('heading', name='Keep LostLink running.')).to_be_visible()
