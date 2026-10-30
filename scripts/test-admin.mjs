@@ -58,6 +58,10 @@ try{
    const rows=await db(await admin.from(table).select('*').in(column,[deletionSchool.id,emptyDeletionSchool.id]));
    if(rows.length)throw Error(`Deletion left records in ${table}.`);
   }
+  const listed=await db(await admin.storage.from('item-public').list(`${deletionSchool.id}/${itemId}`));
+  if(listed.some(object=>object.name===`${photoId}.webp`))throw Error('Deletion left photo bytes in Storage.');
+  const queued=await db(await admin.from('school_photo_cleanup').select('storage_path').eq('storage_path',photoPath));
+  if(queued.length)throw Error('Photo deletion still awaits cleanup.');
   const object=await admin.storage.from('item-public').download(photoPath);
   if(!object.error)throw Error('Deletion left photo bytes in Storage.');
   console.log('Permanent school deletion: database records and Storage bytes removed.');

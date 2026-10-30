@@ -53,3 +53,7 @@ PR #47 publishes the implementation. During final review, scoped the browser's
 expand-delete selector to `summary` because the confirmation button has the same
 visible text. This prevents a Playwright strict-locator collision; application
 behavior is unchanged. Full persisted CI is running against the updated source.
+
+The physical-file acceptance assertion additionally requires a successful Storage
+listing without the deleted file and an empty cleanup entry for that path. This
+prevents a transient Storage download error from being mistaken for removal.
