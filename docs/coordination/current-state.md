@@ -1,3 +1,19 @@
+# Issue #45 owner school management — 2026-10-30 UTC
+
+The existing two website owners retain school rename/settings controls, with explicit
+Edit school links. New permanent deletion requires the typed school address, confirmation
+and current version. It removes school inventory, claims/private proof, memberships and
+activity transactionally, retaining a minimal owner deletion receipt. Photo bytes use a
+durable cleanup outbox with visible retry; school admins cannot delete schools.
+
+Migration `202610300008_owner_school_deletion.sql` and the repeatable SQL Editor setup
+provide the database change. 76 unit tests, lint/types, webpack production build, six
+SQL/RLS suites in the minimal PostgreSQL harness and fresh/repeat setup checks pass.
+Full local Supabase installation exceeded disk space; persisted Auth/Storage/browser
+acceptance remains for PR CI. Hosted migration/deployment is separate. See the
+[issue report](../../agent-logs/codex-issue-45__founder-vunassigned__phase-01-owner-school-management/codex-issue-45__founder-vunassigned__phase-01-owner-school-management.md)
+and [administration guide](../administration.md).
+
 # Issue #41 password reset — 2026-10-28 UTC
 
 Sign-in now links to a role-independent password recovery flow. Real Supabase

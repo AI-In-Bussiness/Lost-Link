@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isSameOrigin, siteOrigin } from '@/lib/auth/security';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { cleanupSchoolPhotos } from '@/lib/admin/photo-cleanup';
 import { readAdminCommand } from '@/lib/admin/contracts';
 
 const headers = {'Cache-Control':'private, no-store'};
@@ -38,12 +39,24 @@ export async function handleAdministration(request: NextRequest, orgSlug?:string
   let command;
   try {command=await readAdminCommand(request);} catch {return fail('VALIDATION_ERROR');}
   const {action,...fields}=command;
-  // UI confirmation is mandatory at this boundary; it is not persisted as data.
+  if(orgSlug && (action==='delete_school' || action==='cleanup_school_photos'))return fail('FORBIDDEN');
+  if(action==='cleanup_school_photos'){
+   const pending=await cleanupSchoolPhotos();
+   const destination=pending?'/admin?cleanup=pending':'/admin?saved=1';
+   return request.headers.get('accept')==='application/json'
+    ? NextResponse.json({destination},{headers})
+    : NextResponse.redirect(new URL(destination,siteOrigin()),{status:303,headers});
+  }
+  // The database also verifies school-deletion confirmation; membership removal
+  // only needs the strict form boundary's confirmation.
   const payload={...fields};
-  if ('confirm' in payload) delete (payload as Partial<typeof payload>).confirm;
+  if (action!=='delete_school' && 'confirm' in payload) delete (payload as Partial<typeof payload>).confirm;
   const {data,error}=await client.rpc(orgSlug?'school_admin_dispatch':'platform_admin_dispatch',{p_action:action,p_payload:payload,...(orgSlug?{p_org_slug:orgSlug}:{})});
   if (error) return fail(error.code==='23505'?'CONFLICT':error.code==='P0001'?error.message:'UNAVAILABLE');
-  const destination=(orgSlug?`/o/${orgSlug}/staff/settings?`:'/admin?')+new URLSearchParams({school:data.schoolId,saved:'1'});
+  const cleanupPending=action==='delete_school' && data.photoCleanupPending && await cleanupSchoolPhotos();
+  const destination=action==='delete_school'
+   ? `/admin?deleted=1${cleanupPending?'&cleanup=pending':''}`
+   : (orgSlug?`/o/${orgSlug}/staff/settings?`:'/admin?')+new URLSearchParams({school:data.schoolId,saved:'1'});
   return request.headers.get('accept')==='application/json'
    ? NextResponse.json({destination},{headers})
    : NextResponse.redirect(new URL(destination,siteOrigin()),{status:303,headers});
