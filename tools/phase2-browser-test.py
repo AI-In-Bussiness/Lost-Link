@@ -522,6 +522,104 @@ class InterfaceTest(unittest.TestCase):
         expect(p.locator('main img')).to_have_attribute('src', selected_photo)
         self.assertEqual(p.evaluate('localStorage.length + sessionStorage.length'), 0)
 
+    def test_oversized_live_photos_are_compressed_in_the_browser(self):
+        results = self.page.evaluate("""async () => {
+          const {preparePhoto, MAX_PHOTO_BYTES} = await import('/src/interface/compress-photo.ts');
+          const canvas = document.createElement('canvas');
+          canvas.width = 2400; canvas.height = 1800;
+          const context = canvas.getContext('2d');
+          const pixels = context.createImageData(canvas.width, canvas.height);
+          let state = 123456789;
+          for (let i = 0; i < pixels.data.length; i += 4) {
+            state ^= state << 13; state ^= state >>> 17; state ^= state << 5;
+            pixels.data[i] = state & 255;
+            pixels.data[i + 1] = (state >>> 8) & 255;
+            pixels.data[i + 2] = (state >>> 16) & 255;
+            pixels.data[i + 3] = 255;
+          }
+          context.putImageData(pixels, 0, 0);
+          const results = [];
+          for (const type of ['image/jpeg', 'image/png', 'image/webp']) {
+            let blob = await new Promise(resolve => canvas.toBlob(resolve, type, 1));
+            if (type === 'image/jpeg') {
+              // EXIF orientation 6: the real browser decoder must rotate once.
+              const bytes = new Uint8Array(await blob.arrayBuffer());
+              const exif = new Uint8Array([255,225,0,34,69,120,105,102,0,0,73,73,42,0,8,0,0,0,1,0,18,1,3,0,1,0,0,0,6,0,0,0,0,0,0,0]);
+              blob = new Blob([bytes.slice(0, 2), exif, bytes.slice(2)], {type});
+            }
+            const original = new File([blob], 'synthetic.' + type.split('/')[1], {type});
+            const prepared = await preparePhoto(original);
+            const bitmap = await createImageBitmap(prepared);
+            results.push({type, original:original.size, prepared:prepared.size,
+              outputType:prepared.type, width:bitmap.width, height:bitmap.height,
+              changed:prepared !== original, limit:MAX_PHOTO_BYTES});
+            bitmap.close();
+          }
+          canvas.width = canvas.height = 2;
+          const smallBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+          const small = new File([smallBlob], 'small.png', {type:'image/png'});
+          return {results, smallUnchanged:(await preparePhoto(small)) === small};
+        }""")
+        self.assertTrue(results['smallUnchanged'], 'Photos already within the upload limit must keep their original bytes')
+        for result in results['results']:
+            with self.subTest(type=result['type']):
+                self.assertGreater(result['original'], result['limit'], 'The fixture must actually exceed the upload limit')
+                self.assertTrue(result['changed'])
+                self.assertGreater(result['prepared'], 0)
+                self.assertLessEqual(result['prepared'], result['limit'])
+                self.assertIn(result['outputType'], ['image/jpeg', 'image/webp'])
+                self.assertLessEqual(max(result['width'], result['height']), 2000)
+                expected_ratio = 3 / 4 if result['type'] == 'image/jpeg' else 4 / 3
+                self.assertAlmostEqual(result['width'] / result['height'], expected_ratio, places=2)
+
+    def test_live_photo_panel_compresses_once_and_keeps_failures_local(self):
+        p = self.page
+        p.evaluate("""async () => {
+          const {photoPanel, bindPhotoPanel} = await import('/src/interface/live-photos.ts');
+          const root = document.createElement('section'); root.id = 'live-photo-test';
+          root.innerHTML = photoPanel({status:'available'}, []);
+          document.querySelector('#app').replaceWith(root);
+          window.__photoUploads = []; window.__photoRefreshes = 0;
+          bindPhotoPanel(root, {orgSlug:'test-school', refresh:() => window.__photoRefreshes++, api:{photos:{
+            upload:async (slug, itemId, file) => {
+              window.__photoUploads.push({size:file.size,type:file.type});
+              await new Promise(resolve => {window.__finishPhotoUpload = resolve});
+              return {ok:true,data:{id:'test-photo',status:'pending'}};
+            }
+          }}}, 'test-item');
+        }""")
+        upload = p.get_by_label('Choose item photo')
+        # A valid PNG with uncompressed image rows genuinely exceeds 4 MiB.
+        def chunk(kind, data):
+            return struct.pack('!I', len(data)) + kind + data + struct.pack('!I', zlib.crc32(kind + data))
+        large = (b'\x89PNG\r\n\x1a\n' + chunk(b'IHDR', struct.pack('!IIBBBBB', 1400, 1000, 8, 6, 0, 0, 0))
+                 + chunk(b'IDAT', zlib.compress((b'\0' + bytes([80, 90, 120, 255]) * 1400) * 1000, level=0))
+                 + chunk(b'IEND', b''))
+        self.assertGreater(len(large), 4 * 1024 * 1024)
+        upload.set_input_files({'name':'large.png','mimeType':'image/png','buffer':large})
+        p.locator('#photo-upload').evaluate("form => {form.requestSubmit(); form.requestSubmit();}")
+        p.wait_for_function('() => window.__photoUploads.length === 1')
+        expect(p.locator('#photo-upload button[type=submit]')).to_be_disabled()
+        self.assertLessEqual(p.evaluate('window.__photoUploads[0].size'), 4 * 1024 * 1024)
+        p.evaluate('window.__finishPhotoUpload()')
+        p.wait_for_function('() => window.__photoRefreshes === 1')
+        expect(p.locator('#photo-upload button[type=submit]')).to_be_enabled()
+        self.assertEqual(p.evaluate('window.__photoUploads.length'), 1)
+
+        for name, mime, content in [
+                ('unsafe.svg', 'image/svg+xml', b'<svg/>' + bytes(4 * 1024 * 1024)),
+                ('broken.png', 'image/png', bytes(4 * 1024 * 1024 + 1)),
+                ('animated.png', 'image/png', large[:33] + chunk(b'acTL', struct.pack('!II', 2, 0)) + large[33:]),
+                ('too-many-pixels.png', 'image/png', large[:8] + chunk(b'IHDR', struct.pack('!IIBBBBB', 5000, 8001, 8, 6, 0, 0, 0)) + large[33:]),
+                ('too-large.png', 'image/png', bytes(32 * 1024 * 1024 + 1))]:
+            with self.subTest(file=name):
+                upload.set_input_files({'name':name,'mimeType':mime,'buffer':content})
+                p.get_by_role('button', name='Upload for private review').click()
+                expect(p.locator('#photo-upload .error-summary')).to_be_focused()
+                expect(upload).to_have_attribute('aria-invalid', 'true')
+                expect(p.locator('#photo-upload button[type=submit]')).to_be_enabled()
+                self.assertEqual(p.evaluate('window.__photoUploads.length'), 1, 'Preparation failures must not send an upload')
+
     def test_latest_route_loading_resize_text_and_reduced_motion(self):
         p = self.page
         self.control('scenario', 'slow')

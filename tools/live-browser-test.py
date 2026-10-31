@@ -10,10 +10,10 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright, expect
 
 
-def png_bytes():
+def png_bytes(width=40, height=20, compression=9):
     def chunk(kind, data):
         return struct.pack('!I', len(data)) + kind + data + struct.pack('!I', zlib.crc32(kind + data))
-    return b'\x89PNG\r\n\x1a\n' + chunk(b'IHDR', struct.pack('!IIBBBBB', 40, 20, 8, 6, 0, 0, 0)) + chunk(b'IDAT', zlib.compress((b'\0' + bytes([60, 80, 120, 255]) * 40) * 20)) + chunk(b'IEND', b'')
+    return b'\x89PNG\r\n\x1a\n' + chunk(b'IHDR', struct.pack('!IIBBBBB', width, height, 8, 6, 0, 0, 0)) + chunk(b'IDAT', zlib.compress((b'\0' + bytes([60, 80, 120, 255]) * width) * height, level=compression)) + chunk(b'IEND', b'')
 
 
 class PersistedWorkflow(unittest.TestCase):
@@ -185,8 +185,29 @@ class PersistedWorkflow(unittest.TestCase):
         staff.get_by_label('Choose item photo').set_input_files({'name':'spoof.jpg','mimeType':'image/jpeg','buffer':b'<html>not an image</html>'})
         staff.get_by_role('button', name='Upload for private review').click()
         expect(staff.locator('#photo-upload [role=alert]')).to_be_visible()
-        staff.get_by_label('Choose item photo').set_input_files({'name':'synthetic.png','mimeType':'image/png','buffer':png_bytes()})
-        staff.get_by_role('button', name='Upload for private review').click()
+        original_photo = png_bytes(1400, 1000, compression=0)
+        self.assertGreater(len(original_photo), 4 * 1024 * 1024, 'The source photo must exceed the service upload limit')
+        staff.get_by_label('Choose item photo').set_input_files({'name':'synthetic-large.png','mimeType':'image/png','buffer':original_photo})
+        # Chromium omits multipart File bytes from Request.post_data_buffer.
+        # Observe the actual File added to FormData without altering
+        # the request or replacing any response in this persisted journey.
+        staff.evaluate("""() => {
+          const originalAppend = FormData.prototype.append;
+          window.__restorePhotoObserver = () => {FormData.prototype.append = originalAppend};
+          FormData.prototype.append = function(name, value) {
+            if (name === 'file' && value instanceof File)
+              window.__uploadedPhoto = {size:value.size,type:value.type};
+            return Reflect.apply(originalAppend, this, arguments);
+          };
+        }""")
+        with staff.expect_request(lambda request: request.method == 'POST' and request.url.endswith('/photos')):
+            staff.get_by_role('button', name='Upload for private review').click()
+        uploaded = staff.evaluate('window.__uploadedPhoto')
+        staff.evaluate('window.__restorePhotoObserver()')
+        self.assertGreater(uploaded['size'], 0)
+        self.assertLessEqual(uploaded['size'], 4 * 1024 * 1024)
+        self.assertLess(uploaded['size'], len(original_photo))
+        self.assertIn(uploaded['type'], ['image/webp', 'image/jpeg'])
         staff.get_by_text('Private preview · not published', exact=True).wait_for()
         expect(staff.get_by_role('status').filter(has_text='Photo uploaded. Review')).to_be_visible()
         private_photo = staff.locator('[data-publish-photo]').locator('..').locator('img')

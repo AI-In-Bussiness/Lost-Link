@@ -1,3 +1,23 @@
+# Issue #49 image compression — 2026-10-31 UTC
+
+Oversized JPEG, PNG and WebP photos are now prepared in the browser before the
+existing 4 MiB multipart upload. Sources up to 32 MiB and 40 megapixels are
+oriented, resized inside 2000×2000, and encoded to bounded JPEG; transparent
+areas become white. Header inspection rejects unsupported, animated and
+oversized-pixel sources before bitmap decoding. Small uploads retain their
+original bytes. The server sanitizer and private review/publication remain
+authoritative.
+
+Local lint, both typechecks, formatting, 75 unit tests, 14 mock tests, 21 release
+tests and webpack production build pass. Real Chromium compression/panel
+regressions cover all three formats, EXIF orientation, local failures and double
+submission; independent review found no actionable issues and exercised lossless
+and alpha WebP. The persisted workflow now submits an actual oversized photo and
+checks the outgoing bytes before its existing private/published lifecycle. PR CI
+runs that full Auth/database/Storage journey. Safari and hosted acceptance are
+not established by the local checks. See the
+[implementation report](../../agent-logs/codex-issue-49__founder-vunassigned__phase-01-image-compression/codex-issue-49__founder-vunassigned__phase-01-image-compression.md).
+
 # Issue #45 owner school management — 2026-10-30 UTC
 
 The existing two website owners retain school rename/settings controls, with explicit
