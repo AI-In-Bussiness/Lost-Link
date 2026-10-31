@@ -1,3 +1,17 @@
+# Owner photo upload follow-up — 2026-10-31 UTC
+
+The user confirmed that a website owner received “This resource is unavailable”
+while uploading a JPEG. The HTTP photo guard recognizes owners, but the trusted
+photo_begin/photo_finish database functions still required school membership.
+That returns NOT_FOUND before decoding. Migration 009 recognizes platform_admins
+for the verified p_actor in both functions while preserving service-only grants,
+item/school/creator checks, quotas, caps and integrity verification. The repeatable
+administration setup includes the same definitions. Existing hosted databases
+must apply the [standalone repair](../../supabase/migrations/202610310009_owner_photo_uploads.sql)
+through their SQL Editor; source deployment does not install database functions.
+SQL and persisted owner JPEG browser regressions accompany the change. Hosted
+installation is not claimed because this workspace has no database admin binding.
+
 # Issue #49 image compression — 2026-10-31 UTC
 
 Oversized JPEG, PNG and WebP photos are now prepared in the browser before the

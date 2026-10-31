@@ -42,6 +42,27 @@ activity. Neither school role changes the protected website-owner assignment.
 Account deletion, billing, provider keys and arbitrary code editing remain
 operator tasks. Password recovery is available from sign-in.
 
+## Repair owner photo uploads on an existing site
+
+An owner without an individual school membership could open an item's photo
+panel but receive “This resource is unavailable” when uploading. The trusted
+processor's `photo_begin` and `photo_finish` functions checked school membership
+without recognizing the verified owner's `p_actor`.
+
+In the intended Supabase project's **SQL Editor**, open a new query, paste the
+entire [owner photo upload migration](../supabase/migrations/202610310009_owner_photo_uploads.sql)
+and select **Run**. It replaces those two function definitions transactionally
+and is safe to repeat on an existing administration installation. Existing
+accounts, memberships, listings and photos are retained. Retry the same JPEG
+on the item afterwards; the existing private preview and publication workflow
+still applies. Hosted databases require this SQL application separately from
+Vercel source deployment. The combined administration setup also includes it.
+
+Both processor functions verify the actor is either a website owner or a staff/
+admin member of the requested school. They retain service-role-only execution,
+item/school matching, creator matching, quotas, photo caps and Storage integrity
+checks. Owner assignment is still restricted to the existing bootstrap process.
+
 ## One-time owner setup
 
 For the dashboard SQL Editor, use the [combined administration setup](../supabase/setup/administration.sql).
@@ -57,10 +78,12 @@ do not replay those individual migrations blindly after manual dashboard setup.
    `supabase/migrations/202610290005_platform_admin.sql`, then
    `202610290006_owner_only_administration.sql`, then
    `202610290007_school_admin_scope.sql`, then
-   `202610300008_owner_school_deletion.sql`. Apply only the pending ones in order;
+   `202610300008_owner_school_deletion.sql`, then
+   `202610310009_owner_photo_uploads.sql`. Apply only the pending ones in order;
    these support installations that already ran the initial PR40 setup. Migration
    007 implements the two-level permissions; 008 adds owner-only permanent school
-   deletion and its photo cleanup outbox. Earlier migrations stay intact.
+   deletion and its photo cleanup outbox; 009 recognizes owners in both trusted
+   photo upload steps. Earlier migrations stay intact.
    Do not reset hosting or replay migrations already recorded as applied.
 2. Deploy the corresponding application source. Keep `SUPABASE_SERVICE_ROLE_KEY`
    configured on the trusted server for photo cleanup (as for existing uploads).

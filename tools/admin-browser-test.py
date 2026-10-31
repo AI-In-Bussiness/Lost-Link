@@ -31,6 +31,59 @@ class OwnerWorkflow(unittest.TestCase):
         with page.expect_navigation(wait_until='load'):
             form.get_by_role('button', name=button, exact=True).click()
         expect(page.get_by_role('status')).to_have_text('Changes saved.')
+    def test_both_owners_upload_review_and_publish_jpegs_without_school_memberships(self):
+        school = '/o/' + self.fixtures['uploadSlug']
+        api = self.origin + '/api/v1/organizations/' + self.fixtures['uploadSlug']
+        visitor_context = self.browser.new_context()
+        self.addCleanup(visitor_context.close)
+        visitor = visitor_context.new_page()
+        foreign_context, _ = self.login(self.fixtures['legacyAdmin'], '/my/claims')
+        # The runner asserts neither website owner has any school membership.
+        # One owner uploads an ordinary JPEG; the other exercises JPEG compression.
+        for number, (actor, jpeg_path) in enumerate(zip([self.fixtures['one'], self.fixtures['two']], self.fixtures['jpegPaths']), 1):
+            with self.subTest(owner=number):
+                context, page = self.login(actor, school + '/staff')
+                title = f'Fictional owner {number} photo item'
+                created = context.request.post(api + '/staff/items', headers={'Origin': self.origin}, data={
+                    'title': title, 'publicDescription': 'A fictional pink pencil for owner JPEG upload acceptance.',
+                    'category': 'other', 'color': 'pink', 'publicLocation': 'Library', 'foundDate': '2026-10-25',
+                    'identifyingDetails': 'Synthetic owner-upload private detail.', 'storageLocation': 'Office shelf',
+                })
+                self.assertEqual(created.status, 201)
+                item_id = created.json()['data']['id']
+                page.goto(self.origin + school + '/staff/items/' + item_id)
+                page.get_by_role('heading', name='Item photographs', exact=True).wait_for()
+                page.get_by_label('Choose item photo').set_input_files(jpeg_path)
+                with page.expect_response(lambda response: response.request.method == 'POST' and response.url == api + '/staff/items/' + item_id + '/photos') as uploaded:
+                    page.get_by_role('button', name='Upload for private review', exact=True).click()
+                self.assertEqual(uploaded.value.status, 201, 'Owners must reach both photo_begin and photo_finish without school membership')
+                page.get_by_text('Private preview · not published', exact=True).wait_for()
+                private_photo = page.locator('[data-publish-photo]').locator('..').locator('img')
+                self.assertTrue(private_photo.evaluate('(img) => img.decode().then(() => img.naturalWidth > 0)'))
+                private_url = private_photo.get_attribute('src')
+                public_url = private_url.replace('/staff/items/', '/items/')
+                self.assertEqual(visitor_context.request.get(self.origin + private_url).status, 401)
+                self.assertEqual(foreign_context.request.get(self.origin + private_url).status, 404)
+                self.assertEqual(visitor_context.request.get(self.origin + public_url).status, 404)
+                pending = context.request.get(api + '/staff/items/' + item_id + '/photos')
+                self.assertEqual(pending.status, 200)
+                self.assertEqual([photo['status'] for photo in pending.json()['data']], ['pending'])
+                page.reload()
+                page.get_by_text('Private preview · not published', exact=True).wait_for()
+                page.get_by_label('I inspected this processed photo').check()
+                page.get_by_role('button', name='Publish reviewed photo', exact=True).click()
+                page.get_by_text('Published photograph', exact=True).wait_for()
+                page.reload()
+                page.get_by_text('Published photograph', exact=True).wait_for()
+                visitor.goto(self.origin + school + '/items/' + item_id)
+                visitor.get_by_role('heading', name=title, exact=True).wait_for()
+                public_photo = visitor.locator('main img')
+                expect(public_photo).to_have_attribute('src', public_url)
+                self.assertTrue(public_photo.evaluate('(img) => img.decode().then(() => img.naturalWidth > 0)'))
+                published = visitor_context.request.get(self.origin + public_url)
+                self.assertEqual(published.status, 200)
+                self.assertEqual(published.headers['content-type'], 'image/webp')
+                self.assertIn('no-store', published.headers['cache-control'])
     def test_owner_and_school_staff_review_student_claims(self):
         school = '/o/' + self.fixtures['reviewSlug']
         api = self.origin + '/api/v1/organizations/' + self.fixtures['reviewSlug']

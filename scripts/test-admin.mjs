@@ -44,6 +44,15 @@ try{
  const reviewSchool=(await db(await admin.from('organizations').insert({slug:slug+'-review',name:'Fictional Claim Review School',published:true}).select('id')))[0];
  await db(await admin.from('memberships').insert({organization_id:reviewSchool.id,user_id:fixtures.staff.id,role:'staff'}));
  fixtures.reviewSlug=slug+'-review';
+ const uploadSchool=(await db(await admin.from('organizations').insert({slug:slug+'-uploads',name:'Fictional Owner Upload School',published:true}).select('id')))[0];
+ const ownerMemberships=await db(await admin.from('memberships').select('organization_id').in('user_id',[fixtures.one.id,fixtures.two.id]));
+ if(ownerMemberships.length)throw Error('Owner upload acceptance requires owners without school memberships.');
+ const jpeg=await sharp({create:{width:554,height:554,channels:3,background:'#f9e3e4'}}).jpeg().toBuffer();
+ const largeJpeg=await sharp(randomBytes(2400*1800*3),{raw:{width:2400,height:1800,channels:3}}).jpeg({quality:100,chromaSubsampling:'4:4:4'}).toBuffer();
+ if(largeJpeg.length<=4*1024*1024 || largeJpeg.length>32*1024*1024)throw Error('Oversized owner JPEG fixture must exercise automatic compression.');
+ const jpegPath=join(directory,'fictional-owner.jpg'),largeJpegPath=join(directory,'fictional-owner-large.jpg');
+ writeFileSync(jpegPath,jpeg,{mode:0o600});writeFileSync(largeJpegPath,largeJpeg,{mode:0o600});
+ Object.assign(fixtures,{uploadSlug:slug+'-uploads',uploadSchoolId:uploadSchool.id,jpegPaths:[jpegPath,largeJpegPath]});
  const file=join(directory,'fixtures.json');writeFileSync(file,JSON.stringify(fixtures),{mode:0o600});
  server=spawn(process.execPath,['node_modules/next/dist/bin/next','start','--hostname','localhost'],{env:process.env,stdio:['ignore','ignore','inherit']});
  let ready=false;
@@ -56,6 +65,16 @@ try{
  const python=spawn('python',['tools/admin-browser-test.py'],{env:{...process.env,LOSTLINK_OWNER_FIXTURES:file},stdio:'inherit'});
  process.exitCode=await new Promise(resolve=>{python.on('error',()=>resolve(1));python.on('exit',code=>resolve(code ?? 1));});
  if(process.exitCode===0){
+  const ownerPhotos=await db(await admin.from('item_photos').select('created_by,status,content_type,byte_size,sha256,storage_path').eq('organization_id',uploadSchool.id));
+  if(ownerPhotos.length!==2 || new Set(ownerPhotos.map(photo=>photo.created_by)).size!==2 || ownerPhotos.some(photo=>![fixtures.one.id,fixtures.two.id].includes(photo.created_by) || photo.status!=='published' || photo.content_type!=='image/webp' || photo.byte_size<1 || photo.byte_size>4*1024*1024))throw Error('Owner upload acceptance did not persist both reviewed photos with safe metadata.');
+  for(const photo of ownerPhotos){
+   const bytes=Buffer.from(await (await db(await admin.storage.from('item-public').download(photo.storage_path))).arrayBuffer());
+   if(bytes.length!==photo.byte_size || createHash('sha256').update(bytes).digest('hex')!==photo.sha256)throw Error('Owner upload Storage bytes do not match their processed metadata.');
+  }
+  const ownerReservations=await db(await admin.from('audit_events').select('actor_id').eq('organization_id',uploadSchool.id).eq('action','photo_upload_reserved'));
+  if(ownerReservations.length!==2 || new Set(ownerReservations.map(event=>event.actor_id)).size!==2)throw Error('Owner uploads did not reserve exactly one processing attempt per owner.');
+  if((await db(await admin.from('memberships').select('organization_id').in('user_id',[fixtures.one.id,fixtures.two.id]))).length)throw Error('Owner uploads must not create school memberships.');
+  console.log('Both owners without school memberships uploaded, privately reviewed and published JPEGs with verified Storage bytes.');
   for(const table of ['organizations','items','claims','item_photos','item_private_details','memberships']){
    const column=table==='organizations'?'id':'organization_id';
    const rows=await db(await admin.from(table).select('*').in(column,[deletionSchool.id,emptyDeletionSchool.id]));
@@ -73,7 +92,7 @@ try{
 }finally{
  if(server){server.kill('SIGTERM');if(server.exitCode===null)await new Promise(resolve=>server.once('exit',resolve));}
  try{
-  const orgs=await db(await admin.from('organizations').select('id').in('slug',[slug,slug+'-legacy',slug+'-other',slug+'-delete',slug+'-delete-empty',slug+'-review']));
+  const orgs=await db(await admin.from('organizations').select('id').in('slug',[slug,slug+'-legacy',slug+'-other',slug+'-delete',slug+'-delete-empty',slug+'-review',slug+'-uploads']));
   for(const org of orgs){
    const photos=await db(await admin.from('item_photos').select('storage_path').eq('organization_id',org.id));
    if(photos.length)await db(await admin.storage.from('item-public').remove(photos.map(p=>p.storage_path)));
