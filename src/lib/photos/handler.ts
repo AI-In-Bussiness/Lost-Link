@@ -28,7 +28,13 @@ async function staffContext(client: SupabaseClient, orgSlug: string) {
   if (!org) throw new PhotoError(404, "NOT_FOUND", "Resource not found.");
   const { data: membership, error: membershipError } = await client.from("memberships").select("role").eq("organization_id", org.id).eq("user_id", user.id).maybeSingle();
   if (membershipError) throw new PhotoError(503, "UNAVAILABLE", "Organization access is temporarily unavailable.");
-  if (!membership || !["staff", "admin"].includes(membership.role)) throw new PhotoError(404, "NOT_FOUND", "Resource not found.");
+  if (!membership || !["staff", "admin"].includes(membership.role)) {
+    // Match private.is_staff: website owners can review every school's items
+    // and claims without a separate school membership.
+    const { data: owner, error: ownerError } = await client.from("platform_admins").select("user_id").eq("user_id", user.id).maybeSingle();
+    if (ownerError) throw new PhotoError(503, "UNAVAILABLE", "Organization access is temporarily unavailable.");
+    if (!owner) throw new PhotoError(404, "NOT_FOUND", "Resource not found.");
+  }
   return { actorId: user.id, organizationId: org.id as string };
 }
 

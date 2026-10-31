@@ -41,6 +41,9 @@ try{
  await db(await admin.storage.from('item-public').upload(photoPath,photoBytes,{contentType:'image/webp'}));
  await db(await admin.from('item_photos').insert({id:photoId,organization_id:deletionSchool.id,item_id:itemId,storage_path:photoPath,status:'pending',sha256:createHash('sha256').update(photoBytes).digest('hex'),byte_size:photoBytes.length,content_type:'image/webp'}));
  Object.assign(fixtures,{deletionSchoolId:deletionSchool.id,emptyDeletionSchoolId:emptyDeletionSchool.id,photoPath});
+ const reviewSchool=(await db(await admin.from('organizations').insert({slug:slug+'-review',name:'Fictional Claim Review School',published:true}).select('id')))[0];
+ await db(await admin.from('memberships').insert({organization_id:reviewSchool.id,user_id:fixtures.staff.id,role:'staff'}));
+ fixtures.reviewSlug=slug+'-review';
  const file=join(directory,'fixtures.json');writeFileSync(file,JSON.stringify(fixtures),{mode:0o600});
  server=spawn(process.execPath,['node_modules/next/dist/bin/next','start','--hostname','localhost'],{env:process.env,stdio:['ignore','ignore','inherit']});
  let ready=false;
@@ -70,7 +73,7 @@ try{
 }finally{
  if(server){server.kill('SIGTERM');if(server.exitCode===null)await new Promise(resolve=>server.once('exit',resolve));}
  try{
-  const orgs=await db(await admin.from('organizations').select('id').in('slug',[slug,slug+'-legacy',slug+'-other',slug+'-delete',slug+'-delete-empty']));
+  const orgs=await db(await admin.from('organizations').select('id').in('slug',[slug,slug+'-legacy',slug+'-other',slug+'-delete',slug+'-delete-empty',slug+'-review']));
   for(const org of orgs){
    const photos=await db(await admin.from('item_photos').select('storage_path').eq('organization_id',org.id));
    if(photos.length)await db(await admin.storage.from('item-public').remove(photos.map(p=>p.storage_path)));

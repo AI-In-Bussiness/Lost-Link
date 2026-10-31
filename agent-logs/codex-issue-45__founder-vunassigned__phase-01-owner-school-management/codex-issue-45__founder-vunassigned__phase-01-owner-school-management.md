@@ -57,3 +57,19 @@ behavior is unchanged. Full persisted CI is running against the updated source.
 The physical-file acceptance assertion additionally requires a successful Storage
 listing without the deleted file and an empty cleanup entry for that path. This
 prevents a transient Storage download error from being mistaken for removal.
+
+
+## Integration with issue #46 — 2026-10-31 UTC
+
+The task owner asked to finish. Commit 33e46bb passed the complete Foundation PR
+workflow 41110203330, security checks, Windows/Linux helpers and Vercel preview,
+including real Auth/Storage and permanent school deletion. Main then advanced to
+dff9614 (PR #48, owner claim Review access), causing conflicts in the shared
+coordination entries and owner browser-fixture script. Resolved by retaining both
+issues' documentation and rows, both sets of school fixtures, and cleanup for all
+fixture schools. The incoming owner authorization repair and Review browser
+scenario are preserved. Combined-source validation is recorded in PR #47.
+
+Combined-source local validation: lint, TypeScript, all 76 unit tests, JavaScript
+syntax, Python compilation and diff checks pass. No tests or assertions from
+either issue were removed. A merge commit preserves both histories.

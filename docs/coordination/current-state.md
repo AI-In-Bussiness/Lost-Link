@@ -9,10 +9,27 @@ durable cleanup outbox with visible retry; school admins cannot delete schools.
 Migration `202610300008_owner_school_deletion.sql` and the repeatable SQL Editor setup
 provide the database change. 76 unit tests, lint/types, webpack production build, six
 SQL/RLS suites in the minimal PostgreSQL harness and fresh/repeat setup checks pass.
-Full local Supabase installation exceeded disk space; persisted Auth/Storage/browser
-acceptance remains for PR CI. Hosted migration/deployment is separate. See the
+Full persisted Auth/Storage/browser acceptance passed on 33e46bb in Foundation
+run 41110203330. Main dff9614 (issue #46) is integrated with both fixture sets
+preserved; combined-source PR checks are running. Hosted migration/deployment is separate. See the
 [issue report](../../agent-logs/codex-issue-45__founder-vunassigned__phase-01-owner-school-management/codex-issue-45__founder-vunassigned__phase-01-owner-school-management.md)
 and [administration guide](../administration.md).
+
+# Issue #46 staff claim review — 2026-10-30 UTC
+
+The claim queue already admits website owners through `private.is_staff`, but
+the HTTP photo/activity guard required a separate school membership. Loading a
+claim's item therefore returned 404 and made the Review page unavailable for
+owners. The guard now recognizes verified `platform_admins` records while
+retaining school membership checks and failing closed on lookup errors.
+
+Added real browser coverage for owner and ordinary staff Review links, refresh,
+private evidence, owner approval/return, and foreign-school/claimant/anonymous
+denials. Local lint/types, 75 unit cases, 21 release cases, 14 mock cases and
+webpack production compilation pass. Full Supabase startup exceeded the local
+disk quota; persisted browser validation is delegated to existing CI. See the
+[issue report](../../agent-logs/codex-issue-46__founder-vunassigned__phase-01-staff-claim-review/codex-issue-46__founder-vunassigned__phase-01-staff-claim-review.md)
+for scope and exact evidence. This entry does not establish hosted acceptance.
 
 # Issue #41 password reset — 2026-10-28 UTC
 
