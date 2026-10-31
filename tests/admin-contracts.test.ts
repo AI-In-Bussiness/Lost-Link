@@ -32,3 +32,15 @@ test('owner return destination is explicit; arbitrary admin subpaths remain reje
  assert.equal(safeReturnPath('/admin'),'/admin');
  for(const path of ['/admin?school=secret','/admin/delete','//evil.test/admin'])assert.equal(safeReturnPath(path),'/account');
 });
+
+test('school deletion requires explicit confirmation, address and a current version',async()=>{
+ const command={action:'delete_school',schoolId:'10000000-0000-4000-8000-000000000001',expectedVersion:'2',schoolSlug:'oak-school',confirm:'delete'};
+ assert.equal(adminCommand.parse(command).action,'delete_school');
+ for(const change of [{confirm:undefined},{confirm:'remove'},{schoolSlug:''},{expectedVersion:'0'},{expectedVersion:'1e2'},{schoolId:'all'},{allSchools:true}]){
+  assert.equal(adminCommand.safeParse({...command,...change}).success,false);
+ }
+ const body=new URLSearchParams(command);
+ const request=new Request('http://localhost/api/admin',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body});
+ assert.equal((await readAdminCommand(request)).action,'delete_school');
+ assert.equal(adminCommand.safeParse({action:'cleanup_school_photos',schoolId:command.schoolId}).success,false);
+});

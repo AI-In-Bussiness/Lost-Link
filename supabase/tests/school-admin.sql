@@ -15,6 +15,7 @@ set local role authenticated;
 select set_config('request.jwt.claim.sub','89000000-0000-4000-8000-000000000001',true);
 select pg_temp.check_true(jsonb_array_length(public.school_admin_dispatch('overview','scoped-one')->'schools')=1 and jsonb_array_length(public.school_admin_dispatch('overview','scoped-one')->'owners')=0,'school overview contains only its own school and no owner directory');
 select pg_temp.school_denied('overview','scoped-two','{}','NOT_FOUND');
+select pg_temp.school_denied('delete_school','scoped-one','{}','VALIDATION_ERROR');
 select pg_temp.school_denied('create_school','scoped-one','{}','VALIDATION_ERROR');
 select pg_temp.school_denied('set_member','scoped-one','{"schoolId":"19000000-0000-4000-8000-000000000002","expectedVersion":1,"email":"scoped-staff@example.test","role":"admin"}','NOT_FOUND');
 select public.school_admin_dispatch('update_school','scoped-one','{"schoolId":"19000000-0000-4000-8000-000000000001","expectedVersion":1,"name":"Own school renamed","timezone":"UTC","contactEmail":"office@example.test","collectionInstructions":"Office after 3pm","published":true}');

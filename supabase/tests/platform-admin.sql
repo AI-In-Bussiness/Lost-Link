@@ -71,6 +71,42 @@ select pg_temp.assert_true((select count(*)=4 from public.platform_admin_events 
 do $$ begin delete from public.platform_admin_events;raise exception 'FAIL audit deletion';exception when insufficient_privilege then raise notice 'PASS owner cannot erase audit';end $$;
 select set_config('request.jwt.claim.sub','39000000-0000-4000-8000-000000000003',true);
 select pg_temp.assert_true(not private.is_staff(:'school_id'::uuid),'school membership removal immediately revokes access');
+-- Owner one can delete a populated school, after explicit current confirmation.
+select set_config('request.jwt.claim.sub','39000000-0000-4000-8000-000000000001',true);
+select pg_temp.denied('delete_school',jsonb_build_object('schoolId',:'school_id','expectedVersion',3,'schoolSlug','owner-test-school','confirm','delete'),'CONFLICT');
+select pg_temp.denied('delete_school',jsonb_build_object('schoolId',:'school_id','expectedVersion',4,'schoolSlug','wrong-school','confirm','delete'),'VALIDATION_ERROR');
+select pg_temp.denied('delete_school',jsonb_build_object('schoolId',:'school_id','expectedVersion',4,'schoolSlug','owner-test-school','confirm','remove'),'VALIDATION_ERROR');
+select pg_temp.denied('delete_school',jsonb_build_object('schoolId',:'school_id','expectedVersion',4,'schoolSlug','owner-test-school'),'VALIDATION_ERROR');
+reset role;
+insert into public.item_private_details(item_id,organization_id,identifying_details,storage_location) values('29000000-0000-4000-8000-000000000001',:'school_id'::uuid,'Private bag fact','Staff cupboard');
+insert into public.item_photos(id,organization_id,item_id,storage_path,status) values('59000000-0000-4000-8000-000000000001',:'school_id'::uuid,'29000000-0000-4000-8000-000000000001',:'school_id'||'/29000000-0000-4000-8000-000000000001/59000000-0000-4000-8000-000000000001.webp','processing');
+insert into public.audit_events(organization_id,action,entity_type,entity_id,request_id) values(:'school_id'::uuid,'fixture','item','29000000-0000-4000-8000-000000000001',gen_random_uuid());
+select count(*) as other_schools from public.organizations where id<>:'school_id'::uuid \gset
+set local role authenticated;
+select set_config('request.jwt.claim.sub','39000000-0000-4000-8000-000000000003',true);
+select pg_temp.denied('delete_school',jsonb_build_object('schoolId',:'school_id','expectedVersion',4,'schoolSlug','owner-test-school','confirm','delete'),'FORBIDDEN');
+do $$ begin select * from public.school_photo_cleanup; raise exception 'FAIL cleanup read';exception when insufficient_privilege then raise notice 'PASS cleanup outbox protected';end $$;
+select set_config('request.jwt.claim.sub','39000000-0000-4000-8000-000000000001',true);
+select public.platform_admin_dispatch('delete_school',jsonb_build_object('schoolId',:'school_id','expectedVersion',4,'schoolSlug','owner-test-school','confirm','delete'));
+select pg_temp.denied('delete_school',jsonb_build_object('schoolId',:'school_id','expectedVersion',4,'schoolSlug','owner-test-school','confirm','delete'),'NOT_FOUND');
+select pg_temp.assert_true((public.platform_admin_dispatch('overview')->>'photoCleanupPending')::boolean,'owner can see cleanup remains pending');
+reset role;
+select pg_temp.assert_true(not exists(select 1 from public.organizations where id=:'school_id'::uuid),'school permanently removed');
+select pg_temp.assert_true(not exists(select 1 from public.items where organization_id=:'school_id'::uuid),'school inventory removed');
+select pg_temp.assert_true(not exists(select 1 from public.claims where organization_id=:'school_id'::uuid),'school claims removed');
+select pg_temp.assert_true(not exists(select 1 from public.item_private_details where organization_id=:'school_id'::uuid),'school private facts removed');
+select pg_temp.assert_true(not exists(select 1 from public.item_photos where organization_id=:'school_id'::uuid),'school photo metadata removed');
+select pg_temp.assert_true(not exists(select 1 from public.audit_events where organization_id=:'school_id'::uuid),'school activity removed');
+select pg_temp.assert_true(not exists(select 1 from public.memberships where organization_id=:'school_id'::uuid),'school memberships removed');
+select pg_temp.assert_true(not exists(select 1 from public.platform_admin_events where organization_id=:'school_id'::uuid),'prior school administration records removed');
+select pg_temp.assert_true(exists(select 1 from public.platform_admin_events where action='delete_school' and details->>'schoolId'=:'school_id' and organization_id is null),'minimal deletion receipt survives');
+select pg_temp.assert_true(exists(select 1 from public.school_photo_cleanup where storage_path like :'school_id'||'/%'),'photo cleanup survives removal of metadata');
+select pg_temp.assert_true((select count(*) from public.organizations)=:other_schools,'other schools retained');
+select pg_temp.assert_true((select count(*)=5 from auth.users where id::text like '39000000-%'),'user accounts retained');
+set local role authenticated;
+select set_config('request.jwt.claim.sub','39000000-0000-4000-8000-000000000002',true);
+select public.platform_admin_dispatch('create_school','{"name":"Second owner deletion","slug":"second-owner-deletion","timezone":"UTC","contactEmail":"","collectionInstructions":"","published":false}') as second_result \gset
+select public.platform_admin_dispatch('delete_school',jsonb_build_object('schoolId',:'second_result'::jsonb->>'schoolId','expectedVersion',1,'schoolSlug','second-owner-deletion','confirm','delete'));
 reset role;
 delete from public.platform_admins where user_id='39000000-0000-4000-8000-000000000002';
 set local role authenticated;

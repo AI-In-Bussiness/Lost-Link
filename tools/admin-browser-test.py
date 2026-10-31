@@ -155,6 +155,52 @@ class OwnerWorkflow(unittest.TestCase):
         violations = page.evaluate('async () => (await axe.run(document, {runOnly:{type:"tag",values:["wcag2a","wcag2aa","wcag21aa"]}})).violations.map(v=>v.id)')
         self.assertEqual(violations, [])
         self.assertEqual(visitor.request.get(self.origin + '/api/v1/organizations/' + self.fixtures['slug']).status, 404)
+    def test_owner_deletion_removes_school_and_protects_other_schools(self):
+        context, page = self.login(self.fixtures['one'])
+        path = '/admin?school=' + self.fixtures['deletionSchoolId']
+        page.goto(self.origin + path)
+        page.locator('summary').filter(has_text='Delete school permanently').click()
+        form = page.get_by_role('form', name='Delete school', exact=True)
+        form.get_by_label('Type the school web address', exact=False).fill('wrong-school')
+        form.get_by_role('checkbox').check()
+        form.get_by_role('button', name='Delete school permanently', exact=True).click()
+        expect(form.get_by_role('alert')).to_contain_text('Check all fields')
+        # Both owners can edit; an old deletion form must not erase a newer edit.
+        _, second = self.login(self.fixtures['two'])
+        second.goto(self.origin + path)
+        settings = second.get_by_role('form', name='School settings', exact=True)
+        settings.get_by_label('School name', exact=True).fill('Renamed Delete School')
+        self.save(second, settings, 'Save school settings')
+        form.get_by_label('Type the school web address', exact=False).fill(self.fixtures['slug'] + '-delete')
+        form.get_by_role('button', name='Delete school permanently', exact=True).click()
+        expect(form.get_by_role('alert')).to_contain_text('another session')
+        page.reload()
+        expect(page.get_by_role('heading', name='Renamed Delete School settings', exact=True)).to_be_visible()
+        page.locator('summary').filter(has_text='Delete school permanently').click()
+        form = page.get_by_role('form', name='Delete school', exact=True)
+        form.get_by_label('Type the school web address', exact=False).fill(self.fixtures['slug'] + '-delete')
+        form.get_by_role('checkbox').check()
+        with page.expect_navigation(wait_until='load'):
+            form.get_by_role('button', name='Delete school permanently', exact=True).click()
+        expect(page.get_by_role('status')).to_contain_text('School deleted.')
+        expect(page.get_by_role('link', name='Renamed Delete School', exact=True)).to_have_count(0)
+        expect(page.get_by_text('School permanently deleted', exact=True)).to_be_visible()
+        self.assertEqual(context.request.get(self.origin + '/api/v1/organizations/' + self.fixtures['slug'] + '-delete').status, 404)
+        staff_context, _ = self.login(self.fixtures['staff'], '/account')
+        self.assertEqual(staff_context.request.get(self.origin + '/api/v1/organizations/' + self.fixtures['slug'] + '-delete/staff/items').status, 404)
+        page.reload()
+        expect(page.get_by_role('link', name='Fictional legacy school', exact=True)).to_be_visible()
+        expect(page.get_by_role('link', name='Fictional other school', exact=True)).to_be_visible()
+        # The second owner can permanently remove an empty hidden school too.
+        second.goto(self.origin + '/admin?school=' + self.fixtures['emptyDeletionSchoolId'])
+        second.locator('summary').filter(has_text='Delete school permanently').click()
+        form = second.get_by_role('form', name='Delete school', exact=True)
+        form.get_by_label('Type the school web address', exact=False).fill(self.fixtures['slug'] + '-delete-empty')
+        form.get_by_role('checkbox').check()
+        with second.expect_navigation(wait_until='load'):
+            form.get_by_role('button', name='Delete school permanently', exact=True).click()
+        expect(second.get_by_role('status')).to_contain_text('School deleted.')
+
     def test_owner_api_denies_nonowners_and_hostile_requests(self):
         visitor = self.browser.new_context()
         self.addCleanup(visitor.close)
@@ -165,7 +211,7 @@ class OwnerWorkflow(unittest.TestCase):
         for actor in [self.fixtures['claimant'], self.fixtures['staff'], self.fixtures['legacyAdmin']]:
             context, page = self.login(actor)
             expect(page.get_by_role('heading', name='Website-owner access required')).to_be_visible()
-            for action in ['create_school','update_school','set_member','remove_member']:
+            for action in ['create_school','update_school','set_member','remove_member','delete_school','cleanup_school_photos']:
                 result = context.request.post(self.origin + '/api/admin', headers={'Origin': self.origin, 'Accept':'application/json'}, form={'action':action})
                 self.assertEqual(result.status, 403, action)
             page.goto(self.origin + '/account')
@@ -204,7 +250,10 @@ class OwnerWorkflow(unittest.TestCase):
         self.save(page, form, 'Save school access')
         staff_context, staff = self.login(self.fixtures['claimant'], '/o/' + own_slug + '/staff')
         self.assertEqual(staff_context.request.get(self.origin + path).status, 404)
+        expect(page.get_by_role('form', name='Delete school', exact=True)).to_have_count(0)
         own_api = self.origin + '/api/school-admin/' + own_slug
+        deletion = {'action':'delete_school','schoolId':self.fixtures['legacySchoolId'],'expectedVersion':'1','schoolSlug':own_slug,'confirm':'delete'}
+        self.assertEqual(context.request.post(own_api,headers={'Origin':self.origin,'Accept':'application/json'},form=deletion).status,403)
         headers = {'Origin':self.origin, 'Accept':'application/json'}
         self.assertEqual(staff_context.request.post(own_api, headers=headers, form={'action':'update_school'}).status, 404)
         self.assertEqual(context.request.get(self.origin + '/o/' + foreign_slug + '/staff/settings').status, 404)

@@ -56,7 +56,14 @@ export async function storeProcessedPhoto(scope: PhotoScope, inputBytes: Uint8Ar
     const aborted = await processor.rpc("photo_abort", parameters).then((result) => !result.error, () => false);
     // Abort fails after a successful finish, including a lost success response.
     // Keep that pending photo/object intact instead of deleting committed data.
-    if (aborted) await processor.storage.from(PHOTO_BUCKET).remove([path]).catch(() => undefined);
+    // A school can be permanently deleted while decoding/uploading. Its reserved
+    // path may already have been cleaned before these bytes reached Storage.
+    const school = await processor.from('organizations').select('id').eq('id', path.split('/')[0]).maybeSingle();
+    const schoolDeleted = !school.error && !school.data;
+    if (aborted || schoolDeleted) {
+      const removed = await processor.storage.from(PHOTO_BUCKET).remove([path]).catch(() => ({error:true}));
+      if (schoolDeleted && removed.error) await processor.from('school_photo_cleanup').upsert({bucket_id:PHOTO_BUCKET,storage_path:path},{onConflict:'bucket_id,storage_path',ignoreDuplicates:true});
+    }
     throw error;
   }
 }
