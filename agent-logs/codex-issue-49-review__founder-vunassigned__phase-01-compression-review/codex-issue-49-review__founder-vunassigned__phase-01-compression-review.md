@@ -45,3 +45,15 @@
 - **Remaining work:** Parent completes checks, PR delivery and issue closure.
 - **Recommended next steps:** Include browser regressions and reports; inspect exact-head CI.
 - **Relevant references:** Issue #49; src/interface/compress-photo.ts; src/interface/live-photos.ts.
+
+## Addendum — 2026-10-31 UTC: integration refresh
+
+Independently checked the pending merge of main 6001c31 into compression head
+2a96063 using common base dff9614. All 353 unique parent file paths remain in
+the index. Every nonconflicting staged blob matches the appropriate parent
+exactly. Both parent versions of current-state.md and task-board.csv remain
+preserved line-for-line in order within the resolved documents. Compression
+helper, upload UI, both browser suites and UI check configuration are unchanged
+from 2a96063 in both index and working tree. No unmerged entries remain;
+git diff --cached --check passes. No actionable findings. Exact-head application
+checks remain the integration gate.

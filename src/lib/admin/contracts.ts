@@ -14,6 +14,8 @@ const settings = {
 };
 export const adminCommand = z.discriminatedUnion('action', [
  z.strictObject({action:z.literal('create_school'), ...settings, slug:z.string().min(1).max(63).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)}),
+ z.strictObject({action:z.literal('delete_school'), schoolId:id, expectedVersion:version, schoolSlug:z.string().min(1).max(63).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), confirm:z.literal('delete')}),
+ z.strictObject({action:z.literal('cleanup_school_photos')}),
  z.strictObject({action:z.literal('update_school'), schoolId:id, expectedVersion:version, ...settings}),
  z.strictObject({action:z.literal('set_member'), schoolId:id, expectedVersion:version, email:z.email().max(254), role:z.enum(['staff','admin'])}),
  z.strictObject({action:z.literal('remove_member'), schoolId:id, expectedVersion:version, userId:id, confirm:z.literal('remove')}),
@@ -31,6 +33,7 @@ export async function readAdminCommand(request: Request) {
 }
 export type AdminSchool = {id:string; name:string; slug:string; timezone:string; published:boolean; contact_email:string; collection_instructions:string; settings_version:number};
 export type AdminOverview = {
+ photoCleanupPending?: boolean;
  schools: AdminSchool[];
  members: {schoolId:string;userId:string;email:string;role:'staff'|'admin'}[];
  owners: {email:string}[];

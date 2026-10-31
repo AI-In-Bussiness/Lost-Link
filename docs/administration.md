@@ -6,7 +6,7 @@ Signup grants neither role.
 
 | Role | Access |
 | --- | --- |
-| Website owner (the two founders) | Create schools; manage settings, access, inventory, photos and claims across every school, including hidden schools |
+| Website owner (the two founders) | Create/delete schools; manage settings, access, inventory, photos and claims across every school, including hidden schools |
 | School admin | Manage settings, staff/admin assignments, inventory and claims only in their assigned school |
 | School staff | Manage inventory, photos and claims only in their assigned school |
 | Claimant | Browse public listings and manage their own claims |
@@ -20,6 +20,10 @@ admins. Website owners can restore or override school access when necessary.
 
 - Create schools with a permanent URL slug; new schools default to hidden.
 - Edit school name, time zone, public office email and collection instructions.
+- Permanently delete a school and all its inventory, claims, private proof, photos,
+  school activity and staff assignments. Type its exact web address and confirm
+  the irreversible action. User accounts and other schools are retained; a minimal
+  owner-visible deletion receipt is kept. School admins cannot delete schools.
 - Publish/hide public listings without deleting inventory, claims or staff access.
 - Assign/change/remove a confirmed registered account's school staff or school-admin access.
 - View the two website owners and the latest 100 owner changes.
@@ -35,8 +39,8 @@ Website owners have full access to every school workspace without adding individ
 memberships. School admins and staff stay scoped to their memberships. School
 settings/access changes are audited; school admins see only their school's admin
 activity. Neither school role changes the protected website-owner assignment.
-Account/school deletion, password resets, billing, provider keys and arbitrary code
-editing remain operator tasks rather than website controls.
+Account deletion, billing, provider keys and arbitrary code editing remain
+operator tasks. Password recovery is available from sign-in.
 
 ## One-time owner setup
 
@@ -52,11 +56,15 @@ do not replay those individual migrations blindly after manual dashboard setup.
    existing operational policy. Apply the reviewed **pending** migration
    `supabase/migrations/202610290005_platform_admin.sql`, then
    `202610290006_owner_only_administration.sql`, then
-   `202610290007_school_admin_scope.sql`. Apply only the pending ones in order;
+   `202610290007_school_admin_scope.sql`, then
+   `202610300008_owner_school_deletion.sql`. Apply only the pending ones in order;
    these support installations that already ran the initial PR40 setup. Migration
-   007 implements the final two-level permissions. Earlier migrations stay intact.
+   007 implements the two-level permissions; 008 adds owner-only permanent school
+   deletion and its photo cleanup outbox. Earlier migrations stay intact.
    Do not reset hosting or replay migrations already recorded as applied.
-2. Deploy the corresponding application source. Keep `NEXT_PUBLIC_SITE_URL`
+2. Deploy the corresponding application source. Keep `SUPABASE_SERVICE_ROLE_KEY`
+   configured on the trusted server for photo cleanup (as for existing uploads).
+   Keep `NEXT_PUBLIC_SITE_URL`
    matched to the actual canonical HTTPS address and the Supabase callback URLs.
 3. Each person registers on the website and confirms their email, using their own
    password. Existing confirmed accounts can be reused. An operator can instead
@@ -96,6 +104,16 @@ security-definer RPC checks the owner table for every operation; it does not tru
 client role claims or user-editable metadata. RLS denies ordinary owner-table reads
 and all direct client mutation of roles/settings/audit. Audit entries are inserted
 transactionally. Errors retain form entries; stale versions require refreshing.
+
+Permanent deletion checks owner permissions, the current settings version and the
+exact typed school address again in the database. It removes school records in one
+transaction. Deleting one school never deletes Auth accounts or another school's
+memberships or records. Photo paths are queued transactionally and bytes are removed
+through the Storage API after commit. If Storage is unavailable, files are no longer
+accessible through the app; `/admin` shows **Retry photo cleanup** until removal
+succeeds. Each retry removes up to 100 files. Keep retrying for larger schools.
+In-flight uploads clean up their own bytes if their school was deleted, and queue a
+retry if that cleanup fails. No storage table rows are deleted directly with SQL.
 
 Removing a school membership or owner row takes effect on the next operation,
 including with an existing session. The role labels/navigation are display only.

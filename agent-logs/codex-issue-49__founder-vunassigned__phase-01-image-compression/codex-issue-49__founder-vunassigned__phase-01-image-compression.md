@@ -45,3 +45,23 @@
 - **Remaining work:** Publish PR, inspect exact-head CI, merge when checks pass and close issue as authorized.
 - **Recommended next steps:** Preserve contributor reports and full persisted upload/private preview/publication checks before integration.
 - **Relevant references:** Issue #49; docs/phase-3/README.md; docs/coordination/implemented-contract.md; browser and independent review reports.
+
+## Integration addendum — 2026-10-31 UTC
+
+All checks passed on original head 2a9606373ea8c4e8a1db79581350bc95938aae86,
+including both Foundation runs 41160307901/41160348874 and the real oversized
+upload/private-preview/publication journey, interface/axe, security, relevance,
+Linux/Windows helpers and Vercel preview. PR #50 tracks delivery.
+
+While checks ran, PR #47 merged into main as 6001c312df074c95210523f3fe827a1ca81be58e.
+Merged that main into this branch without rewriting history. Only two shared
+documentation prepend sections conflicted: current-state.md and task-board.csv.
+Both issue #49 and issue #45 entries are retained in full. No application-source
+resolution or deletion was required. Combined-source checks run on the new head;
+the original green results are not claimed for that new head.
+
+Independent merge review confirmed all 353 parent file paths and every
+nonconflicting blob retained, both documentation contributions preserved, and
+all issue #49 application/test files unchanged. Combined lint, root/UI
+typechecks and 76 unit tests passed before publication; webpack build and
+fresh exact-head CI follow.
