@@ -6,7 +6,17 @@ school lost-and-found interface, following the task owner's paper/pen direction.
 ## Material and typography
 
 - Page background is warm textured paper, using the original local paper.svg.
-- Ink is #293b43; primary actions use #28594b. Rust is a restrained annotation.
+- Apply a 60/30/10 visual hierarchy inspired by the supplied color-palette video:
+  - About 60% sand (#f2ead8): textured page, warm light cards and controls.
+  - About 30% olive (#3d4934; dark ink #293323): text, rules, links and artwork.
+  - About 10% signal yellow (#eed55a): primary actions, heading underline,
+    notebook margins, step numbers and small illustration details.
+- These proportions guide attention rather than requiring exact pixel coverage.
+  Use olive ink on yellow controls; reserve white-on-red for destructive actions.
+- Neutral secondary buttons and red/green/blue status semantics remain distinct.
+  Focus uses a dark olive outline; never use yellow alone to convey state.
+- Shared CSS tokens also color the original illustration and paper asset. Keep
+  large surfaces quiet and reserve the bright accent for meaningful emphasis.
 - Use locally hosted Caveat for headings and Patrick Hand for readable writing.
   Both are OFL licensed; license files ship alongside fonts in public/design/.
 - Maintain at least 18px writing text in inputs and comfortable line spacing.

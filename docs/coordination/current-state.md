@@ -1,3 +1,15 @@
+# Video-inspired color hierarchy — 2026-11-11 UTC
+
+The shared notebook UI now uses the supplied video's 60/30/10 approach:
+sand for dominant surfaces, olive for ink and structure, and signal yellow
+for primary actions and sparse highlights. Original local fonts, illustration,
+responsive layouts, routes, private claim copy and semantic status colors remain.
+The stale workspace was fast-forwarded to main 75af1a6 before changes.
+Local verification and visual-review evidence are recorded in the
+[color hierarchy report](../../agent-logs/codex-palette-01__founder-vunassigned__phase-01-color-hierarchy/codex-palette-01__founder-vunassigned__phase-01-color-hierarchy.md).
+The task owner approved the visual result ("Looks great, deploy it").
+Production publication through the existing GitHub/Vercel integration is in progress.
+
 # Owner photo upload follow-up — 2026-10-31 UTC
 
 The user confirmed that a website owner received “This resource is unavailable”

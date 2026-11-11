@@ -43,20 +43,20 @@ function homeArt(): string {
       <path d="M28 308H452M28 322H452" stroke="#beb5a5"/>
       <ellipse cx="246" cy="307" rx="174" ry="13" fill="#d8cfbd"/>
       <g transform="rotate(-7 220 200)">
-        <path d="M160 126v-19a45 45 0 0 1 90 0v19" stroke="#293b43" stroke-width="12"/>
-        <path d="M150 128c-22 0-35 22-35 48v116c0 13 10 20 23 20h143c13 0 23-7 23-20V176c0-26-13-48-35-48Z" fill="#e8d9b8" stroke="#293b43" stroke-width="3"/>
+        <path d="M160 126v-19a45 45 0 0 1 90 0v19" stroke="var(--ink)" stroke-width="12"/>
+        <path d="M150 128c-22 0-35 22-35 48v116c0 13 10 20 23 20h143c13 0 23-7 23-20V176c0-26-13-48-35-48Z" fill="var(--sand-shade)" stroke="var(--ink)" stroke-width="3"/>
         <path d="M135 173c26-12 121-12 150 0M151 132l-7 166M267 132l7 166" stroke="#71654e" stroke-width="3"/>
-        <rect x="146" y="217" width="125" height="72" rx="13" fill="#eee4cd" stroke="#293b43" stroke-width="3"/>
-        <path d="M155 232h107m-13 0v14" stroke="#293b43" stroke-width="3"/>
-        <rect x="186" y="174" width="43" height="22" rx="2" fill="#f8edcf"/>
-        <path d="m217 137 47 33" stroke="#293b43" stroke-width="2"/>
-        <path d="m260 155 43 15-18 53-43-15Z" fill="#fffaf0" stroke="#293b43" stroke-width="2"/>
-        <circle cx="267" cy="171" r="3" fill="#303e3a"/>
+        <rect x="146" y="217" width="125" height="72" rx="13" fill="var(--sand)" stroke="var(--ink)" stroke-width="3"/>
+        <path d="M155 232h107m-13 0v14" stroke="var(--ink)" stroke-width="3"/>
+        <rect x="186" y="174" width="43" height="22" rx="2" fill="var(--signal)"/>
+        <path d="m217 137 47 33" stroke="var(--ink)" stroke-width="2"/>
+        <path d="m260 155 43 15-18 53-43-15Z" fill="var(--sand-light)" stroke="var(--ink)" stroke-width="2"/>
+        <circle cx="267" cy="171" r="3" fill="var(--olive)"/>
         <path d="m258 186 27 9m-30 1 19 6" stroke="#a49a87" stroke-width="2"/>
       </g>
-      <g transform="rotate(8 354 250)"><rect x="326" y="176" width="59" height="130" rx="19" fill="#d8dfd0" stroke="#293b43" stroke-width="3"/><rect x="339" y="158" width="33" height="23" rx="5" fill="#303e3a"/><path d="M337 205v66" stroke="#c4d0be" stroke-width="5" stroke-linecap="round"/></g>
-      <g transform="rotate(-12 87 287)"><path d="M40 285h62l25 19H40Z" fill="#e5c66e" stroke="#293b43" stroke-width="3"/><path d="M45 304h84v9H45Z" fill="#fffaf0" stroke="#293b43" stroke-width="3"/><path d="m79 282 7 10m4-10 7 10" stroke="#293b43" stroke-width="3"/></g>
-      <path d="m371 87 6-13m4 22 14-4M96 149l-15-5" stroke="#a35b3d" stroke-width="2" stroke-linecap="round"/>
+      <g transform="rotate(8 354 250)"><rect x="326" y="176" width="59" height="130" rx="19" fill="var(--olive)" stroke="var(--ink)" stroke-width="3"/><rect x="339" y="158" width="33" height="23" rx="5" fill="var(--olive)"/><path d="M337 205v66" stroke="var(--sand-shade)" stroke-width="5" stroke-linecap="round"/></g>
+      <g transform="rotate(-12 87 287)"><path d="M40 285h62l25 19H40Z" fill="var(--signal)" stroke="var(--ink)" stroke-width="3"/><path d="M45 304h84v9H45Z" fill="var(--sand-light)" stroke="var(--ink)" stroke-width="3"/><path d="m79 282 7 10m4-10 7 10" stroke="var(--ink)" stroke-width="3"/></g>
+      <path d="m371 87 6-13m4 22 14-4M96 149l-15-5" stroke="var(--olive)" stroke-width="2" stroke-linecap="round"/>
     </svg>
     <figcaption><span class="art-note">Left behind.<br><em>Not forgotten.</em></span><span class="art-caption">Your next stop:<br>the school office.</span></figcaption>
   </figure>`;
