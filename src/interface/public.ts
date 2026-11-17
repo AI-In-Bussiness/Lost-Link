@@ -37,28 +37,61 @@ function dateControl(value: string): "date" | "text" {
 }
 
 function homeArt(): string {
-  return `<figure class="hero-art" aria-label="Illustration of belongings waiting at a school lost-and-found">
-    <div class="art-heading"><span>a few familiar things…</span><span aria-hidden="true">sketch no. 01</span></div>
-    <svg viewBox="0 0 480 370" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M28 308H452M28 322H452" stroke="#beb5a5"/>
-      <ellipse cx="246" cy="307" rx="174" ry="13" fill="#d8cfbd"/>
-      <g transform="rotate(-7 220 200)">
-        <path d="M160 126v-19a45 45 0 0 1 90 0v19" stroke="var(--ink)" stroke-width="12"/>
-        <path d="M150 128c-22 0-35 22-35 48v116c0 13 10 20 23 20h143c13 0 23-7 23-20V176c0-26-13-48-35-48Z" fill="var(--sand-shade)" stroke="var(--ink)" stroke-width="3"/>
-        <path d="M135 173c26-12 121-12 150 0M151 132l-7 166M267 132l7 166" stroke="#71654e" stroke-width="3"/>
-        <rect x="146" y="217" width="125" height="72" rx="13" fill="var(--sand)" stroke="var(--ink)" stroke-width="3"/>
-        <path d="M155 232h107m-13 0v14" stroke="var(--ink)" stroke-width="3"/>
-        <rect x="186" y="174" width="43" height="22" rx="2" fill="var(--signal)"/>
-        <path d="m217 137 47 33" stroke="var(--ink)" stroke-width="2"/>
-        <path d="m260 155 43 15-18 53-43-15Z" fill="var(--sand-light)" stroke="var(--ink)" stroke-width="2"/>
-        <circle cx="267" cy="171" r="3" fill="var(--olive)"/>
-        <path d="m258 186 27 9m-30 1 19 6" stroke="#a49a87" stroke-width="2"/>
-      </g>
-      <g transform="rotate(8 354 250)"><rect x="326" y="176" width="59" height="130" rx="19" fill="var(--olive)" stroke="var(--ink)" stroke-width="3"/><rect x="339" y="158" width="33" height="23" rx="5" fill="var(--olive)"/><path d="M337 205v66" stroke="var(--sand-shade)" stroke-width="5" stroke-linecap="round"/></g>
-      <g transform="rotate(-12 87 287)"><path d="M40 285h62l25 19H40Z" fill="var(--signal)" stroke="var(--ink)" stroke-width="3"/><path d="M45 304h84v9H45Z" fill="var(--sand-light)" stroke="var(--ink)" stroke-width="3"/><path d="m79 282 7 10m4-10 7 10" stroke="var(--ink)" stroke-width="3"/></g>
-      <path d="m371 87 6-13m4 22 14-4M96 149l-15-5" stroke="var(--olive)" stroke-width="2" stroke-linecap="round"/>
-    </svg>
-    <figcaption><span class="art-note">Left behind.<br><em>Not forgotten.</em></span><span class="art-caption">Your next stop:<br>the school office.</span></figcaption>
+  return `<figure class="hero-art paper-scene" aria-label="An original paper sketch of belongings waiting at a school lost-and-found">
+    <div class="scene-grid" aria-hidden="true"></div>
+    <div class="scene-orbit" aria-hidden="true"></div>
+    <div class="art-heading"><span>a few familiar things…</span><span>sketch no. 01</span></div>
+    <div class="scene-paper paper-object">
+      <span class="paper-tape" aria-hidden="true"></span>
+      <div class="paper-topline" aria-hidden="true"><span>LOST PROPERTY</span><span>SCHOOL OFFICE</span></div>
+      <svg class="belongings-art" viewBox="0 0 480 370" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M28 308H452M28 322H452" stroke="#beb5a5"/>
+        <ellipse cx="247" cy="312" rx="174" ry="13" fill="#d8cfbd"/>
+        <g transform="rotate(-7 220 200)">
+          <path d="M160 126v-19a45 45 0 0 1 90 0v19" stroke="var(--ink)" stroke-width="12"/>
+          <path d="M166 126v-19a39 39 0 0 1 78 0v19" stroke="var(--sand-shade)" stroke-width="3"/>
+          <path d="m267 131 25 9c24 8 34 27 34 54v101c0 16-12 25-30 25l-28-8V143Z" fill="var(--olive)" stroke="var(--ink)" stroke-width="3"/>
+          <path d="m298 165 10 11v115l-12 10" stroke="var(--sand-shade)" stroke-width="2"/>
+          <path d="M150 128c-22 0-35 22-35 48v116c0 13 10 20 23 20h143c13 0 23-7 23-20V176c0-26-13-48-35-48Z" fill="var(--sand-shade)" stroke="var(--ink)" stroke-width="3"/>
+          <path d="M153 139c-17 0-27 18-27 42v103" stroke="var(--sand-light)" stroke-width="8" stroke-linecap="round"/>
+          <path d="M135 173c26-12 121-12 150 0M151 132l-7 166M267 132l7 166" stroke="#71654e" stroke-width="3"/>
+          <path d="M145 180c24-10 109-10 131 0" stroke="#968871" stroke-width="1.5" stroke-dasharray="4 5"/>
+          <rect x="150" y="222" width="125" height="72" rx="13" fill="var(--olive)"/>
+          <rect x="146" y="217" width="125" height="72" rx="13" fill="var(--sand)" stroke="var(--ink)" stroke-width="3"/>
+          <path d="M155 232h107m-13 0v14" stroke="var(--ink)" stroke-width="3"/>
+          <path d="M155 276h107" stroke="#a49a87" stroke-width="1.5" stroke-dasharray="3 4"/>
+          <rect x="186" y="174" width="43" height="22" rx="2" fill="var(--signal)" stroke="var(--ink)" stroke-width="1"/>
+          <path d="m195 185 7 5 17-11" stroke="var(--ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="m217 137 47 33" stroke="var(--ink)" stroke-width="2"/>
+          <path d="m260 155 43 15-18 53-43-15Z" fill="var(--sand-light)" stroke="var(--ink)" stroke-width="2"/>
+          <circle cx="267" cy="171" r="3" fill="var(--olive)"/>
+          <path d="m258 186 27 9m-30 1 19 6" stroke="#a49a87" stroke-width="2"/>
+        </g>
+        <g transform="rotate(8 354 250)">
+          <rect x="329" y="179" width="59" height="130" rx="19" fill="var(--ink)"/>
+          <rect x="326" y="176" width="59" height="130" rx="19" fill="var(--olive)" stroke="var(--ink)" stroke-width="3"/>
+          <rect x="339" y="158" width="33" height="23" rx="5" fill="var(--olive)" stroke="var(--ink)" stroke-width="2"/>
+          <path d="M340 165h31m-34 40v66" stroke="var(--sand-shade)" stroke-width="4" stroke-linecap="round"/>
+          <path d="M366 191v96" stroke="var(--ink)" stroke-width="7" stroke-linecap="round" opacity=".3"/>
+        </g>
+        <g transform="rotate(-12 87 287)">
+          <path d="M40 285h62l25 19H40Z" fill="var(--signal)" stroke="var(--ink)" stroke-width="3"/>
+          <path d="M45 304h84v9H45Z" fill="var(--sand-light)" stroke="var(--ink)" stroke-width="3"/>
+          <path d="m79 282 7 10m4-10 7 10" stroke="var(--ink)" stroke-width="3"/>
+        </g>
+        <path d="m371 87 6-13m4 22 14-4M96 149l-15-5" stroke="var(--olive)" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <div class="paper-bottomline" aria-hidden="true"><span>Left behind. Not forgotten.</span><span><svg class="arrow-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span></div>
+    </div>
+    <div class="scene-pencil paper-object" aria-hidden="true">
+      <span class="pencil-face pencil-front"><span>LOSTLINK · MAKE YOUR MARK</span></span>
+      <span class="pencil-face pencil-side"></span><span class="pencil-face pencil-top"></span>
+      <span class="pencil-ferrule"></span><span class="pencil-eraser"></span>
+      <span class="pencil-wood"></span><span class="pencil-lead"></span>
+    </div>
+    <div class="scene-tag paper-object" aria-hidden="true"><span class="tag-hole"></span><span class="tag-eyebrow">THE BEST PART?</span><strong>Back<br>to you.</strong><svg class="tag-swoosh" viewBox="0 0 150 25" fill="none"><path d="M3 15C40 2 98 1 145 9M20 23c39-11 75-12 113-10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><small>A little less lost.</small></div>
+    <svg class="scene-doodle" viewBox="0 0 180 100" fill="none" aria-hidden="true"><path class="draw-line" d="M5 26c38-44 115-14 103 18-9 23-56 21-53 0 4-30 75-18 105 26m-30-5 31 7-7-29" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <figcaption><span class="art-note">Sound familiar?</span><span class="art-caption">Your next stop:<br>the school office.</span></figcaption>
   </figure>`;
 }
 
@@ -72,23 +105,25 @@ async function home(ctx: ViewContext): Promise<View> {
     organizations.find((org) => org.slug === ctx.orgSlug) ?? organizations[0];
   return {
     title: "Find what you lost",
-    html: `<section class="hero"><div class="hero-copy"><p class="eyebrow">Meet LostLink</p><h1>School lost<br><em>&amp; found</em></h1><p class="hero-description">Your school’s lost-and-found, in one place. Browse found belongings, send a private claim, and follow staff updates on the way to getting your item back.</p><nav class="landing-links" aria-label="Explore LostLink"><a href="#features">Explore features</a><a href="#how-it-works">How it works</a></nav>${first ? `<form id="home-search" class="hero-search stack" method="get" action="${schoolPath(first.slug)}/search"><div class="field"><label for="home-school">Your school</label><select id="home-school" name="school" required>${organizations.map((org) => option(org.slug, first.slug, org.name)).join("")}</select></div><div class="field"><label for="home-query">What are you looking for?</label><input id="home-query" name="q" type="search" maxlength="300" placeholder="Try “black sports bag”" autocomplete="off" aria-describedby="home-search-hint"><p class="muted" id="home-search-hint">Use public details like type and color. Save secret identifying details for your private claim.</p></div><button class="button" type="submit">Find my item <span aria-hidden="true"><svg class="arrow-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button><p class="muted">Browsing is open to everyone. Sign in when you're ready to claim.</p></form>` : result.ok ? '<div class="notice"><p>No schools are currently listing items. Contact your school office for help.</p></div>' : '<div class="notice"><p>We couldn’t load the school list. Try again, or contact your school office for help.</p><button id="home-retry" class="secondary" type="button">Try again</button></div>'}<p class="hero-assurance"><strong>Private proof. People decide.</strong><span>Ownership details go to authorized staff. A search match is only a starting point.</span></p></div>${homeArt()}</section>
+    html: `<section class="hero"><div class="hero-copy"><p class="eyebrow hero-kicker"><svg class="kicker-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2v20M2 12h20M5 5l14 14M5 19 19 5" stroke="currentColor" stroke-width="2"/></svg> Your school’s lost &amp; found</p><h1 class="hero-title"><span class="hero-word">LOST.</span> <span class="hero-word hero-word-accent">FOUND.</span></h1><p class="hero-scribble">Let’s get it back.</p><p class="hero-description">Your school’s lost-and-found, in one place. Find a familiar thing. Send a private claim. Get back to your day.</p><div class="hero-actions"><a class="button" href="#find-item">Find my stuff <svg class="arrow-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a><nav class="landing-links" aria-label="Explore LostLink"><a href="#features">Explore features</a><a href="#how-it-works">How it works</a></nav></div></div>${homeArt()}</section>
+    <section class="find-section" id="find-item" tabindex="-1" aria-label="Find your lost item" data-reveal><div class="search-heading"><span class="eyebrow">The search starts here</span><span class="search-handnote">one less thing to worry about ↴</span></div>${first ? `<form id="home-search" class="hero-search" method="get" action="${schoolPath(first.slug)}/search"><div class="field"><label for="home-school">Your school</label><select id="home-school" name="school" required>${organizations.map((org) => option(org.slug, first.slug, org.name)).join("")}</select></div><div class="field"><label for="home-query">What are you looking for?</label><input id="home-query" name="q" type="search" maxlength="300" placeholder="Try “black sports bag”" autocomplete="off" aria-describedby="home-search-hint"></div><button class="button" type="submit">Find my item <svg class="arrow-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="search-meta"><p class="muted" id="home-search-hint">Use public details like type and color. Save secret identifying details for your private claim.</p><p class="muted">Browsing is open to everyone. Sign in when you're ready to claim.</p></div></form>` : result.ok ? '<div class="notice"><p>No schools are currently listing items. Contact your school office for help.</p></div>' : '<div class="notice"><p>We couldn’t load the school list. Try again, or contact your school office for help.</p><button id="home-retry" class="secondary" type="button">Try again</button></div>'}<p class="hero-assurance"><strong>Private proof. People decide.</strong><span>Ownership details go to authorized staff. A search match is only a starting point.</span></p></section>
+    <div class="paper-divider" aria-hidden="true"><span>LESS LOST.</span><span>MORE FOUND.</span><svg viewBox="0 0 40 40" fill="none"><path d="M20 3v34M3 20h34M8 8l24 24M8 32 32 8" stroke="currentColor" stroke-width="3"/></svg><span>BACK TO YOU.</span></div>
     <section class="landing-features" aria-labelledby="features">
-      <div class="landing-intro">
+      <div class="landing-intro" data-reveal>
         <p class="eyebrow">More than a lost-and-found bin</p>
-        <h2 id="features" tabindex="-1">A clearer way back to your belongings.</h2>
+        <h2 id="features" tabindex="-1">Good things<br>find their way<br><em>back.</em></h2>
         <p>From the first search to the school office, LostLink keeps the next step in sight.</p>
         <p class="muted">Looking for something? You can browse without an account. Sign in or create an account when you’re ready to send a claim.</p>
-        <a class="text-link" href="${ctx.session ? "/my/claims" : ctx.api.live ? "/sign-up" : "/sign-in"}">${ctx.session ? "View my claims" : "Create an account"}</a>
+        <a class="text-link" href="${ctx.session ? "/my/claims" : ctx.api.live ? "/sign-up" : "/sign-in"}">${ctx.session ? "View my claims" : "Create an account"} <svg class="arrow-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></a>
       </div>
       <dl class="feature-notes">
-        <div><dt>Search your school</dt><dd>Describe what you lost in your own words. Smart matching suggests possible matches from your school’s listed items, with keyword search available when smart matching isn’t.</dd></div>
-        <div><dt>Look a little closer</dt><dd>Check published photos and public descriptions. Narrow the list by category, color, or the date an item was found.</dd></div>
-        <div><dt>Keep your proof private</dt><dd>Send an identifying detail only the owner would know. Your claim is visible to you and authorized school staff, not other visitors.</dd></div>
-        <div><dt>Follow your claim</dt><dd>See staff decisions and collection instructions in My claims. Approval means ready for collection; staff record the return after the physical handover.</dd></div>
+        <div data-reveal><dt><span class="feature-number" aria-hidden="true">01</span>Search your school</dt><dd>Describe what you lost in your own words. Smart matching suggests possible matches from your school’s listed items, with keyword search available when smart matching isn’t.</dd></div>
+        <div data-reveal><dt><span class="feature-number" aria-hidden="true">02</span>Look a little closer</dt><dd>Check published photos and public descriptions. Narrow the list by category, color, or the date an item was found.</dd></div>
+        <div data-reveal><dt><span class="feature-number" aria-hidden="true">03</span>Keep your proof private</dt><dd>Send an identifying detail only the owner would know. Your claim is visible to you and authorized school staff, not other visitors.</dd></div>
+        <div data-reveal><dt><span class="feature-number" aria-hidden="true">04</span>Follow your claim</dt><dd>See staff decisions and collection instructions in My claims. Approval means ready for collection; staff record the return after the physical handover.</dd></div>
       </dl>
     </section>
-    <section class="how-section stack" aria-labelledby="how-it-works"><div class="page-heading"><p class="eyebrow">From found to returned</p><h2 id="how-it-works" tabindex="-1">Back in your hands, in four steps.</h2><p class="muted">A possible match starts the conversation. School staff verify ownership before collection.</p></div><div class="steps">${[
+    <section class="how-section stack" aria-labelledby="how-it-works"><div class="page-heading" data-reveal><p class="eyebrow">From found to returned</p><h2 id="how-it-works" tabindex="-1">Back in your hands.<br><em>Four simple steps.</em></h2><p class="muted">A possible match starts the conversation. School staff verify ownership before collection.</p></div><div class="steps">${[
       [
         "01",
         "Describe",
@@ -112,11 +147,11 @@ async function home(ctx: ViewContext): Promise<View> {
     ]
       .map(
         ([number, title, text]) =>
-          `<article class="step"><span class="step-number" aria-hidden="true">${number}</span><h3>${title}</h3><p class="muted">${text}</p></article>`,
+          `<article class="step" data-reveal><span class="step-number" aria-hidden="true">${number}</span><h3>${title}</h3><p class="muted">${text}</p></article>`,
       )
       .join(
         "",
-      )}</div></section><section class="staff-callout two-column" aria-labelledby="staff-intro"><div><p class="eyebrow">At the school office</p><h2 id="staff-intro">Work at the school office?</h2><p class="muted">List found items, review and publish photos, manage private claims, and record each return in your school’s staff workspace.</p><p class="muted">Staff access is assigned by your school. Creating an account does not grant staff permissions.</p></div><div class="actions"><a class="button secondary" href="/sign-in">Staff sign in <span aria-hidden="true"><svg class="arrow-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div></section>`,
+      )}</div></section><section class="staff-callout two-column" aria-labelledby="staff-intro" data-reveal><div><p class="eyebrow">At the school office</p><h2 id="staff-intro">A little order.<br>A lot of happy returns.</h2><p class="muted">List found items, review and publish photos, manage private claims, and record each return in your school’s staff workspace.</p><p class="muted">Staff access is assigned by your school. Creating an account does not grant staff permissions.</p></div><div class="actions"><a class="button secondary" href="/sign-in">Staff sign in <svg class="arrow-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div></section>`,
     bind: (root) => {
       root.querySelector("#home-retry")?.addEventListener("click", ctx.refresh);
       root

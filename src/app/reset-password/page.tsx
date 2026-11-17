@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getRecoverySession } from "@/lib/auth/recovery-session";
 import { safeReturnPath } from "@/lib/auth/security";
-import LegalLinks from "../legal-links";
+import PaperFrame from "../paper-frame";
 
 export const dynamic = "force-dynamic";
 
@@ -19,9 +19,9 @@ export default async function ResetPasswordPage({ searchParams }: { searchParams
     "rate-limit": "Too many requests. Please wait a few minutes before trying again.",
     unavailable: "Your password could not be updated right now. Please try again.",
   };
-  return <main id="main" className="mx-auto max-w-lg px-6 py-16">
-    <Link href="/" className="underline">LostLink home</Link>
-    <h1 className="mt-8 text-3xl font-semibold">{status === "updated" ? "Password updated" : "Choose a new password"}</h1>
+  return <PaperFrame><main id="main" className="paper-page paper-page-body paper-page-narrow">
+    <p className="eyebrow paper-page-eyebrow">Account recovery</p>
+    <h1 className="paper-page-title">{status === "updated" ? "Password updated" : "Choose a new password"}</h1>
     {status === "updated" ? <>
       <p role="status" className="mt-6">Your password has been changed. Use your new password the next time you sign in. Your account access is unchanged.</p>
       <p className="mt-6"><Link href={destination} className="underline">Continue to LostLink</Link></p>
@@ -31,13 +31,12 @@ export default async function ResetPasswordPage({ searchParams }: { searchParams
     </> : <>
       <p className="mt-3" id="password-guidance">Use 12–256 characters. Choose a unique LostLink password. Complete this form within 15 minutes.</p>
       {error && <p role="alert" className="mt-6">{Object.hasOwn(errors, error) ? errors[error] : errors.unavailable}</p>}
-      <form method="post" action="/api/auth/reset-password" className="mt-8 grid gap-4">
-        <label className="grid gap-1">New password<input name="password" type="password" autoComplete="new-password" minLength={12} maxLength={256} aria-describedby="password-guidance" required className="rounded border p-3" /></label>
-        <label className="grid gap-1">Confirm new password<input name="confirmPassword" type="password" autoComplete="new-password" minLength={12} maxLength={256} required className="rounded border p-3" /></label>
-        <button type="submit" className="rounded bg-slate-900 px-4 py-3 text-white">Save new password</button>
+      <form method="post" action="/api/auth/reset-password" className="paper-form stack">
+        <label className="grid gap-1">New password<input name="password" type="password" autoComplete="new-password" minLength={12} maxLength={256} aria-describedby="password-guidance" required className="paper-input" /></label>
+        <label className="grid gap-1">Confirm new password<input name="confirmPassword" type="password" autoComplete="new-password" minLength={12} maxLength={256} required className="paper-input" /></label>
+        <button type="submit" className="button">Save new password</button>
       </form>
     </>}
     <p className="mt-6"><Link href={`/sign-in?next=${encodeURIComponent(destination)}`} className="underline">Back to sign in</Link></p>
-    <LegalLinks />
-  </main>;
+  </main></PaperFrame>;
 }

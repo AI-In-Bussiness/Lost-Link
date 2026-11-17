@@ -4,7 +4,7 @@ import { pendingSignupEmailCookie } from "@/lib/auth/confirmation";
 import { safeReturnPath } from "@/lib/auth/security";
 import { supabaseConfiguration } from "@/lib/supabase/server";
 import ResendConfirmationForm from "./form";
-import LegalLinks from '../legal-links';
+import PaperFrame from "../paper-frame";
 
 export const dynamic = "force-dynamic";
 
@@ -19,9 +19,9 @@ export default async function ResendConfirmationPage({ searchParams }: { searchP
     disabled: "Account registration is currently unavailable. Please contact the LostLink team.",
     unavailable: "We could not request a confirmation email right now. Please try again later.",
   };
-  return <main id="main" className="mx-auto max-w-lg px-6 py-16">
-    <Link href="/" className="underline">LostLink home</Link>
-    <h1 className="mt-8 text-3xl font-semibold">Confirm your email</h1>
+  return <PaperFrame><main id="main" className="paper-page paper-page-body paper-page-narrow">
+    <p className="eyebrow paper-page-eyebrow">One more step</p>
+    <h1 className="paper-page-title">Confirm your email</h1>
     <p className="mt-3">Request a new email link without creating another account. It confirms your email if needed, then signs you in.</p>
     {!supabaseConfiguration() ? <p role="status" className="mt-6">Confirmation email is unavailable until sign-in is configured.</p> : <>
       {status === "sent" && <p role="status" className="mt-6">If this address has an account, a new email link has been requested. Check your inbox and spam folder. If your email is already confirmed, the email may say “Sign in” or “Magic Link”. Your original password still works.</p>}
@@ -29,6 +29,5 @@ export default async function ResendConfirmationPage({ searchParams }: { searchP
       <ResendConfirmationForm email={email} next={destination} />
     </>}
     <p className="mt-6"><Link href={`/sign-in?next=${encodeURIComponent(destination)}`} className="underline">Sign in</Link></p>
-    <LegalLinks />
-  </main>;
+  </main></PaperFrame>;
 }

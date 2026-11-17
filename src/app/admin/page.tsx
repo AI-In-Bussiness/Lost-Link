@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import PaperFrame from '../paper-frame';
 import { redirect } from 'next/navigation';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import type { AdminOverview } from '@/lib/admin/contracts';
@@ -10,17 +11,15 @@ export const revalidate=0;
 export default async function AdminPage({searchParams}:{searchParams:Promise<Record<string,string|string[]|undefined>>}) {
  const params=await searchParams;
  const client=await createSupabaseServerClient();
- if(!client) return <main id="main" className="container main-content"><h1>Owner settings unavailable</h1><p role="alert">The website could not connect to its database. Try again later.</p><Link href="/">LostLink home</Link></main>;
+ if(!client) return <PaperFrame><main id="main" className="paper-page paper-page-body paper-page-narrow"><h1>Owner settings unavailable</h1><p role="alert">The website could not connect to its database. Try again later.</p><Link href="/">LostLink home</Link></main></PaperFrame>;
  const {data:{user},error:authError}=await client.auth.getUser();
  if(authError || !user)redirect('/sign-in?next=%2Fadmin');
  const {data,error}=await client.rpc('platform_admin_dispatch',{p_action:'overview',p_payload:{}});
- if(error) return <main id="main" className="container main-content"><Link href="/account">Your account</Link><h1>{error.message==='FORBIDDEN'?'Website-owner access required':'Owner settings unavailable'}</h1><p role="alert">{error.message==='FORBIDDEN'?'This account does not have website-owner access. School staff permissions do not grant owner access.':'Settings could not be loaded. Refresh to retry, or contact your website operator.'}</p></main>;
+ if(error) return <PaperFrame><main id="main" className="paper-page paper-page-body paper-page-narrow"><Link href="/account">Your account</Link><h1>{error.message==='FORBIDDEN'?'Website-owner access required':'Owner settings unavailable'}</h1><p role="alert">{error.message==='FORBIDDEN'?'This account does not have website-owner access. School staff permissions do not grant owner access.':'Settings could not be loaded. Refresh to retry, or contact your website operator.'}</p></main></PaperFrame>;
  const overview=data as AdminOverview;
  const school=overview.schools.find(s=>s.id===params.school);
- return <>
-  <a className="skip-link" href="#main">Skip to content</a>
-  <header className="site-header"><div className="header-inner"><Link className="brand" href="/">LostLink.</Link><nav aria-label="Owner navigation" className="main-nav"><Link href="/account">Your account</Link><Link href="/admin" aria-current="page">Website administration</Link></nav><form action="/api/auth/sign-out" method="post"><button className="plain" type="submit">Sign out</button></form></div></header>
-  <main id="main" className="container main-content owner-page">
+ return <PaperFrame owner>
+  <main id="main" className="container main-content owner-page paper-page paper-page-body paper-page-wide">
    <section className="page-heading"><p className="eyebrow">Website owner · {user.email}</p><h1>Keep LostLink running.</h1><p>Manage schools, public settings and staff access.</p></section>
    {params.deleted==='1' && <p role="status" className="notice">School deleted. Its inventory, claims and school access have been permanently removed.</p>}
    {(overview.photoCleanupPending || params.cleanup==='pending') && <div className="notice stack"><p>Some deleted school photos still need to be removed from storage. Retry until cleanup is complete.</p><AdminForm label="Clean up deleted school photos"><input type="hidden" name="action" value="cleanup_school_photos" /><button className="button secondary" type="submit">Retry photo cleanup</button></AdminForm></div>}
@@ -45,5 +44,5 @@ export default async function AdminPage({searchParams}:{searchParams:Promise<Rec
     <h2>Recent admin activity</h2><p className="muted">The latest 100 owner changes. School claim and item activity stays in its staff workspace.</p><ol className="owner-school-list">{overview.events.map(event=><li key={event.id}><strong>{({create_school:'School created',update_school:'School settings updated',set_member:'School access saved',remove_member:'School access removed',delete_school:'School permanently deleted',owners_bootstrapped:'Website owners configured'} as Record<string,string>)[event.action] ?? 'Admin change'}</strong><span>{overview.schools.find(s=>s.id===event.organization_id)?.name ?? (event.action==='delete_school'?String(event.details.name ?? 'Deleted school'):'Website')} · {event.actor_email ?? 'Secure operator'}{event.target_email ? ` · ${event.target_email}`:''}</span><time dateTime={event.occurred_at}>{new Date(event.occurred_at).toISOString().replace('T',' ').slice(0,19)} UTC</time></li>)}</ol>
    </section>
   </main>
- </>;
+ </PaperFrame>;
 }

@@ -153,7 +153,8 @@ class PersistedWorkflow(unittest.TestCase):
     def test_policy_pages_and_public_navigation(self):
         page = self.context().new_page()
         page.goto(self.origin)
-        page.get_by_role('heading', level=1, name='School lost & found').wait_for()
+        page.get_by_role('heading', level=1, name='LOST. FOUND.', exact=True).wait_for()
+        expect(page.locator('.hero-description')).to_contain_text('Your school’s lost-and-found')
         page.get_by_role('navigation', name='Policies').get_by_role('link', name='Privacy policy', exact=True).click()
         page.wait_for_url(self.origin + '/privacy')
         page.get_by_role('heading', level=1, name='Privacy policy', exact=True).wait_for()
@@ -169,7 +170,8 @@ class PersistedWorkflow(unittest.TestCase):
         page.get_by_role('heading', level=1, name='Privacy policy', exact=True).wait_for()
         page.get_by_role('link', name='LostLink home', exact=True).click()
         page.wait_for_url(self.origin + '/')
-        page.get_by_role('heading', level=1, name='School lost & found').wait_for()
+        page.get_by_role('heading', level=1, name='LOST. FOUND.', exact=True).wait_for()
+        expect(page.locator('.hero-description')).to_contain_text('Your school’s lost-and-found')
 
     def test_real_upload_claim_review_return_and_isolation(self):
         staff_context, staff = self.login(self.fixtures['staff'], self.school + '/staff/items/new')
@@ -244,7 +246,8 @@ class PersistedWorkflow(unittest.TestCase):
         public_photo_url = photo.get_attribute('src')
         self.review(visitor, 'public-item')
         visitor.goto(self.origin)
-        visitor.get_by_role('heading', level=1, name='School lost & found').wait_for()
+        visitor.get_by_role('heading', level=1, name='LOST. FOUND.', exact=True).wait_for()
+        expect(visitor.locator('.hero-description')).to_contain_text('Your school’s lost-and-found')
         self.review(visitor, 'home')
         visitor.goto(self.origin + self.school + '/search?from=2026-01-02')
         visitor.get_by_text('No matching items found.', exact=True).wait_for()

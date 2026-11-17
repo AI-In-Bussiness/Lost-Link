@@ -1,3 +1,20 @@
+# Animated paper redesign for review — 2026-11-17 UTC
+
+The task owner requested a reference-inspired redesign, then clarified that it
+must cover all pages. `codex/paper-motion` introduces local editorial typography,
+layered paper/3D stationery, accessible motion and a consistent public, claimant,
+staff, auth/account, settings and policy design. Search, API, roles, private proof
+and existing legal wording remain intact. The branch is for visual review before
+merge; no production merge is authorized or performed.
+
+See the [review gallery](../design-review/paper-motion/README.md) and
+[implementation/validation report](../../agent-logs/codex-paper-01__founder-vunassigned__phase-01-paper-redesign/codex-paper-01__founder-vunassigned__phase-01-paper-redesign.md).
+Local lint/types, 76 unit cases, 14 mock cases, 21 release cases and production
+compilation pass. Native review covers 24 viewport/route cases and 20 axe scans;
+22/22 mock browser journeys with active-motion axe checks pass. Motion and
+workflow details are recorded in the linked reports.
+Real persisted Supabase acceptance remains delegated to existing PR CI.
+
 # Video-inspired color hierarchy — 2026-11-11 UTC
 
 The shared notebook UI now uses the supplied video's 60/30/10 approach:

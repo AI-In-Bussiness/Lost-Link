@@ -1,12 +1,11 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
-import LegalLinks from '../legal-links';
+import PaperFrame from "../paper-frame";
 
 export const metadata: Metadata = { title: 'Privacy policy · LostLink' };
 
 export default function PrivacyPage() {
-  return <main id="main" className="container main-content policy-page">
-    <Link href="/">LostLink home</Link>
+  return <PaperFrame><main id="main" className="paper-page paper-page-body policy-page">
+    <p className="eyebrow paper-page-eyebrow">The details, on paper</p>
     <h1>Privacy policy</h1>
     <p className="muted">Last updated: 28 October 2026</p>
     <p>LostLink helps people browse found belongings, send private ownership claims, and follow school staff decisions. This notice describes the current demonstration. Use fictional item descriptions and ownership details in the demo.</p>
@@ -32,6 +31,5 @@ export default function PrivacyPage() {
     <p>The demonstration does not yet enforce an automatic deletion schedule for item records, claims, staff notes, or photographs. Those records remain until an operator removes them. Provider logs and backups have separate retention settings; deleting an active record does not necessarily remove backup copies immediately.</p>
     <p>Ask the school office managing a listing about correcting its item or claim information, or to reach the LostLink operator about account information. Account deletion and data export require operator assistance; there is no self-service deletion control. Do not send passwords or sensitive ownership evidence in a general support message.</p>
     <p>Before using real school records or students’ personal information, the operator and participating school must establish their retention, privacy contact, and data handling arrangements. This demonstration notice does not assert that those arrangements have been completed.</p>
-    <LegalLinks />
-  </main>;
+  </main></PaperFrame>;
 }

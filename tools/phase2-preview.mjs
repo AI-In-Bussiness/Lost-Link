@@ -39,7 +39,9 @@ const app = createServer(async (req, res) => {
     )
       file = resolve(root, "." + path);
     else if (
-      /^\/design\/(?:caveat\.ttf|patrick-hand\.ttf|paper\.svg)$/.test(path)
+      /^\/design\/(?:caveat\.ttf|patrick-hand\.ttf|anton\.ttf|paper\.svg)$/.test(
+        path,
+      )
     )
       file = resolve(root, "public", "." + path);
     else if (path === "/mock-assets/item-placeholder.svg")

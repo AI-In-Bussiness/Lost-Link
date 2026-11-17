@@ -25,7 +25,7 @@ export default function AdminForm({children,label,action='/api/admin'}:{children
    setPending(false);
   }
  }
- return <form action={action} method="post" onSubmit={submit} className="stack owner-form" aria-label={label} aria-busy={pending}>
+ return <form action={action} method="post" onSubmit={submit} className="stack owner-form paper-form" aria-label={label} aria-busy={pending}>
   {error && <div className="error-summary" role="alert" tabIndex={-1} ref={alert}>{error}</div>}
   <fieldset disabled={pending} className="stack">{children}</fieldset>
   {pending && <p role="status">Saving changes…</p>}

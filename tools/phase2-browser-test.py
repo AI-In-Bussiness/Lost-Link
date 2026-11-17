@@ -108,6 +108,43 @@ class InterfaceTest(unittest.TestCase):
         self.ready()
         expect(p.get_by_role('button', name='Continue as demo staff')).to_be_visible()
 
+    def test_decorative_motion_controls_and_keyboard_visibility(self):
+        p = self.page
+        expect(p.locator('html')).to_have_attribute('data-motion', 'active')
+        expect(p.get_by_role('button', name='Pause animations', exact=True)).to_have_attribute('aria-pressed', 'false')
+        # Keyboard anchor navigation immediately reveals and focuses its target.
+        self.keyboard_activate(p.get_by_role('link', name='Find my stuff', exact=True))
+        expect(p.locator('#find-item')).to_be_focused()
+        expect(p.locator('#find-item')).to_have_css('opacity', '1')
+        self.keyboard_activate(p.get_by_role('button', name='Pause animations', exact=True))
+        expect(p.locator('html')).to_have_attribute('data-motion', 'paused')
+        expect(p.get_by_role('button', name='Resume animations', exact=True)).to_have_attribute('aria-pressed', 'true')
+        self.assertTrue(p.locator('[data-reveal]').evaluate_all("nodes => nodes.every(n => getComputedStyle(n).opacity === '1')"))
+        self.assertTrue(p.locator('.paper-object').evaluate_all("nodes => nodes.every(n => getComputedStyle(n).animationPlayState === 'paused' || getComputedStyle(n).animationName === 'none')"))
+        p.get_by_role('link', name='Find an item', exact=True).click()
+        self.ready()
+        expect(p.locator('html')).to_have_attribute('data-motion', 'paused')
+        self.keyboard_activate(p.get_by_role('button', name='Resume animations', exact=True))
+        expect(p.locator('html')).to_have_attribute('data-motion', 'active')
+        self.route('/')
+        # OS preference changes apply immediately and do not erase a manual pause.
+        p.get_by_role('button', name='Pause animations', exact=True).click()
+        p.emulate_media(reduced_motion='reduce')
+        expect(p.get_by_role('button', name='Motion reduced', exact=True)).to_be_disabled()
+        expect(p.locator('html')).to_have_attribute('data-motion', 'paused')
+        self.assertTrue(p.locator('.paper-object').evaluate_all("nodes => nodes.every(n => getComputedStyle(n).animationName === 'none')"))
+        p.emulate_media(reduced_motion='no-preference')
+        expect(p.get_by_role('button', name='Resume animations', exact=True)).to_be_enabled()
+        expect(p.locator('html')).to_have_attribute('data-motion', 'paused')
+        p.get_by_role('button', name='Resume animations', exact=True).click()
+        expect(p.locator('html')).to_have_attribute('data-motion', 'active')
+        p.emulate_media(reduced_motion='reduce')
+        expect(p.locator('html')).to_have_attribute('data-motion', 'paused')
+        expect(p.get_by_role('button', name='Motion reduced', exact=True)).to_be_disabled()
+        p.emulate_media(reduced_motion='no-preference')
+        expect(p.locator('html')).to_have_attribute('data-motion', 'active')
+        self.assertEqual(p.evaluate('localStorage.length + sessionStorage.length'), 0)
+
     def test_landing_stays_available_without_school_directory(self):
         p = self.page
         # Exercise the live composition contract with a synthetic directory only.
@@ -126,7 +163,8 @@ class InterfaceTest(unittest.TestCase):
             getSession:()=>null,signOut:()=>{}});
         }""")
         self.ready()
-        expect(p.locator('h1')).to_contain_text('School lost')
+        expect(p.get_by_role('heading', level=1, name='LOST. FOUND.', exact=True)).to_be_visible()
+        expect(p.locator('.hero-description')).to_contain_text('Your school’s lost-and-found')
         expect(p.locator('#features')).to_be_visible()
         expect(p.locator('main')).to_contain_text('We couldn’t load the school list.')
         expect(p.locator('#home-search')).to_have_count(0)
@@ -733,7 +771,7 @@ class InterfaceTest(unittest.TestCase):
                   SCHOOL + '/staff/items', SCHOOL + '/staff/items/new',
                   SCHOOL + '/staff/items/item-jacket', SCHOOL + '/staff/claims/claim-pending']
         self.control('persona', 'staff')
-        for width in [320, 768, 1440]:
+        for width in [320, 390, 768, 1440]:
             p.set_viewport_size({'width': width, 'height': 1000})
             for path in routes:
                 self.route(path)
