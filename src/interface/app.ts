@@ -4,6 +4,7 @@ import { e, safeReturnPath, schoolPath, unavailable } from "./shared.ts";
 import { publicView } from "./public.ts";
 import { claimsView } from "./claims.ts";
 import { staffView } from "./staff.ts";
+import { bindPageMotion } from "./motion.ts";
 
 export interface InterfaceHost {
   live?: boolean;
@@ -18,6 +19,8 @@ export interface InterfaceHost {
 export function mountLostLink(root: HTMLElement, host: InterfaceHost) {
   let generation = 0;
   let destroyed = false;
+  const motionPreference = { paused: false };
+  let disposeMotion: (() => void) | undefined;
   // Session-only context: no private form values or user data enter storage.
   let activeOrgSlug =
     host.getSession()?.staffOrgSlugs[0] ??
@@ -83,8 +86,10 @@ export function mountLostLink(root: HTMLElement, host: InterfaceHost) {
     const schoolAdmin =
       session?.websiteOwner || session?.schoolAdminOrgSlugs?.includes(orgSlug);
     const nav = `${schoolAdmin ? `<a href="${base}/staff/settings">School settings</a>` : ""}${session?.websiteOwner ? '<a href="/admin">Website admin</a>' : ""}<a href="${base}/search" ${parts[2] === "search" ? 'aria-current="page"' : ""}>Find an item</a><a href="/my/claims" ${parts[0] === "my" ? 'aria-current="page"' : ""}>My claims</a>${staff ? `<a href="${base}/staff" ${parts[2] === "staff" ? 'aria-current="page"' : ""}>Staff workspace</a>` : ""}`;
+    disposeMotion?.();
+    disposeMotion = undefined;
     // Replacing the old view immediately clears all private forms on navigation/sign-out.
-    root.innerHTML = `<a class="skip-link" href="#main">Skip to content</a><header class="site-header"><div class="header-inner"><a class="brand" href="/" aria-label="LostLink home"><span class="brand-mark" aria-hidden="true"><svg class="arrow-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Lost<span>Link</span><span class="brand-dot" aria-hidden="true">.</span></a><nav class="main-nav" aria-label="Main navigation">${nav}</nav><div class="account">${session ? `<span class="account-name">${e(session.name)}</span>${host.live ? '<form method="post" action="/api/auth/sign-out"><button class="plain" type="submit">Sign out</button></form>' : '<button class="plain" id="sign-out" type="button">Sign out</button>'}` : `<a class="button secondary" href="/sign-in">Sign in <span aria-hidden="true"><svg class="arrow-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>`}</div></div></header><div class="school-strip"><div class="container"><span aria-hidden="true">⌂</span> <span id="school-name">School lost &amp; found</span><span class="strip-divider">/</span><a href="/">Change school</a></div></div><main id="main" class="container main-content" tabindex="-1" aria-busy="true"><div class="loading-state" role="status"><span class="spinner" aria-hidden="true"></span>Loading your page…</div></main><footer class="site-footer"><div class="container footer-inner"><a class="brand small" href="/">LostLink.</a><p>School lost &amp; found</p>${host.live ? '<nav class="legal-links" aria-label="Policies"><a href="/privacy">Privacy policy</a><a href="/terms">Terms and conditions</a></nav>' : ""}<span>Staff verify every return.</span></div></footer>`;
+    root.innerHTML = `<a class="skip-link" href="#main">Skip to content</a><header class="site-header${url.pathname === "/" ? " is-home" : ""}"><div class="header-inner"><a class="brand" href="/" aria-label="LostLink home"><span class="brand-mark" aria-hidden="true"><svg class="arrow-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Lost<span>Link</span><span class="brand-dot" aria-hidden="true">.</span></a><nav class="main-nav" aria-label="Main navigation">${nav}</nav><div class="account">${session ? `<span class="account-name">${e(session.name)}</span>${host.live ? '<form method="post" action="/api/auth/sign-out"><button class="plain" type="submit">Sign out</button></form>' : '<button class="plain" id="sign-out" type="button">Sign out</button>'}` : `<a class="button secondary" href="/sign-in">Sign in <span aria-hidden="true"><svg class="arrow-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>`}</div></div></header><div class="school-strip"><div class="container"><span aria-hidden="true">⌂</span> <span id="school-name">School lost &amp; found</span><span class="strip-divider">/</span><a href="/">Change school</a></div></div><main id="main" class="container main-content${url.pathname === "/" ? " home-page" : ""}" tabindex="-1" aria-busy="true"><div class="loading-state" role="status"><span class="spinner" aria-hidden="true"></span>Loading your page…</div></main><footer class="site-footer"><div class="container footer-inner"><a class="brand small" href="/">LostLink.</a><p>School lost &amp; found</p>${host.live ? '<nav class="legal-links" aria-label="Policies"><a href="/privacy">Privacy policy</a><a href="/terms">Terms and conditions</a></nav>' : ""}<span>Staff verify every return.</span><button type="button" class="motion-toggle plain" aria-pressed="false" hidden>Pause animations</button></div></footer>`;
     root.querySelector("#sign-out")?.addEventListener("click", () => {
       host.signOut();
       navigate("/");
@@ -101,6 +106,7 @@ export function mountLostLink(root: HTMLElement, host: InterfaceHost) {
           main.innerHTML = view.html;
           main.removeAttribute("aria-busy");
           view.bind?.(main);
+          disposeMotion = bindPageMotion(root, motionPreference);
           document.title = view.title + " · LostLink";
           if (focus) focusHeading(main);
           return;
@@ -117,6 +123,7 @@ export function mountLostLink(root: HTMLElement, host: InterfaceHost) {
           });
           main.innerHTML = view.html;
           main.removeAttribute("aria-busy");
+          disposeMotion = bindPageMotion(root, motionPreference);
           document.title = view.title + " · LostLink";
           if (focus) focusHeading(main);
           return;
@@ -178,6 +185,7 @@ export function mountLostLink(root: HTMLElement, host: InterfaceHost) {
       main.innerHTML = view.html;
       main.removeAttribute("aria-busy");
       view.bind?.(main);
+      disposeMotion = bindPageMotion(root, motionPreference);
       document.title = view.title + " · LostLink";
       // Hash navigation can render before the target exists. Restore its position
       // and keyboard focus after mounting, including direct links and history.
@@ -214,6 +222,7 @@ export function mountLostLink(root: HTMLElement, host: InterfaceHost) {
       main.innerHTML = view.html;
       main.removeAttribute("aria-busy");
       view.bind?.(main);
+      disposeMotion = bindPageMotion(root, motionPreference);
       document.title = view.title + " · LostLink";
       if (focus) focusHeading(main);
     }
@@ -269,6 +278,7 @@ export function mountLostLink(root: HTMLElement, host: InterfaceHost) {
     destroy() {
       destroyed = true;
       generation++;
+      disposeMotion?.();
       root.replaceChildren();
       root.removeEventListener("click", onClick);
       window.removeEventListener("popstate", onPop);

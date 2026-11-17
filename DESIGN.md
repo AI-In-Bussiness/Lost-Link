@@ -1,50 +1,54 @@
-# LostLink: paper and pen
+# LostLink: pencil, paper and perspective
 
-Read this specification before UI work. It refines Founder A's original
-school lost-and-found interface, following the task owner's paper/pen direction.
+The task owner's November 2026 redesign keeps the school notebook identity while
+adding the oversized typography, dimensional objects and motion of their visual
+reference. This supersedes the earlier static, handwritten-only composition.
 
-## Material and typography
+## Materials and typography
 
-- Page background is warm textured paper, using the original local paper.svg.
-- Apply a 60/30/10 visual hierarchy inspired by the supplied color-palette video:
-  - About 60% sand (#f2ead8): textured page, warm light cards and controls.
-  - About 30% olive (#3d4934; dark ink #293323): text, rules, links and artwork.
-  - About 10% signal yellow (#eed55a): primary actions, heading underline,
-    notebook margins, step numbers and small illustration details.
-- These proportions guide attention rather than requiring exact pixel coverage.
-  Use olive ink on yellow controls; reserve white-on-red for destructive actions.
-- Neutral secondary buttons and red/green/blue status semantics remain distinct.
-  Focus uses a dark olive outline; never use yellow alone to convey state.
-- Shared CSS tokens also color the original illustration and paper asset. Keep
-  large surfaces quiet and reserve the bright accent for meaningful emphasis.
-- Use locally hosted Caveat for headings and Patrick Hand for readable writing.
-  Both are OFL licensed; license files ship alongside fonts in public/design/.
-- Maintain at least 18px writing text in inputs and comfortable line spacing.
-- Texture belongs in backgrounds; never distort text or place grain over controls.
-- Keep dark ink contrast, visible focus, explicit labels and semantic headings.
+- Warm textured sand paper, deep olive ink and sparse signal-yellow highlights.
+  Shared CSS tokens color every public, claimant, staff, account and admin view.
+- Locally hosted Anton provides bold editorial headings. Caveat adds handwritten
+  annotations; Patrick Hand provides readable writing and form inputs. Their OFL
+  licenses ship alongside the fonts in `public/design/`.
+- Paper texture stays behind content. Controls and data remain straight, with
+  dark borders, explicit labels and visible keyboard focus.
+- Primary buttons use yellow with ink text and a small offset ink shadow.
+  Secondary actions use neutral paper; destructive and semantic status colors
+  retain their meaning independently of the decorative palette.
 
 ## Composition
 
-- Preserve the original search-first school workflow and shared view components.
-- Homepage: handwritten introduction and margin-marked form beside a taped sketch.
-- Use simple ink rules and slightly irregular borders, not glossy panels.
-- Process steps are a two-column written checklist, one column on phones.
-- Functional tables, error messages and controls remain straight and readable.
-- Keep any rotation to decorative art and step numbers, never forms or body copy.
+- The homepage is an editorial Lost/Found poster, with explicit school purpose,
+  a layered original belongings sketch, a CSS 3D pencil and a paper luggage tag.
+- The school selector and public-description search share a labeled search sheet.
+  The feature and process sections use ruled layouts and numbered annotations.
+- Search results use tactile paper cards; claim and staff screens use the same
+  typography, rules, surfaces and controls. Tables remain horizontally scrollable.
+- Native Next account, authentication, policy and administration routes use the
+  shared `PaperFrame` shell and paper page/form classes.
+- Layouts adapt from 320px phones through large screens, including enlarged text.
 
-## Avoid
+## Motion and accessibility
 
-- No gradients, glass effects, floating orbs, stock testimonials or invented counts.
-- No default Inter, decorative serif hero, or identical marketing card rows.
-- No external runtime font/image services; serve the licensed assets locally.
-- No randomness in layout, illegible script, text filters or scroll animations.
-- No backend/route changes just to achieve a visual effect.
-- Keep the purpose explicit in the hero. Do not add pill buttons, emoji icons,
-  em dashes, fabricated reviews/metrics/customer counts, cursor effects, or
-  AI-builder branding. Do not introduce generated photographs or marketing copy.
-- Preserve existing local vector/brand assets. New public legal wording needs
-  owner-supplied text or explicit approval to prepare a factual draft.
+- Decorative paper objects float and turn using CSS perspective and transforms.
+  A drawn flourish animates as pencil ink. Fine-pointer movement shifts depth
+  layers without replacing the user's cursor or moving functional controls.
+- IntersectionObserver progressively reveals homepage sections. Content remains
+  visible without motion support, and keyboard focus reveals its entire section.
+- The interface footer provides Pause/Resume animations, retained across its
+  client-side navigation. OS reduced-motion requests override decorative motion.
+  Native routes use only a short transform-based entry transition.
+- No scroll locking, scroll hijacking, autoplay media or animation dependency.
+  Functional headings retain full contrast throughout their entry motion.
+- Motion listeners and observers are disposed when a view is replaced or unmounted.
 
-Reference: https://agent-design.com/blog/stop-ai-ui-looking-templated
-The guide informs persistent constraints; the school notebook design is the
-user's requested art direction, not a template copied from that site.
+## Product boundaries
+
+- Keep the existing search-first school workflow, routes, API and role checks.
+- Preserve public/private proof boundaries and staff ownership verification.
+- Do not invent reviews, counts, testimonials or new product capabilities.
+- Assets are local; no external runtime font or image services are required.
+- Existing legal wording and brand/vector motifs remain intact.
+- The redesign is delivered for PR review; merging and production publication
+  require the task owner's subsequent decision.

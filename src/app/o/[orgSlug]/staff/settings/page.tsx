@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import PaperFrame from '@/app/paper-frame';
 import {notFound,redirect} from 'next/navigation';
 import {createSupabaseServerClient} from '@/lib/supabase/server';
 import {slug} from '@/lib/api/contracts';
@@ -12,14 +13,14 @@ export default async function SchoolSettings({params,searchParams}:{params:Promi
  const path=`/o/${orgSlug}/staff/settings`;
  const query=await searchParams;
  const client=await createSupabaseServerClient();
- if(!client)return <main id="main" className="container main-content"><h1>School settings unavailable</h1><p role="alert">Try again later.</p></main>;
+ if(!client)return <PaperFrame><main id="main" className="paper-page paper-page-body paper-page-narrow"><h1>School settings unavailable</h1><p role="alert">Try again later.</p></main></PaperFrame>;
  const {data:{user}}=await client.auth.getUser();
  if(!user)redirect('/sign-in?next='+encodeURIComponent(path));
  const {data,error}=await client.rpc('school_admin_dispatch',{p_action:'overview',p_org_slug:orgSlug,p_payload:{}});
  if(error?.message==='NOT_FOUND')notFound();
- if(error)return <main id="main" className="container main-content"><h1>School settings unavailable</h1><p role="alert">Refresh to retry.</p></main>;
+ if(error)return <PaperFrame><main id="main" className="paper-page paper-page-body paper-page-narrow"><h1>School settings unavailable</h1><p role="alert">Refresh to retry.</p></main></PaperFrame>;
  const overview=data as AdminOverview;const school=overview.schools[0];const action=`/api/school-admin/${orgSlug}`;
- return <main id="main" className="container main-content owner-page stack">
+ return <PaperFrame><main id="main" className="container main-content owner-page stack paper-page paper-page-body paper-page-wide">
   <nav aria-label="School administration"><Link href="/account">Your account</Link> · <Link href={`/o/${orgSlug}/staff`}>School workspace</Link> · <Link href={`/o/${orgSlug}/search`}>Public listings</Link></nav>
   <section className="page-heading"><p className="eyebrow">School administration · {user.email}</p><h1>{school.name} settings</h1><p>Manage settings and staff for this school. Website owners manage all schools.</p></section>
   {query.saved==='1' && <p role="status" className="notice">Changes saved.</p>}
@@ -33,5 +34,5 @@ export default async function SchoolSettings({params,searchParams}:{params:Promi
    </section>
   </div>
   <section className="owner-audit"><h2>Recent school administration</h2><ul className="owner-school-list">{overview.events.map(event=><li key={event.id}><span>{event.action==='update_school'?'School settings updated':event.action==='set_member'?'School access saved':event.action==='remove_member'?'School access removed':'School created'} · {event.actor_email ?? 'Website operator'}</span><time dateTime={event.occurred_at}>{new Date(event.occurred_at).toISOString().slice(0,19).replace('T',' ')} UTC</time></li>)}</ul></section>
- </main>;
+ </main></PaperFrame>;
 }

@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import LegalLinks from '../legal-links';
+import PaperFrame from "../paper-frame";
 
 export const metadata: Metadata = { title: 'Terms and conditions · LostLink' };
 
 export default function TermsPage() {
-  return <main id="main" className="container main-content policy-page">
-    <Link href="/">LostLink home</Link>
+  return <PaperFrame><main id="main" className="paper-page paper-page-body policy-page">
+    <p className="eyebrow paper-page-eyebrow">The details, on paper</p>
     <h1>Terms and conditions</h1>
     <p className="muted">Last updated: 28 October 2026</p>
     <p>LostLink is a demonstration of a school lost-and-found service. It lets visitors browse found belongings and lets signed-in users send private claims for staff review. Use fictional item descriptions and ownership details when testing the demo.</p>
@@ -27,6 +27,5 @@ export default function TermsPage() {
 
     <h2>Privacy and changes</h2>
     <p>Read the <Link href="/privacy">privacy policy</Link> for the information used by this demonstration, who can see it, and its current retention limits. Check the date on this page when reviewing updated terms.</p>
-    <LegalLinks />
-  </main>;
+  </main></PaperFrame>;
 }

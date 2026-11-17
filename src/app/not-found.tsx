@@ -1,2 +1,11 @@
 import Link from 'next/link';
-export default function NotFound(){return <main id="main" className="mx-auto max-w-3xl px-6 py-16"><h1 className="text-3xl font-bold">Page not found</h1><p className="my-4">Check the address or return to LostLink.</p><Link href="/">Go home</Link></main>}
+import PaperFrame from './paper-frame';
+
+export default function NotFound() {
+  return <PaperFrame><main id="main" className="paper-page paper-page-body paper-page-narrow">
+    <p className="eyebrow paper-page-eyebrow">404 · A loose page</p>
+    <h1 className="paper-page-title">Page not found</h1>
+    <p>Check the address or return to LostLink.</p>
+    <Link className="button" href="/">Go home <span aria-hidden="true">↗</span></Link>
+  </main></PaperFrame>;
+}
