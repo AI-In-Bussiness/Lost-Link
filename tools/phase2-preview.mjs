@@ -44,6 +44,7 @@ const app = createServer(async (req, res) => {
       )
     )
       file = resolve(root, "public", "." + path);
+    else if (path === "/icon.svg") file = resolve(root, "src/app/icon.svg");
     else if (path === "/mock-assets/item-placeholder.svg")
       file = resolve(root, "public/mock-assets/item-placeholder.svg");
     else if (
