@@ -4,10 +4,12 @@ import PaperFrame from "../paper-frame";
 export const metadata: Metadata = { title: 'Privacy policy · LostLink' };
 
 export default function PrivacyPage() {
-  return <PaperFrame><main id="main" className="paper-page paper-page-body policy-page">
-    <p className="eyebrow paper-page-eyebrow">The details, on paper</p>
+  return <PaperFrame><main id="main" className="paper-page policy-page">
+    <section className="page-heading">
+    <p className="eyebrow">The details, on paper</p>
     <h1>Privacy policy</h1>
     <p className="muted">Last updated: 28 October 2026</p>
+    </section>
     <p>LostLink helps people browse found belongings, send private ownership claims, and follow school staff decisions. This notice describes the current demonstration. Use fictional item descriptions and ownership details in the demo.</p>
 
     <h2>Information you provide</h2>

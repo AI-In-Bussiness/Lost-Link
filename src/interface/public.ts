@@ -49,21 +49,21 @@ function homeArt(): string {
         <ellipse cx="247" cy="312" rx="174" ry="13" fill="#d8cfbd"/>
         <g transform="rotate(-7 220 200)">
           <path d="M160 126v-19a45 45 0 0 1 90 0v19" stroke="var(--ink)" stroke-width="12"/>
-          <path d="M166 126v-19a39 39 0 0 1 78 0v19" stroke="var(--sand-shade)" stroke-width="3"/>
+          <path d="M166 126v-19a39 39 0 0 1 78 0v19" stroke="var(--paper-edge)" stroke-width="3"/>
           <path d="m267 131 25 9c24 8 34 27 34 54v101c0 16-12 25-30 25l-28-8V143Z" fill="var(--olive)" stroke="var(--ink)" stroke-width="3"/>
-          <path d="m298 165 10 11v115l-12 10" stroke="var(--sand-shade)" stroke-width="2"/>
-          <path d="M150 128c-22 0-35 22-35 48v116c0 13 10 20 23 20h143c13 0 23-7 23-20V176c0-26-13-48-35-48Z" fill="var(--sand-shade)" stroke="var(--ink)" stroke-width="3"/>
-          <path d="M153 139c-17 0-27 18-27 42v103" stroke="var(--sand-light)" stroke-width="8" stroke-linecap="round"/>
+          <path d="m298 165 10 11v115l-12 10" stroke="var(--paper-edge)" stroke-width="2"/>
+          <path d="M150 128c-22 0-35 22-35 48v116c0 13 10 20 23 20h143c13 0 23-7 23-20V176c0-26-13-48-35-48Z" fill="var(--paper-edge)" stroke="var(--ink)" stroke-width="3"/>
+          <path d="M153 139c-17 0-27 18-27 42v103" stroke="var(--sheet)" stroke-width="8" stroke-linecap="round"/>
           <path d="M135 173c26-12 121-12 150 0M151 132l-7 166M267 132l7 166" stroke="#71654e" stroke-width="3"/>
           <path d="M145 180c24-10 109-10 131 0" stroke="#968871" stroke-width="1.5" stroke-dasharray="4 5"/>
           <rect x="150" y="222" width="125" height="72" rx="13" fill="var(--olive)"/>
-          <rect x="146" y="217" width="125" height="72" rx="13" fill="var(--sand)" stroke="var(--ink)" stroke-width="3"/>
+          <rect x="146" y="217" width="125" height="72" rx="13" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/>
           <path d="M155 232h107m-13 0v14" stroke="var(--ink)" stroke-width="3"/>
           <path d="M155 276h107" stroke="#a49a87" stroke-width="1.5" stroke-dasharray="3 4"/>
-          <rect x="186" y="174" width="43" height="22" rx="2" fill="var(--signal)" stroke="var(--ink)" stroke-width="1"/>
+          <rect x="186" y="174" width="43" height="22" rx="2" fill="var(--accent)" stroke="var(--ink)" stroke-width="1"/>
           <path d="m195 185 7 5 17-11" stroke="var(--ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="m217 137 47 33" stroke="var(--ink)" stroke-width="2"/>
-          <path d="m260 155 43 15-18 53-43-15Z" fill="var(--sand-light)" stroke="var(--ink)" stroke-width="2"/>
+          <path d="m260 155 43 15-18 53-43-15Z" fill="var(--sheet)" stroke="var(--ink)" stroke-width="2"/>
           <circle cx="267" cy="171" r="3" fill="var(--olive)"/>
           <path d="m258 186 27 9m-30 1 19 6" stroke="#a49a87" stroke-width="2"/>
         </g>
@@ -71,12 +71,12 @@ function homeArt(): string {
           <rect x="329" y="179" width="59" height="130" rx="19" fill="var(--ink)"/>
           <rect x="326" y="176" width="59" height="130" rx="19" fill="var(--olive)" stroke="var(--ink)" stroke-width="3"/>
           <rect x="339" y="158" width="33" height="23" rx="5" fill="var(--olive)" stroke="var(--ink)" stroke-width="2"/>
-          <path d="M340 165h31m-34 40v66" stroke="var(--sand-shade)" stroke-width="4" stroke-linecap="round"/>
+          <path d="M340 165h31m-34 40v66" stroke="var(--paper-edge)" stroke-width="4" stroke-linecap="round"/>
           <path d="M366 191v96" stroke="var(--ink)" stroke-width="7" stroke-linecap="round" opacity=".3"/>
         </g>
         <g transform="rotate(-12 87 287)">
-          <path d="M40 285h62l25 19H40Z" fill="var(--signal)" stroke="var(--ink)" stroke-width="3"/>
-          <path d="M45 304h84v9H45Z" fill="var(--sand-light)" stroke="var(--ink)" stroke-width="3"/>
+          <path d="M40 285h62l25 19H40Z" fill="var(--accent)" stroke="var(--ink)" stroke-width="3"/>
+          <path d="M45 304h84v9H45Z" fill="var(--sheet)" stroke="var(--ink)" stroke-width="3"/>
           <path d="m79 282 7 10m4-10 7 10" stroke="var(--ink)" stroke-width="3"/>
         </g>
         <path d="m371 87 6-13m4 22 14-4M96 149l-15-5" stroke="var(--olive)" stroke-width="2" stroke-linecap="round"/>
@@ -106,8 +106,7 @@ async function home(ctx: ViewContext): Promise<View> {
   return {
     title: "Find what you lost",
     html: `<section class="hero"><div class="hero-copy"><p class="eyebrow hero-kicker"><svg class="kicker-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2v20M2 12h20M5 5l14 14M5 19 19 5" stroke="currentColor" stroke-width="2"/></svg> Your school’s lost &amp; found</p><h1 class="hero-title"><span class="hero-word">LOST.</span> <span class="hero-word hero-word-accent">FOUND.</span></h1><p class="hero-scribble">Let’s get it back.</p><p class="hero-description">Your school’s lost-and-found, in one place. Find a familiar thing. Send a private claim. Get back to your day.</p><div class="hero-actions"><a class="button" href="#find-item">Find my stuff <svg class="arrow-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a><nav class="landing-links" aria-label="Explore LostLink"><a href="#features">Explore features</a><a href="#how-it-works">How it works</a></nav></div></div>${homeArt()}</section>
-    <section class="find-section" id="find-item" tabindex="-1" aria-label="Find your lost item" data-reveal><div class="search-heading"><span class="eyebrow">The search starts here</span><span class="search-handnote">one less thing to worry about ↴</span></div>${first ? `<form id="home-search" class="hero-search" method="get" action="${schoolPath(first.slug)}/search"><div class="field"><label for="home-school">Your school</label><select id="home-school" name="school" required>${organizations.map((org) => option(org.slug, first.slug, org.name)).join("")}</select></div><div class="field"><label for="home-query">What are you looking for?</label><input id="home-query" name="q" type="search" maxlength="300" placeholder="Try “black sports bag”" autocomplete="off" aria-describedby="home-search-hint"></div><button class="button" type="submit">Find my item <svg class="arrow-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="search-meta"><p class="muted" id="home-search-hint">Use public details like type and color. Save secret identifying details for your private claim.</p><p class="muted">Browsing is open to everyone. Sign in when you're ready to claim.</p></div></form>` : result.ok ? '<div class="notice"><p>No schools are currently listing items. Contact your school office for help.</p></div>' : '<div class="notice"><p>We couldn’t load the school list. Try again, or contact your school office for help.</p><button id="home-retry" class="secondary" type="button">Try again</button></div>'}<p class="hero-assurance"><strong>Private proof. People decide.</strong><span>Ownership details go to authorized staff. A search match is only a starting point.</span></p></section>
-    <div class="paper-divider" aria-hidden="true"><span>LESS LOST.</span><span>MORE FOUND.</span><svg viewBox="0 0 40 40" fill="none"><path d="M20 3v34M3 20h34M8 8l24 24M8 32 32 8" stroke="currentColor" stroke-width="3"/></svg><span>BACK TO YOU.</span></div>
+    <section class="find-section" id="find-item" tabindex="-1" aria-label="Find your lost item" data-reveal><div class="search-heading"><h2>Find an item</h2></div>${first ? `<form id="home-search" class="hero-search" method="get" action="${schoolPath(first.slug)}/search"><div class="field"><label for="home-school">Your school</label><select id="home-school" name="school" required>${organizations.map((org) => option(org.slug, first.slug, org.name)).join("")}</select></div><div class="field"><label for="home-query">What are you looking for?</label><input id="home-query" name="q" type="search" maxlength="300" placeholder="Try “black sports bag”" autocomplete="off" aria-describedby="home-search-hint"></div><button class="button" type="submit">Find my item <svg class="arrow-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="search-meta"><p class="muted" id="home-search-hint">Use public details like type and color. Save secret identifying details for your private claim.</p><p class="muted">Browsing is open to everyone. Sign in when you're ready to claim.</p></div></form>` : result.ok ? '<div class="notice"><p>No schools are currently listing items. Contact your school office for help.</p></div>' : '<div class="notice"><p>We couldn’t load the school list. Try again, or contact your school office for help.</p><button id="home-retry" class="secondary" type="button">Try again</button></div>'}<p class="hero-assurance"><strong>Private proof. People decide.</strong><span>Ownership details go to authorized staff. A search match is only a starting point.</span></p></section>
     <section class="landing-features" aria-labelledby="features">
       <div class="landing-intro" data-reveal>
         <p class="eyebrow">More than a lost-and-found bin</p>

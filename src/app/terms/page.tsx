@@ -5,10 +5,12 @@ import PaperFrame from "../paper-frame";
 export const metadata: Metadata = { title: 'Terms and conditions · LostLink' };
 
 export default function TermsPage() {
-  return <PaperFrame><main id="main" className="paper-page paper-page-body policy-page">
-    <p className="eyebrow paper-page-eyebrow">The details, on paper</p>
+  return <PaperFrame><main id="main" className="paper-page policy-page">
+    <section className="page-heading">
+    <p className="eyebrow">The details, on paper</p>
     <h1>Terms and conditions</h1>
     <p className="muted">Last updated: 28 October 2026</p>
+    </section>
     <p>LostLink is a demonstration of a school lost-and-found service. It lets visitors browse found belongings and lets signed-in users send private claims for staff review. Use fictional item descriptions and ownership details when testing the demo.</p>
 
     <h2>Accounts and staff access</h2>

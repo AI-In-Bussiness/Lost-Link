@@ -4,7 +4,7 @@ import { e, safeReturnPath, schoolPath, unavailable } from "./shared.ts";
 import { publicView } from "./public.ts";
 import { claimsView } from "./claims.ts";
 import { staffView } from "./staff.ts";
-import { bindPageMotion } from "./motion.ts";
+import { bindPageMotion, getMotionPreference } from "./motion.ts";
 
 export interface InterfaceHost {
   live?: boolean;
@@ -19,7 +19,7 @@ export interface InterfaceHost {
 export function mountLostLink(root: HTMLElement, host: InterfaceHost) {
   let generation = 0;
   let destroyed = false;
-  const motionPreference = { paused: false };
+  const motionPreference = getMotionPreference();
   let disposeMotion: (() => void) | undefined;
   // Session-only context: no private form values or user data enter storage.
   let activeOrgSlug =

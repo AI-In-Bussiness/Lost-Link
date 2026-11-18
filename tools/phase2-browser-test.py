@@ -112,6 +112,17 @@ class InterfaceTest(unittest.TestCase):
         p = self.page
         expect(p.locator('html')).to_have_attribute('data-motion', 'active')
         expect(p.get_by_role('button', name='Pause animations', exact=True)).to_have_attribute('aria-pressed', 'false')
+        # Decorative loops stop outside the viewport and resume at the same scene.
+        p.locator('.paper-scene').scroll_into_view_if_needed()
+        p.wait_for_function("() => document.querySelector('.paper-scene').classList.contains('is-in-view')")
+        expect(p.locator('.scene-paper')).to_have_css('animation-play-state', 'running')
+        p.locator('.site-footer').scroll_into_view_if_needed()
+        p.wait_for_function("() => !document.querySelector('.paper-scene').classList.contains('is-in-view')")
+        expect(p.locator('.scene-paper')).to_have_css('animation-play-state', 'paused')
+        expect(p.locator('.draw-line')).to_have_css('animation-play-state', 'paused')
+        p.locator('.paper-scene').scroll_into_view_if_needed()
+        p.wait_for_function("() => document.querySelector('.paper-scene').classList.contains('is-in-view')")
+        expect(p.locator('.scene-paper')).to_have_css('animation-play-state', 'running')
         # Keyboard anchor navigation immediately reveals and focuses its target.
         self.keyboard_activate(p.get_by_role('link', name='Find my stuff', exact=True))
         expect(p.locator('#find-item')).to_be_focused()
@@ -124,6 +135,14 @@ class InterfaceTest(unittest.TestCase):
         p.get_by_role('link', name='Find an item', exact=True).click()
         self.ready()
         expect(p.locator('html')).to_have_attribute('data-motion', 'paused')
+        # A manually paused page stays quiet after a full document reload.
+        p.reload()
+        self.ready()
+        expect(p.locator('html')).to_have_attribute('data-motion', 'paused')
+        expect(p.get_by_role('button', name='Resume animations', exact=True)).to_have_attribute('aria-pressed', 'true')
+        self.route('/')
+        self.assertTrue(p.locator('[data-reveal]').evaluate_all("nodes => nodes.every(n => getComputedStyle(n).opacity === '1')"))
+        self.assertTrue(p.locator('.paper-object').evaluate_all("nodes => nodes.every(n => getComputedStyle(n).animationPlayState === 'paused' || getComputedStyle(n).animationName === 'none')"))
         self.keyboard_activate(p.get_by_role('button', name='Resume animations', exact=True))
         expect(p.locator('html')).to_have_attribute('data-motion', 'active')
         self.route('/')
@@ -144,6 +163,102 @@ class InterfaceTest(unittest.TestCase):
         p.emulate_media(reduced_motion='no-preference')
         expect(p.locator('html')).to_have_attribute('data-motion', 'active')
         self.assertEqual(p.evaluate('localStorage.length + sessionStorage.length'), 0)
+
+    def test_decorative_art_does_not_escape_or_cover_search_controls(self):
+        p = self.page
+        for reduced in [False, True]:
+            p.emulate_media(reduced_motion='reduce' if reduced else 'no-preference')
+            for width in [320, 390, 760, 768, 1024, 1440]:
+                with self.subTest(width=width, reduced_motion=reduced):
+                    p.set_viewport_size({'width': width, 'height': 1000})
+                    self.route('/')
+                    p.evaluate('async () => {await document.fonts.ready}')
+                    # Sample float extremes and lateral shifts, including transition
+                    # endpoints. A bounded parent alone does not prove its art fits.
+                    for phase in [0, 0.5, 1]:
+                        for tilt in ['left', 'center', 'right']:
+                            measured = p.locator('.paper-scene').evaluate("""(scene, sample) => {
+                              scene.dataset.tilt = sample.tilt;
+                              for (const animation of scene.getAnimations({subtree:true})) {
+                                const duration = animation.effect.getTiming().duration;
+                                animation.pause();
+                                if (typeof duration === 'number')
+                                  animation.currentTime = duration * (animation instanceof CSSTransition ? 1 : sample.phase);
+                              }
+                              const objects = [...scene.querySelectorAll('.paper-object')].map(node => {
+                                const box = node.getBoundingClientRect();
+                                return {name:node.className, left:box.left, right:box.right, top:box.top, bottom:box.bottom};
+                              });
+                              const icons = [...scene.querySelectorAll('.arrow-icon')].map(node => {
+                                const box = node.getBoundingClientRect();
+                                return {width:box.width, height:box.height};
+                              });
+                              const front=scene.querySelector('.pencil-front');
+                              const wood=scene.querySelector('.pencil-wood');
+                              const heading=scene.querySelector(':scope > .art-heading').getBoundingClientRect();
+                              const caption=scene.querySelector(':scope > figcaption').getBoundingClientRect();
+                              return {objects, icons, width:innerWidth,
+                                clearance:objects.map(box=>({name:box.name,top:box.top-heading.bottom,bottom:caption.top-box.bottom})),
+                                pencilSeam:wood.offsetTop-(front.offsetTop+front.offsetHeight),
+                                scrollWidth:document.documentElement.scrollWidth};
+                            }""", {'phase':phase, 'tilt':tilt})
+                            self.assertLessEqual(measured['scrollWidth'], width, measured)
+                            # All three moving objects leave the heading and caption
+                            # readable throughout the float, including reduced motion.
+                            for clearance in measured['clearance']:
+                                self.assertGreaterEqual(min(clearance['top'], clearance['bottom']), -1, measured)
+                            # The barrel and wooden tip meet without coplanar overlap.
+                            self.assertGreaterEqual(measured['pencilSeam'], 0, measured)
+                            for artwork in measured['objects']:
+                                self.assertGreaterEqual(artwork['left'], -1, measured)
+                                self.assertLessEqual(artwork['right'], width + 1, measured)
+                            # A small sheet icon must not inherit the large sketch's
+                            # canvas dimensions and displace its caption.
+                            for icon in measured['icons']:
+                                self.assertLessEqual(max(icon.values()), 40, measured)
+                    for target in p.locator('.hero-actions a, #home-school, #home-query, #home-search button').all():
+                        target.scroll_into_view_if_needed()
+                        hit = target.evaluate("""node => {
+                          const box=node.getBoundingClientRect();
+                          const top=document.elementFromPoint(box.left+box.width/2,box.top+box.height/2);
+                          return {name:node.id||node.textContent.trim(),reachable:top!==null&&node.contains(top)};
+                        }""")
+                        self.assertTrue(hit['reachable'], hit)
+
+    def test_staff_tables_keep_words_readable_and_actions_reachable(self):
+        p = self.page
+        self.control('persona', 'staff')
+        for width in [320, 390, 768]:
+            p.set_viewport_size({'width': width, 'height': 1000})
+            for reduced in [False, True]:
+                p.emulate_media(reduced_motion='reduce' if reduced else 'no-preference')
+                for path, action in [(SCHOOL + '/staff?status=all', 'Review'), (SCHOOL + '/staff/items', 'Manage')]:
+                    with self.subTest(width=width, route=path, reduced_motion=reduced):
+                        self.route(path)
+                        region = p.get_by_role('region', name='Claim review table' if action == 'Review' else 'Found-item inventory table', exact=True)
+                        # Normal words must not become vertical columns of glyphs.
+                        wrapping = region.locator('th, td a, td .badge').evaluate_all(r"""nodes => nodes.map(node => {
+                          const text = [...node.childNodes].find(child => child.nodeType === Node.TEXT_NODE && child.textContent.trim());
+                          if (!text) return null;
+                          const start = text.textContent.search(/\S/), word = text.textContent.trim().split(/\s/)[0];
+                          const range = document.createRange();
+                          range.setStart(text,start);range.setEnd(text,start+word.length);
+                          return {word,lines:range.getClientRects().length};
+                        }).filter(Boolean)""")
+                        for word in wrapping:
+                            self.assertEqual(word['lines'], 1, wrapping)
+                        self.assertFalse(p.evaluate('document.documentElement.scrollWidth > innerWidth'))
+                        region.scroll_into_view_if_needed()
+                        region.focus()
+                        can_scroll = region.evaluate('node => node.scrollWidth > node.clientWidth')
+                        if can_scroll:
+                            p.keyboard.press('ArrowRight')
+                            p.wait_for_function("label => document.querySelector('[aria-label=\"' + label + '\"]').scrollLeft > 0", arg=region.get_attribute('aria-label'))
+                        link = region.get_by_role('link', name=action + ' ', exact=False).first
+                        expected = link.get_attribute('href')
+                        self.keyboard_activate(link)
+                        self.ready()
+                        self.assertEqual(p.url, BASE + expected)
 
     def test_landing_stays_available_without_school_directory(self):
         p = self.page
@@ -777,6 +892,7 @@ class InterfaceTest(unittest.TestCase):
                 self.route(path)
                 self.assertEqual(p.locator('h1').count(), 1, path)
                 self.assertEqual(p.locator('main').count(), 1)
+                p.wait_for_function("[...document.querySelectorAll('.brand-mark img')].every(image => image.complete && image.naturalWidth > 0)")
                 self.assertFalse(p.evaluate('document.documentElement.scrollWidth > innerWidth'), f'{width}: {path}')
             self.route(SCHOOL + '/search')
             p.screenshot(path=f'/tmp/lostlink-search-{width}.png', full_page=True)

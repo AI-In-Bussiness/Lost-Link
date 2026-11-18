@@ -21,23 +21,25 @@ export default async function SignUpPage({ searchParams }: { searchParams: Promi
     "email-delivery": "Confirmation email delivery is not available for this address. Please contact the LostLink team.",
     unavailable: "Unable to create an account right now. Please try again later.",
   };
-  return <PaperFrame><main id="main" className="paper-page paper-page-body paper-page-narrow">
-    <p className="eyebrow paper-page-eyebrow">A place for your belongings</p>
-    <h1 className="paper-page-title">Create an account</h1>
-    <p className="mt-3">Sign up to claim your belongings and track your requests. Staff access is assigned separately by your organization.</p>
-    {!configured ? <p role="status" className="mt-6">Sign-up is unavailable until Supabase is configured.</p> : status === "sent" ? <section className="mt-6">
-      <h2 className="text-xl font-semibold">Check your email</h2>
-      <p role="status">If this address has an unconfirmed account, we have requested a confirmation link. Check your inbox and spam folder, then open the newest link in this browser.</p>
-      <p className="mt-3">If you opened a confirmation link earlier, your email may already be confirmed. Try signing in with your original password. Registering again does not change an existing account or its password.</p>
+  return <PaperFrame><main id="main" className="paper-page paper-page-narrow card">
+    <section className="page-heading">
+    <p className="eyebrow">A place for your belongings</p>
+    <h1>Create an account</h1>
+    <p>Sign up to claim your belongings and track your requests. Staff access is assigned separately by your organization.</p>
+    </section>
+    {!configured ? <p role="status" className="notice">Sign-up is unavailable until Supabase is configured.</p> : status === "sent" ? <section>
+      <h2>Check your email</h2>
+      <p role="status" className="notice">If this address has an unconfirmed account, we have requested a confirmation link. Check your inbox and spam folder, then open the newest link in this browser.</p>
+      <p>If you opened a confirmation link earlier, your email may already be confirmed. Try signing in with your original password. Registering again does not change an existing account or its password.</p>
       <ResendConfirmationForm email={email} next={destination} />
     </section> : <form method="post" action="/api/auth/sign-up" className="paper-form stack">
-      {error && <p role="alert">{Object.hasOwn(errors, error) ? errors[error] : errors.unavailable}</p>}
-      <label className="grid gap-1">Email<input name="email" type="email" autoComplete="email" defaultValue={email} maxLength={254} required className="paper-input" /></label>
-      <label className="grid gap-1">Password<input name="password" type="password" autoComplete="new-password" minLength={12} maxLength={256} aria-describedby="password-help" required className="paper-input" /></label>
+      {error && <p role="alert" className="error-summary">{Object.hasOwn(errors, error) ? errors[error] : errors.unavailable}</p>}
+      <label className="field">Email<input name="email" type="email" autoComplete="email" defaultValue={email} maxLength={254} required /></label>
+      <label className="field">Password<input name="password" type="password" autoComplete="new-password" minLength={12} maxLength={256} aria-describedby="password-help" required /></label>
       <p id="password-help">Use at least 12 characters.</p>
       <input type="hidden" name="next" value={destination} />
       <button className="button" type="submit">Create account</button>
     </form>}
-    <p className="mt-6">Already have an account? <Link href={signIn} className="underline">Sign in</Link></p>
+    <p>Already have an account? <Link href={signIn} className="text-link">Sign in</Link></p>
   </main></PaperFrame>;
 }

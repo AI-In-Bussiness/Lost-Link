@@ -25,5 +25,6 @@ Lost-and-found searches can take time for both the person looking and the staff 
 
 ## Project resources
 
+- [UI and UX style guide](DESIGN.md)
 - [Development and operations](DEVELOPMENT.md)
 - [License](LICENSE)
