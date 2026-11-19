@@ -32,7 +32,7 @@ try {
  const fixtures = {origin:'http://localhost:3000',orgs,staff:await actor(orgs[0]),foreign:await actor(orgs[1]),claimant:await actor(),other:await actor()};
  const fixtureFile = join(directory,'fixtures.json');
  writeFileSync(fixtureFile,JSON.stringify(fixtures),{mode:0o600});
- server = spawn(process.execPath,['node_modules/next/dist/bin/next','start','--hostname','localhost'],{env:{...process.env,LOSTLINK_ORGANIZATION_SLUGS:orgs.map(o=>o.slug).join(',')},stdio:['ignore','ignore','inherit']});
+ server = spawn(process.execPath,['node_modules/next/dist/bin/next','start','--hostname','localhost'],{env:{...process.env,LOSTLINK_ITEM_IDENTIFICATION:'true',LOSTLINK_ORGANIZATION_SLUGS:orgs.map(o=>o.slug).join(',')},stdio:['ignore','ignore','inherit']});
  let ready = false;
  for(let i=0;i<60;i++) {
   if(server.exitCode!==null) throw new Error('Browser app server exited.');

@@ -8,7 +8,7 @@ export default function PrivacyPage() {
     <section className="page-heading">
     <p className="eyebrow">The details, on paper</p>
     <h1>Privacy policy</h1>
-    <p className="muted">Last updated: 28 October 2026</p>
+    <p className="muted">Last updated: 19 November 2026</p>
     </section>
     <p>LostLink helps people browse found belongings, send private ownership claims, and follow school staff decisions. This notice describes the current demonstration. Use fictional item descriptions and ownership details in the demo.</p>
 
@@ -23,6 +23,7 @@ export default function PrivacyPage() {
     <h2>How information is used</h2>
     <p>LostLink uses account information to sign you in and control access. Item and claim records support searching, ownership review, collection, and return. Activity records help staff track changes to items and claims.</p>
     <p>Matching compares search descriptions with public item information on the application server. Private ownership evidence and internal staff notes are not sent to the matching model. The application does not send searches to an external AI inference service.</p>
+    <p>When staff select a found-item photo for intake, LostLink analyzes a processed copy on the application server to suggest listing details. Staff can enter details manually and review any suggestions before saving.</p>
     <p>Search descriptions and filters appear in page URLs and may remain in browser history or hosting logs. Use public details such as an item type and color. Do not put passwords, identity documents, contact information, or private ownership evidence in a search.</p>
 
     <h2>Service providers and cookies</h2>

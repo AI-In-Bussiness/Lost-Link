@@ -1,4 +1,4 @@
-import type { Activity, LostLinkApi, MyClaim, Organization, Page, Pagination, PublicItem, Result, StaffItem, StaffPhoto } from "./contracts.ts";
+import type { Activity, ItemSuggestion, LostLinkApi, MyClaim, Organization, Page, Pagination, PublicItem, Result, StaffItem, StaffPhoto } from "./contracts.ts";
 
 type ItemDto = {
   id: string; organizationSlug: string; title: string; publicDescription: string;
@@ -48,20 +48,27 @@ function page<T>(items: T[], input: Pagination = {}): Result<Page<T>> {
 
 /** Same-origin cookie transport. No credentials, fixtures or authorization decisions live here. */
 export function createHttpApi(_slugs: string[], transport: typeof fetch = fetch): LostLinkApi {
-  async function request<T>(path: string, body?: unknown): Promise<Result<Envelope<T>>> {
+  async function request<T>(path: string, body?: unknown, signal?: AbortSignal): Promise<Result<Envelope<T>>> {
     try {
       const response = await transport(`/api/v1${path}`, {
         method: body === undefined ? "GET" : "POST", credentials: "same-origin", cache: "no-store",
+        ...(signal ? { signal } : {}),
         ...(body === undefined ? {} : body instanceof FormData ? { body } : { headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }),
       });
       const json = await response.json();
       if (!response.ok) {
-        const codes = { UNAUTHORIZED: "UNAUTHENTICATED", UNAVAILABLE: "INTERNAL_ERROR", VALIDATION_ERROR: "VALIDATION_ERROR", FORBIDDEN: "FORBIDDEN", NOT_FOUND: "NOT_FOUND", CONFLICT: "CONFLICT", RATE_LIMITED: "RATE_LIMITED", PAYLOAD_TOO_LARGE: "VALIDATION_ERROR", UNSUPPORTED_MEDIA_TYPE: "VALIDATION_ERROR" } as const;
-        const code = codes[json?.error?.code as keyof typeof codes] ?? "INTERNAL_ERROR";
+        const codes = { UNAUTHORIZED: "UNAUTHENTICATED", UNAVAILABLE: "INTERNAL_ERROR", VALIDATION_ERROR: "VALIDATION_ERROR", FORBIDDEN: "FORBIDDEN", NOT_FOUND: "NOT_FOUND", CONFLICT: "CONFLICT", RATE_LIMITED: "RATE_LIMITED", PAYLOAD_TOO_LARGE: "VALIDATION_ERROR", UNSUPPORTED_MEDIA_TYPE: "VALIDATION_ERROR", ITEM_NOT_RECOGNIZED: "VALIDATION_ERROR" } as const;
+        const errorCode = json?.error?.code as keyof typeof codes;
+        const code = Object.hasOwn(codes, errorCode) ? codes[errorCode] : "INTERNAL_ERROR";
         const names: Record<string, string> = { evidenceText: "ownershipEvidence", publicLocation: "foundLocation", identifyingDetails: "verificationNotes", privateNote: "privateNote", claimantReason: "reason" };
         const fieldErrors = Object.fromEntries(Object.entries(json?.error?.fields ?? {}).map(([key]) => [names[key] ?? key, "Check this value."]));
         const messages = { UNAUTHENTICATED: "Sign in to continue.", INTERNAL_ERROR: "The service is unavailable. Please try again.", VALIDATION_ERROR: "Check the highlighted fields.", FORBIDDEN: "This action is not allowed.", NOT_FOUND: "This resource is unavailable.", CONFLICT: "The record changed or an active claim already exists. Refresh the status or view My claims.", RATE_LIMITED: "Too many requests. Please wait an hour before trying again." };
-        return { ok: false, error: { code, message: json?.error?.code === "PAYLOAD_TOO_LARGE" ? "Choose a photo of 4 MiB or smaller." : json?.error?.code === "UNSUPPORTED_MEDIA_TYPE" ? "Choose a valid JPEG, PNG or WebP photo." : messages[code], requestId: String(json?.error?.requestId ?? "browser"), fieldErrors } };
+        const photoMessages: Record<string, string> = {
+          PAYLOAD_TOO_LARGE: "Choose a photo of 4 MiB or smaller.",
+          UNSUPPORTED_MEDIA_TYPE: "Choose a valid JPEG, PNG or WebP photo.",
+          ITEM_NOT_RECOGNIZED: "The item could not be identified from this photo.",
+        };
+        return { ok: false, error: { code, message: Object.hasOwn(photoMessages, errorCode) ? photoMessages[errorCode] : messages[code], requestId: String(json?.error?.requestId ?? "browser"), fieldErrors } };
       }
       if (!json || !("data" in json)) throw new Error("Invalid response");
       return ok(json);
@@ -119,6 +126,11 @@ export function createHttpApi(_slugs: string[], transport: typeof fetch = fetch)
   return {
     live: true,
     photos: {
+      async identify(slug, file, signal) {
+        const form = new FormData(); form.append("file", file);
+        const result = await request<ItemSuggestion>(orgPath(slug) + "/staff/items/identify", form, signal);
+        return result.ok ? ok(result.data.data) : result;
+      },
       async upload(slug, id, file) {
         const form = new FormData(); form.append("file", file);
         const result = await request<{id: string; status: "pending"}>(orgPath(slug) + "/staff/items/" + encodeURIComponent(id) + "/photos", form);

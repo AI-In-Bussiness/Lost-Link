@@ -38,7 +38,7 @@ async function staffContext(client: SupabaseClient, orgSlug: string) {
   return { actorId: user.id, organizationId: org.id as string };
 }
 
-export async function handlePhoto(request: NextRequest, action: PhotoAction, params: Record<string, string>) {
+export async function handlePhoto(request: NextRequest, action: PhotoAction | (() => Promise<unknown>), params: Record<string, string>) {
   const requestId = randomUUID();
   const headers = { "Cache-Control": "private, no-store", "X-Request-Id": requestId, "X-Content-Type-Options": "nosniff" };
   const json = (value: unknown, status = 200) => NextResponse.json(value, { status, headers });
@@ -53,6 +53,7 @@ export async function handlePhoto(request: NextRequest, action: PhotoAction, par
     const client = await createSupabaseServerClient();
     if (!client) throw new PhotoError(503, "UNAVAILABLE", "Photos are temporarily unavailable.");
     const staff = action === "public_content" ? null : await staffContext(client, orgSlug);
+    if (typeof action === "function") return json(await action());
     if (action === "activity") {
       const page = paging.parse(query);
       let cursor: string | undefined;

@@ -13,6 +13,7 @@ export async function embed(input: string[]): Promise<number[][]> {
   if (busy) throw new Error("Local inference busy");
   busy = true;
   try {
+    process.env.ORT_DISABLE_TELEMETRY = "1";
     const active = worker ??= new Worker(join(process.cwd(), "src/lib/search/local-worker.mjs"), {
       workerData: { modelDir: join(process.cwd(), "models/all-MiniLM-L6-v2") }, execArgv: [],
     });

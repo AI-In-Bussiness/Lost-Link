@@ -165,7 +165,9 @@ export async function submitting(
   if (form.dataset.busy) return;
   form.dataset.busy = "true";
   form.setAttribute("aria-busy", "true");
-  const buttons = [...form.querySelectorAll<HTMLButtonElement>("button")];
+  const buttons = [
+    ...form.querySelectorAll<HTMLButtonElement>("button:enabled"),
+  ];
   buttons.forEach((b) => (b.disabled = true));
   try {
     await action();

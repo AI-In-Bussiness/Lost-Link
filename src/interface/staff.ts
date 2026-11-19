@@ -1,5 +1,6 @@
 import { photoPanel, bindPhotoPanel } from "./live-photos.ts";
 import { photoInputHtml, bindPhotoInput } from "./photo-input.ts";
+import { intakePhotoHtml, bindIntakePhoto } from "./intake-photo.ts";
 import type {
   Category,
   Claim,
@@ -240,7 +241,7 @@ async function intake(ctx: ViewContext): Promise<View> {
         "Create a public listing and keep identifying details private.",
       ) +
       `
-    <form id="intake-form" class="stack" novalidate><div data-errors></div><div class="two-column"><section class="card stack"><p class="eyebrow">Visible to students</p><h2>Public listing</h2>
+    <form id="intake-form" class="stack" novalidate><div data-errors></div><div id="intake-fields" class="stack">${ctx.api.photos ? intakePhotoHtml : ""}<div class="two-column"><section class="card stack"><p class="eyebrow">Visible to students</p><h2>Public listing</h2>
     <div class="field"><label for="title">Item title</label><input id="title" name="title" required minlength="3" maxlength="100" placeholder="For example, Purple pencil case"></div>
     <div class="field"><label for="publicDescription">Public description</label><textarea id="publicDescription" name="publicDescription" required minlength="10" maxlength="1000" rows="4" aria-describedby="public-hint"></textarea><p id="public-hint" class="muted">Describe the outside. Keep hidden marks and contents for verification.</p></div>
     <div class="two-column"><div class="field"><label for="category">Category</label><select id="category" name="category" required>${categories
@@ -251,83 +252,167 @@ async function intake(ctx: ViewContext): Promise<View> {
       )}</select></div><div class="field"><label for="color">Color</label><input id="color" name="color" required maxlength="40" pattern="[a-z]+([ \\-][a-z]+)*" aria-describedby="color-hint"><p id="color-hint" class="muted">Use lowercase color words, for example black or dark blue.</p></div></div>
     <div class="field"><label for="foundLocation">Broad found location</label><input id="foundLocation" name="foundLocation" required maxlength="100" placeholder="For example, Library"></div>
     <div class="field"><label for="foundDate">Date found</label><input id="foundDate" name="foundDate" type="date" required max="${new Date().toISOString().slice(0, 10)}"></div>
-    ${ctx.api.live ? "<p>Save the listing, then upload and review its photograph on the next screen.</p>" : photoInputHtml(Boolean(ctx.photoUpload))}
+    ${ctx.api.live ? "" : photoInputHtml(Boolean(ctx.photoUpload))}
     ${ctx.api.live ? "" : `<div class="field"><label for="photo.alt">Image description</label><input id="photo.alt" name="photo.alt" required maxlength="200" value="Fictional found-item illustration, not a photograph"><p class="muted">Describe only public details for people using screen readers.</p></div>`}</section>
-    <section class="card stack privacy"><p class="eyebrow">Staff only</p><h2>Private verification</h2><p>These details never appear in the public preview.</p><div class="field"><label for="verificationNotes">${ctx.api.live ? "Identifying notes (required)" : "Identifying notes (optional)"}</label><textarea id="verificationNotes" name="verificationNotes" ${ctx.api.live ? "required" : ""} maxlength="2000" rows="5" aria-describedby="private-hint"></textarea><p id="private-hint" class="muted">Record a hidden mark or contents staff can compare with a claim. Use fictional details in this demo.</p></div><div class="field"><label for="storageLocation">Staff storage location</label><input id="storageLocation" name="storageLocation" required maxlength="100"></div></section></div>
-    <div class="actions"><button type="submit">Preview public listing &gt;</button><a href="${base(ctx)}/items">Cancel</a></div>
+    <section class="card stack privacy"><p class="eyebrow">Staff only</p><h2>Private verification</h2><p>These details never appear in the public preview.</p><div class="field"><label for="verificationNotes">${ctx.api.live ? "Identifying notes (required)" : "Identifying notes (optional)"}</label><textarea id="verificationNotes" name="verificationNotes" ${ctx.api.live ? "required" : ""} maxlength="2000" rows="5" aria-describedby="private-hint"></textarea><p id="private-hint" class="muted">Record a hidden mark or contents staff can compare with a claim.${ctx.api.live ? "" : " Use fictional details in this demo."}</p></div><div class="field"><label for="storageLocation">Staff storage location</label><input id="storageLocation" name="storageLocation" required maxlength="100"></div></section></div>
+    <div class="actions"><button type="submit">Preview public listing &gt;</button><a href="${base(ctx)}/items">Cancel</a></div></div>
     <section id="public-preview" class="card stack" hidden aria-labelledby="preview-heading" tabindex="-1"></section></form>`,
     bind: (root) => {
       const form = root.querySelector<HTMLFormElement>("#intake-form")!;
       const preview = root.querySelector<HTMLElement>("#public-preview")!;
-      const photo = ctx.api.live
-        ? {
-            ready: () => true,
-            value: () => ({
-              photo: {
-                url: "/mock-assets/item-placeholder.svg",
-                alt: "No photograph yet",
-                isPlaceholder: true,
-              },
-              upload: { mimeType: "image/jpeg" as const, sizeBytes: 0 },
-            }),
-          }
-        : bindPhotoInput(form, ctx.photoUpload);
+      const fields = root.querySelector<HTMLElement>("#intake-fields")!;
+      const photos = ctx.api.photos;
       let reviewed = false;
-      const value = (name: string) =>
-        String(new FormData(form).get(name) || "").trim();
-      const input = (): CreateItemInput => ({
-        orgSlug: ctx.orgSlug,
-        title: value("title"),
-        publicDescription: value("publicDescription"),
-        category: value("category") as Category,
-        color: value("color"),
-        foundLocation: value("foundLocation"),
-        foundDate: value("foundDate"),
-        photo: {
-          ...photo.value()!.photo,
-          alt: ctx.api.live ? value("title") : value("photo.alt"),
-        },
-        upload: photo.value()!.upload,
-        verificationNotes: value("verificationNotes"),
-        storageLocation: value("storageLocation"),
-      });
-      form.addEventListener("input", () => {
+      let savedItemId: string | undefined;
+      const invalidatePreview = () => {
+        if (savedItemId) return;
         reviewed = false;
         preview.hidden = true;
-      });
-      form.addEventListener("change", () => {
-        reviewed = false;
-        preview.hidden = true;
-      });
+      };
+      const livePhoto = photos
+        ? bindIntakePhoto(form, photos, ctx.orgSlug, invalidatePreview)
+        : undefined;
+      const demoPhoto = ctx.api.live
+        ? undefined
+        : bindPhotoInput(form, ctx.photoUpload);
+      form.addEventListener("input", invalidatePreview);
+      form.addEventListener("change", invalidatePreview);
       form.addEventListener("submit", (event) => {
         event.preventDefault();
-        if (!photo.ready() || !valid(form)) return;
-        const item = input();
+        if (
+          form.dataset.busy ||
+          savedItemId ||
+          livePhoto?.ready() === false ||
+          demoPhoto?.ready() === false ||
+          !valid(form)
+        )
+          return;
+        livePhoto?.cancelSuggestion();
+        const attached = livePhoto?.value();
+        const demo = demoPhoto?.value();
+        const values = new FormData(form);
+        const value = (name: string) => String(values.get(name) || "").trim();
+        const item: CreateItemInput = {
+          orgSlug: ctx.orgSlug,
+          title: value("title"),
+          publicDescription: value("publicDescription"),
+          category: value("category") as Category,
+          color: value("color"),
+          foundLocation: value("foundLocation"),
+          foundDate: value("foundDate"),
+          photo: {
+            url:
+              attached?.url ??
+              demo?.photo.url ??
+              "/mock-assets/item-placeholder.svg",
+            alt: demo
+              ? value("photo.alt")
+              : attached
+                ? value("title")
+                : "No photograph yet",
+            isPlaceholder: !attached && (demo?.photo.isPlaceholder ?? true),
+          },
+          upload: demo?.upload ?? { mimeType: "image/jpeg", sizeBytes: 0 },
+          verificationNotes: value("verificationNotes"),
+          storageLocation: value("storageLocation"),
+        };
+        const photoLabel = attached
+          ? "Photo awaiting private review"
+          : ctx.api.live
+            ? "No photograph yet"
+            : item.photo.isPlaceholder
+              ? "Illustration · demo item"
+              : "Local photo · not uploaded";
+        const saveLabel = attached
+          ? "Save listing with photo"
+          : ctx.api.live
+            ? "Save listing and add photo"
+            : "Publish demo item";
         reviewed = true;
         // Deliberately construct the public preview from its allowlisted fields.
-        preview.innerHTML = `<p class="eyebrow">Public preview</p><h2 id="preview-heading">${e(item.title)}</h2><div class="two-column"><div class="item-image"><img src="${e(item.photo.url)}" alt="${e(item.photo.alt)}"><span class="photo-label">${item.photo.isPlaceholder ? "Illustration · demo item" : "Local photo · not uploaded"}</span></div><div><p>${e(item.publicDescription)}</p><dl class="detail-list"><div><dt>Category</dt><dd>${e(label(item.category))}</dd></div><div><dt>Color</dt><dd>${e(item.color)}</dd></div><div><dt>Found at</dt><dd>${e(item.foundLocation)}</dd></div><div><dt>Found on</dt><dd>${date(item.foundDate)}</dd></div></dl></div></div><p class="muted">Only the listing above will be shown publicly.</p><div class="actions"><button type="button" id="publish-item">${ctx.api.live ? "Save listing and add photo" : "Publish demo item"}</button><button type="button" class="secondary" id="edit-item">Back to editing</button></div>`;
+        preview.innerHTML = `<p class="eyebrow">Public preview</p><h2 id="preview-heading">${e(item.title)}</h2><div class="two-column"><div class="item-image"><img src="${e(item.photo.url)}" alt="${e(item.photo.alt)}"><span class="photo-label">${photoLabel}</span></div><div><p>${e(item.publicDescription)}</p><dl class="detail-list"><div><dt>Category</dt><dd>${e(label(item.category))}</dd></div><div><dt>Color</dt><dd>${e(item.color)}</dd></div><div><dt>Found at</dt><dd>${e(item.foundLocation)}</dd></div><div><dt>Found on</dt><dd>${date(item.foundDate)}</dd></div></dl></div></div><p class="muted">${attached ? "The photo stays private until staff review and publish it." : "Only the listing above will be shown publicly."}</p><p id="intake-save-status" role="status" tabindex="-1" hidden></p><div class="actions"><button type="button" id="publish-item">${saveLabel}</button><button type="button" class="secondary" id="edit-item">Back to editing</button><a id="saved-item" hidden>Open saved listing</a></div>`;
         preview.hidden = false;
         preview.focus();
-        preview.querySelector("#edit-item")!.addEventListener("click", () => {
-          reviewed = false;
-          preview.hidden = true;
+        const edit = preview.querySelector<HTMLButtonElement>("#edit-item")!;
+        const save = preview.querySelector<HTMLButtonElement>("#publish-item")!;
+        const status = preview.querySelector<HTMLElement>(
+          "#intake-save-status",
+        )!;
+        edit.addEventListener("click", () => {
+          invalidatePreview();
           form.querySelector<HTMLInputElement>("#title")!.focus();
         });
-        preview
-          .querySelector("#publish-item")!
-          .addEventListener("click", () => {
-            if (!reviewed || !photo.ready() || !valid(form)) return;
-            void submitting(form, async () => {
-              const result = await ctx.api.createItem(input());
-              if (!root.isConnected) return;
-              if (result.ok) ctx.navigate(itemPath(ctx, result.data.id));
-              else {
-                reviewed = false;
-                preview.hidden = true;
-                mutationError(form, result, ctx);
+        save.addEventListener("click", () => {
+          if (!reviewed || form.dataset.busy) return;
+          void submitting(form, async () => {
+            const retryingPhoto = savedItemId !== undefined;
+            fields.inert = true;
+            try {
+              if (!savedItemId) {
+                const result = await ctx.api.createItem(item);
+                if (!result.ok) {
+                  if (form.isConnected) {
+                    fields.inert = false;
+                    invalidatePreview();
+                    mutationError(form, result, ctx);
+                  }
+                  return;
+                }
+                savedItemId = result.data.id;
               }
-            });
+              const path = itemPath(ctx, savedItemId);
+              if (photos && attached) {
+                status.hidden = false;
+                if (retryingPhoto) {
+                  // The first upload may have succeeded even if its response was lost.
+                  status.textContent =
+                    "Checking the saved listing for the photo…";
+                  const current = await ctx.api.getStaffItem(
+                    ctx.orgSlug,
+                    savedItemId,
+                  );
+                  if (!form.isConnected) return;
+                  if (!current.ok) {
+                    status.textContent =
+                      "Listing saved. We couldn’t check whether the photo was uploaded. Retry or open the saved listing.";
+                    status.focus();
+                    return;
+                  }
+                  if (current.data.photos?.length) {
+                    ctx.navigate(path);
+                    return;
+                  }
+                }
+                status.textContent =
+                  "Listing saved. Uploading photo for private review…";
+                const uploaded = await photos.upload(
+                  ctx.orgSlug,
+                  savedItemId,
+                  attached.file,
+                );
+                if (!form.isConnected) return;
+                if (!uploaded.ok) {
+                  fields.hidden = true;
+                  edit.hidden = true;
+                  save.textContent = "Retry photo upload";
+                  const link =
+                    preview.querySelector<HTMLAnchorElement>("#saved-item")!;
+                  link.href = path;
+                  link.hidden = false;
+                  status.textContent =
+                    "Listing saved. " +
+                    uploaded.error.message +
+                    " You can retry the photo upload or open the saved listing.";
+                  status.focus();
+                  return;
+                }
+              }
+              if (form.isConnected) ctx.navigate(path);
+            } finally {
+              fields.inert = false;
+            }
           });
+        });
       });
     },
   };
