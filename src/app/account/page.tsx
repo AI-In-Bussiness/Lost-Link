@@ -17,14 +17,82 @@ export default async function AccountPage() {
   const { data: memberships, error: membershipError } = await client.from("memberships")
     .select("organization_id, role, organizations(name,slug)").eq("user_id", user.id).returns<Membership[]>();
   const {data:owner}=await client.from("platform_admins").select("user_id").eq("user_id",user.id).maybeSingle();
-  return <PaperFrame><main id="main" className="paper-page paper-page-body paper-page-account">
-    <p className="eyebrow paper-page-eyebrow">Your LostLink notebook</p>
-    <h1 className="paper-page-title">Your account</h1>
-    <p className="mt-3">Signed in as {user.email}</p>
-    <p className="mt-4"><Link href="/my/claims">View my claims</Link></p>
-    {owner && <p className="mt-4"><Link href="/admin">Website administration — manage schools and staff</Link></p>}
-    <h2 className="mt-8 text-xl font-semibold">Organization access</h2>
-    {membershipError ? <p role="alert">Organization access could not be loaded. Please refresh to retry.</p> : memberships?.length ? <ul className="paper-access-list">{memberships.map((membership) => <li key={membership.organization_id}>{membership.organizations ? organizationDisplayName({ id: membership.organization_id, ...membership.organizations }) : "Organization unavailable"} · {membership.role==='admin'?'School admin':'School staff'} {membership.organizations && <Link href={`/o/${membership.organizations.slug}/staff`}>Open staff workspace</Link>}{membership.role==='admin' && membership.organizations && <> · <Link href={`/o/${membership.organizations.slug}/staff/settings`}>School administration</Link></>}</li>)}</ul> : <p className="mt-3">You have claimant access. No staff memberships are assigned.</p>}
-    <form method="post" action="/api/auth/sign-out" className="mt-8"><button className="button secondary" type="submit">Sign out</button></form>
-  </main></PaperFrame>;
+  return (
+    <PaperFrame account>
+      <main id="main" className="paper-page paper-page-account card">
+        <section className="page-heading">
+          <p className="eyebrow">Your LostLink notebook</p>
+          <h1>Your account</h1>
+          <p>Signed in as {user.email}</p>
+        </section>
+        <nav className="actions" aria-label="Account shortcuts">
+          <Link className="button" href="/my/claims">
+            View my claims
+          </Link>
+          {owner && (
+            <Link className="button secondary" href="/admin">
+              Website administration — manage schools and staff
+            </Link>
+          )}
+        </nav>
+        <h2>Organization access</h2>
+        {membershipError ? (
+          <p role="alert" className="error-summary">
+            Organization access could not be loaded. Please refresh to retry.
+          </p>
+        ) : memberships?.length ? (
+          <ul className="paper-access-list">
+            {memberships.map((membership) => (
+              <li key={membership.organization_id}>
+                <div className="access-membership">
+                  <strong>
+                    {membership.organizations
+                      ? organizationDisplayName({
+                          id: membership.organization_id,
+                          ...membership.organizations,
+                        })
+                      : "Organization unavailable"}
+                  </strong>
+                  <span className="badge">
+                    {membership.role === "admin"
+                      ? "School admin"
+                      : "School staff"}
+                  </span>
+                </div>
+                {membership.organizations && (
+                  <div className="actions">
+                    <Link
+                      className="text-link"
+                      href={`/o/${membership.organizations.slug}/staff`}
+                    >
+                      Open staff workspace
+                    </Link>
+                    {membership.role === "admin" && (
+                      <Link
+                        className="text-link"
+                        href={`/o/${membership.organizations.slug}/staff/settings`}
+                      >
+                        School administration
+                      </Link>
+                    )}
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>You have claimant access. No staff memberships are assigned.</p>
+        )}
+        <form
+          method="post"
+          action="/api/auth/sign-out"
+          className="paper-page-actions"
+        >
+          <button className="button secondary" type="submit">
+            Sign out
+          </button>
+        </form>
+      </main>
+    </PaperFrame>
+  );
 }

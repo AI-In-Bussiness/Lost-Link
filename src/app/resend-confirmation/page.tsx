@@ -19,15 +19,17 @@ export default async function ResendConfirmationPage({ searchParams }: { searchP
     disabled: "Account registration is currently unavailable. Please contact the LostLink team.",
     unavailable: "We could not request a confirmation email right now. Please try again later.",
   };
-  return <PaperFrame><main id="main" className="paper-page paper-page-body paper-page-narrow">
-    <p className="eyebrow paper-page-eyebrow">One more step</p>
-    <h1 className="paper-page-title">Confirm your email</h1>
-    <p className="mt-3">Request a new email link without creating another account. It confirms your email if needed, then signs you in.</p>
-    {!supabaseConfiguration() ? <p role="status" className="mt-6">Confirmation email is unavailable until sign-in is configured.</p> : <>
-      {status === "sent" && <p role="status" className="mt-6">If this address has an account, a new email link has been requested. Check your inbox and spam folder. If your email is already confirmed, the email may say “Sign in” or “Magic Link”. Your original password still works.</p>}
-      {error && <p role="alert" className="mt-6">{Object.hasOwn(errors, error) ? errors[error] : errors.unavailable}</p>}
+  return <PaperFrame><main id="main" className="paper-page paper-page-narrow card">
+    <section className="page-heading">
+    <p className="eyebrow">One more step</p>
+    <h1>Confirm your email</h1>
+    <p>Request a new email link without creating another account. It confirms your email if needed, then signs you in.</p>
+    </section>
+    {!supabaseConfiguration() ? <p role="status" className="notice">Confirmation email is unavailable until sign-in is configured.</p> : <>
+      {status === "sent" && <p role="status" className="notice">If this address has an account, a new email link has been requested. Check your inbox and spam folder. If your email is already confirmed, the email may say “Sign in” or “Magic Link”. Your original password still works.</p>}
+      {error && <p role="alert" className="error-summary">{Object.hasOwn(errors, error) ? errors[error] : errors.unavailable}</p>}
       <ResendConfirmationForm email={email} next={destination} />
     </>}
-    <p className="mt-6"><Link href={`/sign-in?next=${encodeURIComponent(destination)}`} className="underline">Sign in</Link></p>
+    <p><Link href={`/sign-in?next=${encodeURIComponent(destination)}`} className="text-link">Sign in</Link></p>
   </main></PaperFrame>;
 }

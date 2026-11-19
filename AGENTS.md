@@ -143,6 +143,8 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 Before editing, read [the agent hub](docs/coordination/README.md),
 [the current-state snapshot](docs/coordination/current-state.md), and
 [the integration checklist](docs/coordination/integration.md).
+For UI or UX work, read [the LostLink style guide](DESIGN.md) before editing.
+Update it alongside shared component, color, typography, layering, or motion changes.
 Confirm your actual branch and commit with Git; branch-specific handoffs describe
 their own snapshot and may predate another founder's work.
 
