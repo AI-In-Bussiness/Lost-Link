@@ -134,6 +134,18 @@ See [Phase 1 handoff](docs/phase-1/README.md) for hosted prerequisites, configur
 
 Architecture and security decisions: [Phase 0 handoff](docs/phase-0/README.md). License: [Apache 2.0](LICENSE).
 
+### Staff photo identification
+
+Run `npm run model:download:identification` to install the pinned YOLOX Nano model before
+local testing. Production builds install it automatically. Photo identification
+runs on the application server's CPU without a separate service or API key.
+
+The model suggests a title, category, color, and description for supported items
+such as bags, bottles, umbrellas, sports equipment, and some electronics.
+Staff review and edit the suggestions before saving. A clear photo of one item
+works best. Manual intake remains available when the model cannot identify an
+item or when the operator sets `LOSTLINK_ITEM_IDENTIFICATION=false`.
+
 ### Phase 3 interface checks
 
 The homepage, `/o/:slug/search`, item/claim screens, `/my/claims` and staff workspace now use the real cookie-authenticated API. `LOSTLINK_ORGANIZATION_SLUGS` optionally sets the school selector’s comma-separated public slugs (defaults to the Flint Hill School and Fairfax High School demo entries). Direct organization URLs are also resolved by the API. Sign in with an operator-provisioned account; the real application has no demo persona controls.

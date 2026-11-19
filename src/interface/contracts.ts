@@ -24,7 +24,14 @@ export interface MyClaim extends Claim {
   item?: PublicItem; itemTitle?: string; collectionInstructions: string | null;
 }
 export interface StaffPhoto { id: string; status: 'pending' | 'published'; url: string; alt: string }
+export interface ItemSuggestion {
+  title: string;
+  publicDescription: string;
+  category: Exclude<Category, 'accessory'>;
+  color: string;
+}
 export interface PhotoApi {
+  identify(orgSlug: string, file: File, signal: AbortSignal): Promise<Result<ItemSuggestion>>;
   upload(orgSlug: string, itemId: string, file: File): Promise<Result<{ id: string; status: 'pending' }>>;
   publish(orgSlug: string, itemId: string, photoId: string): Promise<Result<unknown>>;
 }

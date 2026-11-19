@@ -711,9 +711,20 @@ class InterfaceTest(unittest.TestCase):
           canvas.width = canvas.height = 2;
           const smallBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
           const small = new File([smallBlob], 'small.png', {type:'image/png'});
-          return {results, smallUnchanged:(await preparePhoto(small)) === small};
+          // A low-entropy camera image can exceed the server's pixel limit while fitting under 4 MiB.
+          canvas.width = 4800; canvas.height = 4500;
+          const cameraBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg'));
+          const camera = new File([cameraBlob], 'large-camera.jpg', {type:'image/jpeg'});
+          const resized = await preparePhoto(camera, {validateSmallPhoto:true});
+          const cameraPreview = await createImageBitmap(resized);
+          const cameraDimensions = [cameraPreview.width, cameraPreview.height];
+          cameraPreview.close();
+          return {results, smallUnchanged:(await preparePhoto(small)) === small,
+            cameraSourceBytes:camera.size, cameraDimensions, maxBytes:MAX_PHOTO_BYTES};
         }""")
         self.assertTrue(results['smallUnchanged'], 'Photos already within the upload limit must keep their original bytes')
+        self.assertLess(results['cameraSourceBytes'], results['maxBytes'])
+        self.assertEqual(max(results['cameraDimensions']), 2000, 'Intake must resize phones above the server pixel limit')
         for result in results['results']:
             with self.subTest(type=result['type']):
                 self.assertGreater(result['original'], result['limit'], 'The fixture must actually exceed the upload limit')
@@ -724,6 +735,79 @@ class InterfaceTest(unittest.TestCase):
                 self.assertLessEqual(max(result['width'], result['height']), 2000)
                 expected_ratio = 3 / 4 if result['type'] == 'image/jpeg' else 4 / 3
                 self.assertAlmostEqual(result['width'] / result['height'], expected_ratio, places=2)
+
+    def test_live_intake_ignores_stale_suggestions_and_reconciles_a_lost_upload_response(self):
+        p = self.page
+        p.evaluate("""async () => {
+          const {staffView} = await import('/src/interface/staff.ts');
+          const root = document.createElement('main');
+          document.querySelector('#app').replaceWith(root);
+          const state = window.__intake = {requests:[], created:[], uploads:[], lookupCount:0, path:null};
+          const unavailable = {ok:false,error:{code:'INTERNAL_ERROR',message:'Try again.',requestId:'test'}};
+          const view = await staffView({
+            url:new URL('/o/test-school/staff/items/new', location.origin), orgSlug:'test-school', orgName:'Test School',
+            navigate:path => {state.path = path}, api:{
+              live:true, listStaffInventory:async () => ({ok:true,data:{}}),
+              createItem:async item => {state.created.push(item); return {ok:true,data:{id:'item-1'}}},
+              getStaffItem:async () => ++state.lookupCount === 1 ? unavailable : {ok:true,data:{photos:[{id:'photo-1',status:'pending'}]}},
+              photos:{
+                identify:async (slug, file, signal) => new Promise(resolve => state.requests.push({name:file.name,signal,resolve})),
+                upload:async (slug, itemId, file) => {state.uploads.push({slug,itemId,name:file.name}); return unavailable}
+              }
+            }
+          });
+          root.innerHTML = view.html;
+          view.bind(root);
+        }""")
+        upload = p.get_by_label('Choose or take an item photo')
+        camera = p.locator('#intake-photo-camera')
+        identify = p.get_by_role('button', name='Suggest item details')
+        expect(camera).to_have_attribute('capture', 'environment')
+        expect(identify).to_be_disabled()
+        upload.set_input_files({'name':'first.png','mimeType':'image/png','buffer':png_bytes()})
+        p.wait_for_function('() => window.__intake.requests.length === 1')
+        expect(identify).to_be_disabled()
+        camera.set_input_files({'name':'second.png','mimeType':'image/png','buffer':png_bytes(240)})
+        p.wait_for_function('() => window.__intake.requests.length === 2')
+        title = p.get_by_label('Item title')
+        title.fill('Staff-corrected item title')
+        p.evaluate("""() => {
+          const [first, second] = window.__intake.requests;
+          if (!first.signal.aborted) throw new Error('Stale request was not cancelled');
+          second.resolve({ok:true,data:{title:'Red bottle',publicDescription:'A red bottle with a black lid.',category:'bottle',color:'red'}});
+          first.resolve({ok:true,data:{title:'Stale backpack',publicDescription:'Stale description.',category:'bag',color:'blue'}});
+        }""")
+        expect(p.locator('#intake-photo-status')).to_contain_text('Suggestions are ready')
+        expect(title).to_have_value('Staff-corrected item title')
+        expect(p.get_by_label('Public description')).to_have_value('A red bottle with a black lid.')
+        expect(p.get_by_label('Category')).to_have_value('bottle')
+        expect(p.get_by_label('Color')).to_have_value('red')
+        expect(identify).to_be_enabled()
+        self.assertEqual(p.evaluate('window.__intake.created'), [])
+        if os.environ.get('AXE_SCRIPT'):
+            p.evaluate(Path(os.environ['AXE_SCRIPT']).read_text())
+            violations = p.evaluate("""async () => (await axe.run('main', {runOnly:{type:'tag',
+              values:['wcag2a','wcag2aa','wcag21aa','wcag22aa']}})).violations.map(v =>
+              ({id:v.id,nodes:v.nodes.map(n=>n.target)}))""")
+            self.assertEqual(violations, [])
+        p.get_by_label('Broad found location').fill('Library')
+        p.get_by_label('Date found').fill('2026-01-01')
+        p.get_by_label('Identifying notes (required)').fill('Fictional hidden mark')
+        p.get_by_label('Staff storage location').fill('Private cabinet')
+        p.get_by_role('button', name='Preview public listing').click()
+        expect(p.locator('#public-preview')).not_to_contain_text('Fictional hidden mark')
+        p.get_by_role('button', name='Save listing with photo').click()
+        retry = p.get_by_role('button', name='Retry photo upload')
+        expect(retry).to_be_enabled()
+        expect(p.get_by_role('link', name='Open saved listing')).to_have_attribute('href', '/o/test-school/staff/items/item-1')
+        retry.click()
+        expect(p.locator('#intake-save-status')).to_contain_text('couldn’t check whether the photo was uploaded')
+        retry.click()
+        p.wait_for_function("() => window.__intake.path === '/o/test-school/staff/items/item-1'")
+        self.assertEqual(p.evaluate('window.__intake.created.length'), 1)
+        self.assertEqual(p.evaluate('window.__intake.uploads'), [
+            {'slug':'test-school','itemId':'item-1','name':'second.png'}
+        ])
 
     def test_live_photo_panel_compresses_once_and_keeps_failures_local(self):
         p = self.page

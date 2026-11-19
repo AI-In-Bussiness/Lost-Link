@@ -116,6 +116,42 @@ test("published photographs replace illustrations and upload uses multipart with
   assert.ok((await api.photos!.upload("maple-school","item-1",new File(["bytes"],"item.png"))).ok);
 });
 
+test("item identification sends only the photo in cancellable, school-scoped multipart", async () => {
+  const photo = new File(["photo bytes"], "item.png", { type: "image/png" });
+  const signal = new AbortController().signal;
+  const suggestion = {
+    title: "Red backpack",
+    publicDescription: "A red backpack with a front pocket.",
+    category: "bag",
+    color: "red",
+  };
+  const api = createHttpApi([], async (url, init) => {
+    assert.equal(url, "/api/v1/organizations/maple-school/staff/items/identify");
+    assert.equal(init?.method, "POST");
+    assert.equal(init?.credentials, "same-origin");
+    assert.equal(init?.cache, "no-store");
+    assert.equal(init?.signal, signal);
+    assert.equal(init?.headers, undefined, "browser supplies the multipart boundary");
+    assert.ok(init?.body instanceof FormData);
+    assert.deepEqual([...init.body.keys()], ["file"]);
+    assert.equal(init.body.get("file"), photo);
+    return response({ data: suggestion });
+  });
+  assert.deepEqual(await api.photos!.identify("maple-school", photo, signal), {
+    ok: true,
+    data: suggestion,
+  });
+});
+
+test("unrecognized photos get a safe manual-entry message", async () => {
+  const api = createHttpApi([], async () =>
+    response({ error: { code: "ITEM_NOT_RECOGNIZED", message: "private diagnostic" } }, 422),
+  );
+  const result = await api.photos!.identify("maple-school", new File(["bytes"], "item.png"), new AbortController().signal);
+  assert.ok(!result.ok);
+  assert.equal(result.error.message, "The item could not be identified from this photo.");
+});
+
 test("claimant explanation is separate from private staff notes", async () => {
   const api = createHttpApi([], async () => response({data:[{...dto,status:"rejected",claimantReason:"The details do not match. Contact staff.",privateReviewNote:undefined}],page:{nextCursor:null}}));
   const found = await api.getMyClaim("claim-1");

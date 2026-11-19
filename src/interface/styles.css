@@ -992,6 +992,14 @@ tbody tr:focus-within {
   padding: 3px 6px;
   letter-spacing: 0.02em;
 }
+.intake-camera {
+  display: none;
+}
+@media (any-pointer: coarse) {
+  .intake-camera {
+    display: grid;
+  }
+}
 .item-card .item-image img {
   aspect-ratio: 1.4;
   object-fit: cover;

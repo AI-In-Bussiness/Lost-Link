@@ -2,6 +2,7 @@
 export const MAX_PHOTO_BYTES = 4 * 1024 * 1024;
 export const MAX_SOURCE_BYTES = 32 * 1024 * 1024;
 export const MAX_SOURCE_PIXELS = 40_000_000;
+const MAX_UPLOAD_PIXELS = 20_000_000;
 
 const invalid = () =>
   new Error(
@@ -98,20 +99,23 @@ function dimensions(bytes: Uint8Array): [number, number] {
   throw invalid();
 }
 
-export async function preparePhoto(file: File): Promise<File> {
+export async function preparePhoto(
+  file: File,
+  { validateSmallPhoto = false } = {},
+): Promise<File> {
   if (!file.size) throw new Error("Choose a nonempty JPEG, PNG or WebP photo.");
-  // Keep ordinary uploads byte-for-byte intact; the server checks their format and dimensions.
-  if (file.size <= MAX_PHOTO_BYTES) return file;
+  const fitsUploadLimit = file.size <= MAX_PHOTO_BYTES;
+  // Keep ordinary uploads intact. Intake also checks headers before showing a local preview.
+  if (fitsUploadLimit && !validateSmallPhoto) return file;
   if (file.size > MAX_SOURCE_BYTES)
     throw new Error(
       "Choose a photo of 32 MiB or smaller for automatic compression.",
     );
   const [width, height] = dimensions(new Uint8Array(await file.arrayBuffer()));
   if (!width || !height || width * height > MAX_SOURCE_PIXELS) {
-    throw new Error(
-      "Choose a photo of 40 megapixels or smaller for automatic compression.",
-    );
+    throw new Error("Choose a photo of 40 megapixels or smaller.");
   }
+  if (fitsUploadLimit && width * height <= MAX_UPLOAD_PIXELS) return file;
   let bitmap: ImageBitmap;
   try {
     bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });

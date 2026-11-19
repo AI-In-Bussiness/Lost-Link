@@ -3,6 +3,12 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   serverExternalPackages: ['@huggingface/transformers', 'onnxruntime-node'],
   outputFileTracingIncludes: {
+    '/api/v1/organizations/*/staff/items/identify': [
+      './src/lib/photos/local-worker.mjs', './src/lib/photos/model-manifest.json', './models/yolox-nano/**/*',
+      './node_modules/onnxruntime-node/dist/**/*', './node_modules/onnxruntime-node/package.json',
+      `./node_modules/onnxruntime-node/bin/napi-v6/${process.platform}/${process.arch}/*`,
+      './node_modules/onnxruntime-common/**/*',
+    ],
     '/api/v1/organizations/*/search': [
       './src/lib/search/local-worker.mjs', './src/lib/search/model-manifest.json', './models/all-MiniLM-L6-v2/**/*',
       './node_modules/@huggingface/transformers/dist/transformers.node.mjs',

@@ -173,6 +173,39 @@ class PersistedWorkflow(unittest.TestCase):
         page.get_by_role('heading', level=1, name='LOST. FOUND.', exact=True).wait_for()
         expect(page.locator('.hero-description')).to_contain_text('Your school’s lost-and-found')
 
+    def test_photo_first_intake_when_ai_does_not_recognize_item(self):
+        staff_context, staff = self.login(self.fixtures['staff'], self.school + '/staff/items/new')
+        endpoint = self.origin + '/api/v1/organizations/' + self.fixtures['orgs'][0]['slug'] + '/staff/items/identify'
+        photo = {'name': 'synthetic.png', 'mimeType': 'image/png', 'buffer': png_bytes()}
+        multipart = {'file': photo}
+        foreign_context, _ = self.login(self.fixtures['foreign'], '/o/' + self.fixtures['orgs'][1]['slug'] + '/staff')
+        claimant_context, _ = self.login(self.fixtures['claimant'], '/my/claims')
+        for context, status in [(self.context(), 401), (claimant_context, 404), (foreign_context, 404)]:
+            denied = context.request.post(endpoint, headers={'Origin': self.origin}, multipart=multipart)
+            self.assertEqual(denied.status, status)
+            self.assertIn('no-store', denied.headers['cache-control'])
+        self.assertEqual(staff_context.request.post(endpoint, headers={'Origin': 'https://example.invalid'}, multipart=multipart).status, 403)
+
+        with staff.expect_response(lambda response: response.request.method == 'POST' and response.url == endpoint) as identification:
+            staff.get_by_label('Choose or take an item photo').set_input_files(photo)
+        self.assertEqual(identification.value.status, 422)
+        self.assertEqual(identification.value.json()['error']['code'], 'ITEM_NOT_RECOGNIZED')
+        expect(staff.locator('#intake-photo-status')).to_contain_text('You can enter the item details yourself.')
+        for label, value in [('Item title', 'Photo-first acceptance item'), ('Public description', 'A fictional blue item recorded by staff.'), ('Color', 'blue'), ('Broad found location', 'Library'), ('Date found', '2026-01-01'), ('Identifying notes (required)', 'Synthetic private mark.'), ('Staff storage location', 'Synthetic cabinet')]:
+            staff.get_by_label(label, exact=True).fill(value)
+        staff.get_by_role('button', name='Preview public listing').click()
+        staff.get_by_role('button', name='Save listing with photo').click()
+        staff.get_by_text('Private preview · not published', exact=True).wait_for()
+        item_id = staff.url.rsplit('/', 1)[1]
+        staff.reload()
+        staff.get_by_text('Private preview · not published', exact=True).wait_for()
+        staff.goto(self.origin + self.school + '/staff/items')
+        expect(staff.get_by_role('link', name='Manage Photo-first acceptance item')).to_have_attribute('href', self.school + '/staff/items/' + item_id)
+        item_endpoint = endpoint.removesuffix('/identify') + '/' + item_id
+        saved = staff_context.request.get(item_endpoint).json()['data']
+        archived = staff_context.request.post(item_endpoint + '/archive', headers={'Origin': self.origin}, data={'expectedVersion': saved['version']})
+        self.assertEqual(archived.status, 200)
+
     def test_real_upload_claim_review_return_and_isolation(self):
         staff_context, staff = self.login(self.fixtures['staff'], self.school + '/staff/items/new')
         self.review(staff, 'intake')

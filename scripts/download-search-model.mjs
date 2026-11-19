@@ -29,12 +29,12 @@ async function atomicCopy(source, destination) {
   } finally { await rm(temporary, { force: true }); }
 }
 
-async function download(entry, manifest, destination, { fetcher, waitBeforeRetry, log }) {
+async function download(entry, assetUrl, destination, { fetcher, waitBeforeRetry, log }) {
   await mkdir(dirname(destination), { recursive: true });
   for (let attempt = 1; attempt <= attempts; attempt++) {
     const temporary = `${destination}.${randomUUID()}.partial`;
     try {
-      const url = new URL(`https://huggingface.co/${manifest.repository}/resolve/${manifest.revision}/${entry.path}`);
+      const url = assetUrl(entry);
       if (attempt > 1) {
         // Refresh an expired CDN redirect rather than retrying its signed URL.
         url.searchParams.set('download', 'true');
@@ -73,12 +73,10 @@ async function download(entry, manifest, destination, { fetcher, waitBeforeRetry
   }
 }
 
-export async function installModelAssets({ root = projectRoot, verifyOnly = false, fetcher = fetch, waitBeforeRetry = pause, log = console.log } = {}) {
-  const manifest = JSON.parse(await readFile(join(root, 'src/lib/search/model-manifest.json'), 'utf8'));
-  const modelRoot = join(root, 'models/all-MiniLM-L6-v2');
-  // Vercel restores .next/cache between Next.js builds; runtime inference stays offline.
-  const cacheRoot = join(root, '.next/cache/lostlink-model', manifest.revision);
-  for (const entry of manifest.files) {
+export async function installPinnedModelFiles({
+  files, modelRoot, cacheRoot, assetUrl, verifyOnly = false, fetcher = fetch, waitBeforeRetry = pause, log = console.log,
+}) {
+  for (const entry of files) {
     const destination = join(modelRoot, entry.path);
     const cached = join(cacheRoot, entry.path);
     if (await verified(destination, entry)) {
@@ -89,7 +87,7 @@ export async function installModelAssets({ root = projectRoot, verifyOnly = fals
         await atomicCopy(cached, destination);
         log(`Restored and verified ${entry.path} from build cache`);
       } else {
-        await download(entry, manifest, destination, { fetcher, waitBeforeRetry, log });
+        await download(entry, assetUrl, destination, { fetcher, waitBeforeRetry, log });
         log(`Downloaded and verified ${entry.path}`);
       }
     }
@@ -99,6 +97,17 @@ export async function installModelAssets({ root = projectRoot, verifyOnly = fals
       catch { log(`Could not cache ${entry.path}; the verified model asset is installed.`); }
     }
   }
+}
+
+export async function installModelAssets({ root = projectRoot, verifyOnly = false, ...options } = {}) {
+  const manifest = JSON.parse(await readFile(join(root, 'src/lib/search/model-manifest.json'), 'utf8'));
+  const modelRoot = join(root, 'models/all-MiniLM-L6-v2');
+  // Vercel restores .next/cache between Next.js builds; runtime inference stays offline.
+  const cacheRoot = join(root, '.next/cache/lostlink-model', manifest.revision);
+  await installPinnedModelFiles({
+    files: manifest.files, modelRoot, cacheRoot, verifyOnly, ...options,
+    assetUrl: (entry) => new URL(`https://huggingface.co/${manifest.repository}/resolve/${manifest.revision}/${entry.path}`),
+  });
   if (!verifyOnly) {
     await copyFile(join(root, 'docs/phase-4/LICENSE-MINILM.txt'), join(modelRoot, 'LICENSE'));
     await copyFile(join(root, 'docs/phase-4/THIRD-PARTY-NOTICES.md'), join(modelRoot, 'NOTICE.md'));
