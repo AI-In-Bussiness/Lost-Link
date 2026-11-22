@@ -38,9 +38,10 @@ function dateControl(value: string): "date" | "text" {
 
 function homeArt(): string {
   return `<figure class="hero-art paper-scene" aria-label="An original paper sketch of belongings waiting at a school lost-and-found">
+    <div class="art-heading"><span>a few familiar things…</span><span>sketch no. 01</span></div>
+    <div class="scene-stage">
     <div class="scene-grid" aria-hidden="true"></div>
     <div class="scene-orbit" aria-hidden="true"></div>
-    <div class="art-heading"><span>a few familiar things…</span><span>sketch no. 01</span></div>
     <div class="scene-paper paper-object">
       <span class="paper-tape" aria-hidden="true"></span>
       <div class="paper-topline" aria-hidden="true"><span>LOST PROPERTY</span><span>SCHOOL OFFICE</span></div>
@@ -91,6 +92,7 @@ function homeArt(): string {
     </div>
     <div class="scene-tag paper-object" aria-hidden="true"><span class="tag-hole"></span><span class="tag-eyebrow">THE BEST PART?</span><strong>Back<br>to you.</strong><svg class="tag-swoosh" viewBox="0 0 150 25" fill="none"><path d="M3 15C40 2 98 1 145 9M20 23c39-11 75-12 113-10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><small>A little less lost.</small></div>
     <svg class="scene-doodle" viewBox="0 0 180 100" fill="none" aria-hidden="true"><path class="draw-line" d="M5 26c38-44 115-14 103 18-9 23-56 21-53 0 4-30 75-18 105 26m-30-5 31 7-7-29" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
     <figcaption><span class="art-note">Sound familiar?</span><span class="art-caption">Your next stop:<br>the school office.</span></figcaption>
   </figure>`;
 }
@@ -233,12 +235,12 @@ async function search(ctx: ViewContext): Promise<View> {
               : ""
           }</div>`
         : ""
-    }<div class="field"><label for="q">Describe your item</label><input type="search" id="q" name="q" maxlength="300" value="${e(values.q)}" placeholder="Type, color, or a detail" aria-describedby="search-privacy${fields.query ? " query-error" : ""}"${fields.query ? ' aria-invalid="true"' : ""}>${fieldError("query")}<p class="muted" id="search-privacy">Use public details such as type and color. Keep names, contact information and secret identifying details for your private claim. AI matching compares descriptions within LostLink.</p></div><div class="field"><label for="category">Category</label><select id="category" name="category"${invalid("category")}>${option("", values.category, "All categories")}${unknownCategory ? option(values.category, values.category) : ""}${categories
+    }<div class="field"><label for="q">Describe your item</label><input type="search" id="q" name="q" maxlength="300" value="${e(values.q)}" placeholder="Type, color, or a detail" aria-describedby="search-privacy${fields.query ? " query-error" : ""}"${fields.query ? ' aria-invalid="true"' : ""}>${fieldError("query")}<p class="help" id="search-privacy">Use public details such as type and color. Keep names, contact information and secret identifying details for your private claim. AI matching compares descriptions within LostLink.</p></div><div class="filter-fields"><div class="field"><label for="category">Category</label><select id="category" name="category"${invalid("category")}>${option("", values.category, "All categories")}${unknownCategory ? option(values.category, values.category) : ""}${categories
       .filter((value) => !ctx.api.live || value !== "accessory")
       .map((value) => option(value, values.category))
       .join(
         "",
-      )}</select>${fieldError("category")}</div><div class="field"><label for="color">Color</label><select id="color" name="color"${invalid("color")}>${option("", values.color, "All colors")}${unknownColor ? option(values.color, values.color) : ""}${colors.map((value) => option(value, values.color)).join("")}</select>${fieldError("color")}</div><div class="field"><label for="from">Found on or after</label><input id="from" name="from" type="${dateControl(values.from)}" value="${e(values.from)}"${invalid("from")}>${fieldError("from")}</div><div class="field"><label for="to">Found on or before</label><input id="to" name="to" type="${dateControl(values.to)}" value="${e(values.to)}"${invalid("to")}>${fieldError("to")}</div><button class="button" type="submit">Search items</button><a class="text-link" href="${base}">Clear search and filters</a><p class="muted">Results use public item details. A match does not establish ownership.</p></form><section class="stack" aria-label="Search results" aria-live="polite">${content}</section></div>`,
+      )}</select>${fieldError("category")}</div><div class="field"><label for="color">Color</label><select id="color" name="color"${invalid("color")}>${option("", values.color, "All colors")}${unknownColor ? option(values.color, values.color) : ""}${colors.map((value) => option(value, values.color)).join("")}</select>${fieldError("color")}</div></div><div class="filter-fields"><div class="field"><label for="from">Found on or after</label><input id="from" name="from" type="${dateControl(values.from)}" value="${e(values.from)}"${invalid("from")}>${fieldError("from")}</div><div class="field"><label for="to">Found on or before</label><input id="to" name="to" type="${dateControl(values.to)}" value="${e(values.to)}"${invalid("to")}>${fieldError("to")}</div></div><button class="button" type="submit">Search items</button><a class="text-link" href="${base}">Clear search and filters</a><p class="help">Results use public item details. A match does not establish ownership.</p></form><section class="stack" aria-label="Search results" aria-live="polite">${content}</section></div>`,
     bind: (root) => {
       root
         .querySelector("#search-retry")
@@ -286,7 +288,7 @@ async function detail(ctx: ViewContext, encodedId: string): Promise<View> {
       : "";
   return {
     title: item.title,
-    html: `<a class="text-link" href="${back}">&lt; Back to ${e(ctx.orgName)} items</a>${staffPhotoHelp}<section class="two-column item-detail">${itemImage(item, "detail-image")}<div class="stack"><div class="page-heading"><p class="eyebrow">${e(ctx.orgName)} · Found item</p><h1>${e(item.title)}</h1><p>${e(item.publicDescription)}</p></div><dl class="item-facts"><div><dt>Category</dt><dd>${e(label(item.category))}</dd></div><div><dt>Color</dt><dd>${e(label(item.color))}</dd></div><div><dt>Found near</dt><dd>${e(item.foundLocation)}</dd></div><div><dt>Date found</dt><dd>${date(item.foundDate)}</dd></div></dl><div class="card stack"><h2>Does this look familiar?</h2><p>Send a private ownership detail for school staff to review. A possible match doesn't guarantee the item is yours.</p><a class="button" href="${claimLink}">This might be mine <span aria-hidden="true"><svg class="arrow-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>${!ctx.session ? '<p class="muted">You’ll sign in before sending your claim.</p>' : ""}<p class="muted">Staff verify ownership before arranging collection.</p></div></div></section>`,
+    html: `<a class="text-link" href="${back}">&lt; Back to ${e(ctx.orgName)} items</a><section class="two-column item-detail"><div class="page-heading"><p class="eyebrow">${e(ctx.orgName)} · Found item</p><h1>${e(item.title)}</h1><p>${e(item.publicDescription)}</p></div>${itemImage(item, "detail-image")}<div class="stack">${staffPhotoHelp}<dl class="item-facts"><div><dt>Category</dt><dd>${e(label(item.category))}</dd></div><div><dt>Color</dt><dd>${e(label(item.color))}</dd></div><div><dt>Found near</dt><dd>${e(item.foundLocation)}</dd></div><div><dt>Date found</dt><dd>${date(item.foundDate)}</dd></div></dl><div class="card stack"><h2>Does this look familiar?</h2><p>Send a private ownership detail for school staff to review. A possible match doesn't guarantee the item is yours.</p><a class="button" href="${claimLink}">This might be mine <span aria-hidden="true"><svg class="arrow-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>${!ctx.session ? '<p class="muted">You’ll sign in before sending your claim.</p>' : ""}<p class="muted">Staff verify ownership before arranging collection.</p></div></div></section>`,
   };
 }
 
