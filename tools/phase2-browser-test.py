@@ -168,7 +168,7 @@ class InterfaceTest(unittest.TestCase):
         p = self.page
         for reduced in [False, True]:
             p.emulate_media(reduced_motion='reduce' if reduced else 'no-preference')
-            for width in [320, 390, 760, 768, 1024, 1440]:
+            for width in [320, 390, 667, 760, 768, 1024, 1440]:
                 with self.subTest(width=width, reduced_motion=reduced):
                     p.set_viewport_size({'width': width, 'height': 1000})
                     self.route('/')
@@ -961,6 +961,46 @@ class InterfaceTest(unittest.TestCase):
                 self.assertGreaterEqual(bounds['x'], 0, path)
                 self.assertLessEqual(bounds['x'] + bounds['width'], 321, path)
         p.screenshot(path='/tmp/lostlink-phone-text-200.png', full_page=True)
+
+    def test_phone_layout_groups_navigation_filters_and_item_details(self):
+        p = self.page
+        p.emulate_media(reduced_motion='reduce')
+        self.control('persona', 'staff')
+        p.set_viewport_size({'width': 320, 'height': 640})
+        self.route(SCHOOL + '/staff')
+        links = p.locator('.main-nav a').all()
+        self.assertEqual(len(links), 3)
+        self.assertEqual(len({link.bounding_box()['y'] for link in links}), 1)
+
+        for width in [320, 390]:
+            p.set_viewport_size({'width': width, 'height': 844})
+            self.route(SCHOOL + '/search')
+            for first, second in [('#category', '#color'), ('#from', '#to')]:
+                with self.subTest(width=width, fields=(first, second)):
+                    left = p.locator(first).bounding_box()
+                    right = p.locator(second).bounding_box()
+                    if width == 320:
+                        self.assertGreaterEqual(right['y'], left['y'] + left['height'])
+                    else:
+                        self.assertAlmostEqual(left['y'], right['y'], delta=1)
+                        self.assertGreaterEqual(right['x'], left['x'] + left['width'])
+
+        for path in [SCHOOL + '/staff', SCHOOL + '/staff/items']:
+            self.route(path)
+            status = p.locator('.status-filter select').bounding_box()
+            apply = p.get_by_role('button', name='Apply filter').bounding_box()
+            self.assertGreaterEqual(apply['x'], status['x'] + status['width'])
+            self.assertAlmostEqual(apply['y'] + apply['height'], status['y'] + status['height'], delta=1)
+
+        self.route(SCHOOL + '/items/item-duffel')
+        heading = p.locator('.item-detail .page-heading').bounding_box()
+        photo = p.locator('.item-detail .detail-image').bounding_box()
+        self.assertGreaterEqual(photo['y'], heading['y'] + heading['height'])
+        p.set_viewport_size({'width': 1440, 'height': 1000})
+        heading = p.locator('.item-detail .page-heading').bounding_box()
+        photo = p.locator('.item-detail .detail-image').bounding_box()
+        self.assertAlmostEqual(photo['y'], heading['y'], delta=1)
+        self.assertLessEqual(photo['x'] + photo['width'], heading['x'])
 
     def test_responsive_pages_landmarks_and_screenshots(self):
         p = self.page

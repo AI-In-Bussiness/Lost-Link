@@ -21,7 +21,7 @@ export default function PaperFrame({ children, owner = false, account = false }:
             <Link href="/account" aria-current={account ? "page" : undefined}>Your account</Link>
             {owner && <Link href="/admin" aria-current="page">Website administration</Link>}
           </nav>
-          {owner && <form action="/api/auth/sign-out" method="post"><button className="plain" type="submit">Sign out</button></form>}
+          {owner && <form className="account" action="/api/auth/sign-out" method="post"><button className="plain" type="submit">Sign out</button></form>}
         </div>
       </header>
       {children}
